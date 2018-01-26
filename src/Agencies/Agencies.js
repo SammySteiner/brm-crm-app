@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { getAgencies } from '../api'
+
 export default class Agencies extends Component {
   constructor(){
     super()
@@ -9,9 +11,8 @@ export default class Agencies extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/v1/agencies')
-      .then(response => response.json())
-      .then(agencies => this.setState({ agencies }))
+    getAgencies()
+    .then(agencies => this.setState({ agencies }))
   }
 
   render(){
