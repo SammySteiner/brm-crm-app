@@ -18,10 +18,10 @@ class App extends Component {
           Welcome to the the ARM CRM by Business Relationship Management!
         </p>
         <Switch>
-          <Route path='/agency' render={() => <Agencies/>}/>
+          <Route path='/agencies' render={() => <Agencies/>}/>
           <Route path='/staff' render={() => <Staffs/>}/>
         </Switch>
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     );
   }
