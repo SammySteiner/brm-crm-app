@@ -38,6 +38,10 @@ export default class Services extends Component {
     return this.props.history.push("/services/" + event.target.id)
   }
 
+  handleSelectStaff(event){
+    return this.props.history.push("/staff/" + event.target.id)
+  }
+
 
   handleSortTitle(){
     let servicesList = this.state.services
@@ -122,6 +126,7 @@ export default class Services extends Component {
           <ServicesTable
             sortedAndFilteredList={filteredList}
             handleSelectService={this.handleSelectService.bind(this)}
+            handleSelectStaff={this.handleSelectStaff.bind(this)}
             handleSortTitle={this.handleSortTitle.bind(this)}
             handleSortDescription={this.handleSortDescription.bind(this)}
             handleSortDivision={this.handleSortDivision.bind(this)}

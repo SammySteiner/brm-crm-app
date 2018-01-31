@@ -16,6 +16,7 @@ export default class ServiceDetail extends Component {
 
   handleDelete(event){
     deleteResource('services', this.state.service.id)
+    .then( service => alert(`${service.title}, lead by ${service.sdl.first_name} ${service.sdl.last_name}, has successfully been deleted from the databse`))
     .then( () => this.props.history.push('/services'))
   }
 

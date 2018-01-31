@@ -40,7 +40,7 @@ export function deleteResource(resource, id){
       'Content-Type': 'application/json'
     },
     method: 'DELETE',
-    body: JSON.stringify( { staff: {id: id} } )
+    body: JSON.stringify( { [resource]: {id: id} } )
   })
   .then( res => res.json() )
 }

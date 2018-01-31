@@ -16,6 +16,15 @@ export default class AgencyDetail extends Component {
 
   handleDelete(event){
     deleteResource('agencies', this.state.agency.id)
+    .then( staff => {
+      var alertIntro = `${staff[0].agency.name} has successfully been deleted from the database. The staff of the agency have not been deleted, including: `
+      var alertStaff = []
+      for (var i = 0; i < staff.length; i++) {
+        alertStaff.push(staff[i].fullname)
+      }
+      var alertMessage = alertIntro + alertStaff.join(', ') + '.'
+      alert(alertMessage)
+    })
     .then( () => this.props.history.push('/agencies'))
   }
 
@@ -31,7 +40,7 @@ export default class AgencyDetail extends Component {
         <ul className='agency-detail'>
           <li>Name: {this.state.agency.name}</li>
           <li>Acronym: {this.state.agency.acronym}</li>
-          <li>Mayoral: {this.available(this.state.agency.mayoral)}</li>
+          <li>Mayoral: {this.state.agency.mayoral ? "Yes" : "No"}</li>
           <li>Access to CityNet? {this.available(this.state.agency.citynet)}</li>
           <li>Address: {this.available(this.state.agency.address)}</li>
           <li>Commissioner: {this.state.agency.commissioner ? this.state.agency.commissioner.first_name + " " + this.state.agency.commissioner.last_name : 'Data Not Available'}</li>
