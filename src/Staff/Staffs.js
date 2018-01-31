@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import StaffList from './StaffList'
 import StaffTable from './StaffTable'
 import Search from '../Search.js'
 
-import { getStaffs } from '../api'
+import { getDirectory } from '../api'
 
 export default class Staffs extends Component {
   constructor(){
@@ -19,7 +20,7 @@ export default class Staffs extends Component {
   }
 
   componentDidMount(){
-    getStaffs()
+    getDirectory('staff')
     .then( staffs => staffs.sort(function(a, b) {
       var textA = a.last_name.toUpperCase()
       var textB = b.last_name.toUpperCase()
@@ -29,10 +30,13 @@ export default class Staffs extends Component {
   }
 
   handleChange(event) {
-    console.log(event.target.value);
     this.setState({
       search: event.target.value
     })
+  }
+
+  handleSelectStaff(event){
+    return this.props.history.push("/staff/" + event.target.id)
   }
 
   handleSortName(){
@@ -100,6 +104,7 @@ export default class Staffs extends Component {
               handleSortName={this.handleSortName.bind(this)}
               handleSortRole={this.handleSortRole.bind(this)}
               handleSortAgency={this.handleSortAgency.bind(this)}
+              handleSelectStaff={this.handleSelectStaff.bind(this)}
             />
           </div>
 

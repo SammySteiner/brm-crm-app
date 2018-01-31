@@ -3,7 +3,7 @@ import React from 'react'
 export default (props) => {
   return (
     <tr>
-      <td>{props.staff.fullname}</td>
+      <td onClick={props.handleSelectStaff} id={props.staff.id}>{props.staff.fullname}</td>
       <td>{props.staff.role.title}</td>
       <td>{props.staff.agency.name}</td>
       <td>{props.staff.email}</td>

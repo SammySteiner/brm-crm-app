@@ -7,7 +7,12 @@ export default(props) => {
     let sortedList = []
     let agenciesList = props.sortedAndFilteredList
     for (var i = 0; i < agenciesList.length; i++) {
-      sortedList.push(<AgenciesList key={i} agencies={agenciesList[i]}/>)
+      sortedList.push(<AgenciesList
+        key={i}
+        handleSelectAgency={props.handleSelectAgency}
+        handleSelectStaff={props.handleSelectStaff}
+        agencies={agenciesList[i]}
+      />)
     }
     return sortedList
   }
@@ -21,6 +26,7 @@ export default(props) => {
           <th onClick={props.handleSortCIO.bind(this)} >CIO</th>
           <th onClick={props.handleSortCommissioner.bind(this)} >Commissioner</th>
           <th onClick={props.handleSortARM.bind(this)} >ARM</th>
+          <th onClick={props.handleSortMayoral.bind(this)} >Mayoral</th>
         </tr>
       </thead>
       <tbody>

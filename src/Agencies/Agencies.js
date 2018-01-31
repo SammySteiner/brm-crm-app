@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import AgenciesTable from './AgenciesTable'
+import Search from '../Search.js'
 
-import { getAgencies } from '../api'
+import { getDirectory } from '../api'
 
 export default class Agencies extends Component {
   constructor(){
@@ -14,19 +15,33 @@ export default class Agencies extends Component {
       acronym: false,
       cio: false,
       commissioner: false,
-      arm: false
+      arm: false,
+      mayoral: false
 
     }
   }
 
   componentDidMount() {
-    getAgencies()
+    getDirectory('agencies')
     .then( agencies => agencies.sort(function(a, b) {
       var textA = a.name.toUpperCase()
       var textB = b.name.toUpperCase()
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
     )
     .then(agencies => this.setState({ agencies }))
+  }
+
+  handleChange(event) {
+    this.setState({
+      search: event.target.value
+    })
+  }
+
+  handleSelectAgency(event){
+    return this.props.history.push("/agencies/" + event.target.id)
+  }
+  handleSelectStaff(event){
+    return this.props.history.push("/staff/" + event.target.id)
   }
 
   handleSortName(){
@@ -99,8 +114,8 @@ export default class Agencies extends Component {
       }
     var newState = Object.assign({}, this.state, {commissioner: this.state.commissioner ? false : true, agencies: agenciesList})
     this.setState(newState)
-
   }
+
   handleSortARM(){
     let agenciesList = this.state.agencies
     if (this.state.arm) {
@@ -117,23 +132,42 @@ export default class Agencies extends Component {
       }
     var newState = Object.assign({}, this.state, {arm: this.state.arm ? false : true, agencies: agenciesList})
     this.setState(newState)
-
-
+  }
+  handleSortMayoral(){
+    let agenciesList = this.state.agencies
+    if (this.state.mayoral) {
+      agenciesList.sort(function(a, b) {
+        var textA = a.mayoral
+        var textB = b.mayoral
+        return (textA === null) ? 1 : (textB === null) ? -1 : (textA > textB ) ? -1 : (textA < textB) ? 1 : 0
+      })} else {
+        agenciesList.sort(function(a, b) {
+          var textA = a.mayoral
+          var textB = b.mayoral
+          return (textA === null) ? 1 : (textB === null) ? -1 : (textA > textB ) ? 1 : (textA < textB) ? -1 : 0
+        })
+      }
+    var newState = Object.assign({}, this.state, {mayoral: this.state.mayoral ? false : true, agencies: agenciesList})
+    this.setState(newState)
   }
 
   render(){
-    const filteredList = this.state.agencies.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) || a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) || a.commissioner.fullname.includes(this.state.search) || a.arm.fullname.includes(this.state.search) )
+    const filteredList = this.state.agencies.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
     return(
       !this.state.agencies[0] ? <h1>Loading</h1> :
       <div className="agency-list">
         <div className="agency">
+          <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
           <AgenciesTable
             sortedAndFilteredList={filteredList}
+            handleSelectAgency={this.handleSelectAgency.bind(this)}
+            handleSelectStaff={this.handleSelectStaff.bind(this)}
             handleSortName={this.handleSortName.bind(this)}
             handleSortAcronym={this.handleSortAcronym.bind(this)}
             handleSortCIO={this.handleSortCIO.bind(this)}
             handleSortCommissioner={this.handleSortCommissioner.bind(this)}
             handleSortARM={this.handleSortARM.bind(this)}
+            handleSortMayoral={this.handleSortMayoral.bind(this)}
           />
         </div>
       </div>

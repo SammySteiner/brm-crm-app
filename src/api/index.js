@@ -11,8 +11,8 @@ export function getAgencies(){
     .then(response => response.json())
 }
 
-export function getStaffs(){
-  return fetch(DB_URL + "staff", {
+export function getDirectory(resource){
+  return fetch(DB_URL + resource, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -20,4 +20,27 @@ export function getStaffs(){
     method: 'GET',
   })
     .then(response => response.json())
+}
+
+export function getDetails(resource, id){
+  return fetch(DB_URL + resource + "/" + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  })
+    .then(response => response.json())
+}
+
+export function deleteResource(resource, id){
+  return fetch(DB_URL + resource + "/" + id, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'DELETE',
+    body: JSON.stringify( { staff: {id: id} } )
+  })
+  .then( res => res.json() )
 }

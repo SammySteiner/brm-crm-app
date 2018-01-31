@@ -7,7 +7,7 @@ export default(props) => {
     let sortedList = []
     let staffList = props.sortedAndFilteredList
     for (var i = 0; i < staffList.length; i++) {
-      sortedList.push(<StaffList key={i} staff={staffList[i]}/>)
+      sortedList.push(<StaffList handleSelectStaff={props.handleSelectStaff} key={i} staff={staffList[i]}/>)
     }
     return sortedList
   }
