@@ -44,3 +44,26 @@ export function deleteResource(resource, id){
   })
   .then( res => res.json() )
 }
+
+export function fetchFormInfo(form){
+  return fetch(DB_URL + form + "FormInfo", {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  })
+    .then(response => response.json())
+}
+
+export function createResource(state, form, url){
+  return fetch(DB_URL + url, {
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  method: 'POST',
+  body: JSON.stringify( {[form]: state} )
+  })
+  .then( res => res.json() )
+}

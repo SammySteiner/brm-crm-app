@@ -6,8 +6,8 @@ import Search from '../Search.js'
 import { getDirectory } from '../api'
 
 export default class Agencies extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       agencies: [],
       search: '',
@@ -42,6 +42,10 @@ export default class Agencies extends Component {
   }
   handleSelectStaff(event){
     return this.props.history.push("/staff/" + event.target.id)
+  }
+
+  newAgency(){
+    return this.props.history.push("agencies/new")
   }
 
   handleSortName(){
@@ -158,6 +162,7 @@ export default class Agencies extends Component {
       <div className="agency-list">
         <div className="agency">
           <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
+          <button type='button' onClick={this.newAgency.bind(this)}>Add an Agency</button>
           <AgenciesTable
             sortedAndFilteredList={filteredList}
             handleSelectAgency={this.handleSelectAgency.bind(this)}

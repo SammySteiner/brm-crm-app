@@ -26,7 +26,7 @@ export default class StaffDetail extends Component {
   handleDelete(event){
     deleteResource('staff', this.state.staff.id)
     .then( staff => alert(`${staff.fullname}, the ${staff.role.title} of ${staff.agency.name} has successfully been deleted from the databse`))
-    .then( () => this.props.history.push('/staff'))
+    .then( () => this.props.history.goBack())
   }
 
   render(){
