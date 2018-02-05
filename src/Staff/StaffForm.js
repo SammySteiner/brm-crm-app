@@ -3,7 +3,7 @@ import React from 'react'
 export default (props) => {
 
   var agencies = props.agencyNames.map( (a, i) => <option key={i} value={a}>{a}</option>)
-  var services = props.services.map( (s , i) => <option key={i} value={s}>{s}</option>)
+  var services = props.services.map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
 
   var roles = []
   if (props.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {

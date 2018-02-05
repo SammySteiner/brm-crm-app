@@ -28,8 +28,9 @@ export default class StaffNew extends Component{
       data => {
         let agencyNames = data.agency.map( a => a.name)
         let roles = data.role.map( r => r.title)
-        let services = data.service.map( s => s.title)
-        return this.setState({ agencyNames: agencyNames, roles: roles, staff: data.staff, services: services })
+        console.log(data.staff[0]);
+        console.log(data.service[0]);
+        return this.setState({ agencyNames: agencyNames, roles: roles, staff: data.staff, services: data.service })
       }
     )
   }
@@ -43,17 +44,38 @@ export default class StaffNew extends Component{
 
   handleSubmit(event){
     event.preventDefault()
-    // for roles:
-    // 1. sdl/service owner - must get sdl/servoice owner info from db in initial request, must not allow if the service alsready has an sdl, say who the sdl is.
-    // 2. commissioner/cio - must get info from db in initial request, must not allow if agency already has commissioner/cio
-    // 3. service proivider should show services.
-    // 4. agency === doitt should show sdl, arm, arm manager, service owner, and service provider.
-    // 5. add general staff to roles.
-    // let info = {name: this.state.name, acronym: this.state.acronym, category: this.state.category, mayoral: this.state.mayoral, citynet: this.state.citynet, address: this.state.address}
-    // createResource(info, 'agency', 'agencies')
     let info = {first_name: this.state.first_name, last_name: this.state.last_name, email: this.state.email, office_phone: this.state.office_phone, cell_phone: this.state.cell_phone, agency: this.state.agency, role: this.state.role, service: this.state.service}
-    createResource(info, 'staff', 'staff')
-    .then( staff => this.props.history.push(staff.id.toString()))
+    if (!this.state.staff.some( s => s.first_name === this.state.first_name && s.last_name === this.state.last_name)) {
+      if (!this.state.staff.some(s => s.email === this.state.email)) {
+        if (!this.state.staff.some(s => s.office_phone === this.state.office_phone)) {
+          if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone)) {
+            if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
+              if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
+                if (!(this.state.role === 'SDL' && this.state.services.filter( s => s.title === this.state.service)[0].sdl_id !== undefined)) {
+                  createResource(info, 'staff', 'staff')
+                  .then( staff => this.props.history.push(staff.id.toString()))
+                } else {
+                  alert(`${this.state.staff.filter(s => s.id === this.state.services.filter( s => s.title === this.state.service)[0].sdl_id - 1)[0]['first_name']} ${this.state.staff.filter(s => s.id === this.state.services.filter( s => s.title === this.state.service)[0].sdl_id - 1)[0]['last_name']} is the current SDL of ${this.state.service}. Remove or reassign the SDL of ${this.state.service} before adding someone to that posittion.`)
+                }
+              } else {
+                createResource(info, 'staff', 'staff')
+                .then( staff => this.props.history.push(staff.id.toString()))
+              }
+            } else {
+              alert(`${this.state.staff.filter( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1)[0]['first_name']} ${this.state.staff.filter( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1)[0]['last_name']} is the current ${this.state.role} of ${this.state.agency}. Remove or reassign the ${this.state.role} of ${this.state.agency} before adding someone to that posittion.`)
+            }
+          } else {
+            alert(`Each employee needs a unique cell phone number. ${this.state.cell_phone} is  already in use.`)
+          }
+        } else {
+          alert(`Each employee needs a unique office phone number. ${this.state.office_phone} is  already in use.`)
+        }
+      } else {
+        alert(`Each employee needs a unique email address. ${this.state.email} is  already in use.`)
+      }
+    } else {
+      alert(`Each employee needs a unique full name. ${this.state.first_name} ${this.state.last_name} is  already in the system. Having mutliple people with the same name can get confusing.`)
+    }
   }
 
 
