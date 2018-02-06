@@ -20,6 +20,14 @@ export default class ServiceDetail extends Component {
     .then( () => this.props.history.goBack())
   }
 
+  handleEdit(event){
+    event.preventDefault()
+    this.props.history.push({
+      pathname: this.state.service.id + "/edit",
+      state: this.state.service
+    })
+  }
+
 
   render(){
     return(
@@ -34,6 +42,7 @@ export default class ServiceDetail extends Component {
           <li>Deputy Commissioner: {this.state.service.deputy_commissioner.first_name} {this.state.service.deputy_commissioner.last_name}</li>
         </ul>
         <button onClick={this.handleDelete.bind(this)}>Delete</button>
+        <button onClick={this.handleEdit.bind(this)}>Edit</button>
       </div>
 
     )

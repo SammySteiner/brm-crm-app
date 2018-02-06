@@ -16,6 +16,8 @@ import StaffNew from './Staff/StaffNew.js'
 
 import Services from './Services/Services.js'
 import ServicesDetail from './Services/ServicesDetail.js'
+import ServicesNew from './Services/ServicesNew.js'
+import ServicesEdit from './Services/ServicesEdit.js'
 
 class App extends Component {
   render() {
@@ -35,6 +37,8 @@ class App extends Component {
           <Route exact path='/staff/:id' render={({ match, history }) => <StaffDetail history={history} match={match}/>}/>
 
           <Route exact path='/services' render={({ history }) => <Services history={history}/>}/>
+          <Route exact path='/services/new' render={({ match, history }) => <ServicesNew history={history} match={match}/>}/>
+          <Route exact path='/services/:id/edit' render={({ match, history }) => <ServicesEdit history={history} match={match}/>}/>
           <Route exact path='/services/:id' render={({ match, history }) => <ServicesDetail history={history} match={match}/>}/>
 
         </Switch>

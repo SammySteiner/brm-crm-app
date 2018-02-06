@@ -28,8 +28,6 @@ export default class StaffNew extends Component{
       data => {
         let agencyNames = data.agency.map( a => a.name)
         let roles = data.role.map( r => r.title)
-        console.log(data.staff[0]);
-        console.log(data.service[0]);
         return this.setState({ agencyNames: agencyNames, roles: roles, staff: data.staff, services: data.service })
       }
     )

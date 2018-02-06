@@ -67,3 +67,15 @@ export function createResource(state, form, url){
   })
   .then( res => res.json() )
 }
+
+export function editResource(info, form, url){
+  return fetch(DB_URL + url + info.id, {
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  method: 'PATCH',
+  body: JSON.stringify( {[form]: info} )
+  })
+  .then( res => res.json() )
+}
