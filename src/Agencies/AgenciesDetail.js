@@ -37,7 +37,17 @@ export default class AgencyDetail extends Component {
     return field === null ? 'Data Not Available' : field
   }
 
+  handleEdit(event){
+    event.preventDefault()
+    this.props.history.push({
+      pathname: this.state.agency.id + "/edit",
+      state: this.state.agency
+    })
+  }
+
+
   render(){
+    console.log(this.state.agency);
     return(
       !this.state.agency.id ? <h1>Loading</h1> :
       <div>
@@ -47,11 +57,13 @@ export default class AgencyDetail extends Component {
           <li>Mayoral: {this.state.agency.mayoral ? "Yes" : "No"}</li>
           <li>Access to CityNet? {this.state.agency.citynet ? "Yes" : "No"}</li>
           <li>Address: {this.available(this.state.agency.address)}</li>
+          <li>Category: {this.available(this.state.agency.category)}</li>
           <li>Commissioner: {this.state.agency.commissioner ? this.state.agency.commissioner.first_name + " " + this.state.agency.commissioner.last_name : 'Data Not Available'}</li>
           <li>CIO: {this.state.agency.cio ? this.state.agency.cio.first_name + " " + this.state.agency.cio.last_name : 'Data Not Available'}</li>
           <li>ARM: {this.state.agency.arm ? this.state.agency.arm.first_name + " " + this.state.agency.arm.last_name : 'Data Not Available'}</li>
         </ul>
         <button onClick={this.handleDelete.bind(this)}>Delete</button>
+        <button onClick={this.handleEdit.bind(this)}>Edit</button>
       </div>
 
     )

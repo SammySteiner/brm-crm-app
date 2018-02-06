@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import AgencyForm from './AgencyForm.js'
+import AgenciesForm from './AgenciesForm.js'
 import { fetchFormInfo, createResource } from '../api'
 
 export default class AgencyNew extends Component{
@@ -13,8 +13,7 @@ export default class AgencyNew extends Component{
       mayoral: false,
       citynet: false,
       address: '',
-      agencyNames: [],
-      agencyAcronyms: []
+      agencies: []
     }
   }
 
@@ -22,13 +21,7 @@ export default class AgencyNew extends Component{
     fetchFormInfo('agencies')
     .then(
       data => {
-        let agencyNames = []
-        let agencyAcronyms = []
-        data.forEach( a => {
-          agencyNames.push(a.name)
-          agencyAcronyms.push(a.acronym)
-        })
-        return this.setState({ agencyNames: agencyNames, agencyAcronyms: agencyAcronyms })
+        return this.setState({ agencies: data.agencies })
       }
     )
   }
@@ -52,7 +45,7 @@ export default class AgencyNew extends Component{
     return(
       <div>
         <h1>Add an Agency</h1>
-        <AgencyForm
+        <AgenciesForm
           name={this.state.name}
           acronym={this.state.acronym}
           category={this.state.category}

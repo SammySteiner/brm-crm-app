@@ -9,6 +9,7 @@ import Footer from './Footer/Footer.js'
 import Agencies from './Agencies/Agencies.js'
 import AgenciesDetail from './Agencies/AgenciesDetail.js'
 import AgenciesNew from './Agencies/AgenciesNew.js'
+import AgenciesEdit from './Agencies/AgenciesEdit.js'
 
 import Staffs from './Staff/Staffs.js'
 import StaffDetail from './Staff/StaffDetail.js'
@@ -30,6 +31,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/agencies' render={({history}) => <Agencies history={history}/>}/>
           <Route exact path='/agencies/new' render={({ match, history }) => <AgenciesNew history={history} match={match}/>}/>\
+          <Route exact path='/agencies/:id/edit' render={({ match, history }) => <AgenciesEdit history={history} match={match}/>}/>
           <Route exact path='/agencies/:id' render={({ match, history }) => <AgenciesDetail history={history} match={match}/>}/>
 
           <Route exact path='/staff' render={({ history }) => <Staffs history={history}/>}/>
