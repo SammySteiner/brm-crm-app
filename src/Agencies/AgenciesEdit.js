@@ -7,22 +7,36 @@ export default class AgenciesEdit extends Component{
   constructor(props){
     super()
     this.state = {
-      name: props.history.location.state.name,
-      acronym: props.history.location.state.acronym,
-      category: props.history.location.state.category.toString(),
-      mayoral: props.history.location.state.mayoral,
-      citynet: (props.history.location.state.address === null) ? false : props.history.location.state.citynet,
-      address: (props.history.location.state.address === null) ? '' : props.history.location.state.address,
-      id: props.history.location.state.id,
-      agencies: [],
+      name: "",
+      acronym: "",
+      category: "",
+      mayoral: "",
+      citynet: "",
+      address: "",
+      id: "",
+      agencies: []
     }
   }
 
   componentDidMount(){
     fetchFormInfo('agencies')
     .then(
-      data => { return this.setState({ agencies: data })}
+      data => { return this.setState({
+        agencies: data,
+        name: this.props.history.location.state.name,
+        acronym: this.props.history.location.state.acronym,
+        category: this.props.history.location.state.category.toString(),
+        mayoral: this.props.history.location.state.mayoral,
+        citynet: (this.props.history.location.state.address === null) ? false : this.props.history.location.state.citynet,
+        address: (this.props.history.location.state.address === null) ? '' : this.props.history.location.state.address,
+        id: this.props.history.location.state.id,
+       })}
     )
+    .catch(error => {
+      console.log(error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    })
   }
 
   handleInputChange(event){

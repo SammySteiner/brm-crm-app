@@ -27,6 +27,11 @@ export default class Staffs extends Component {
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
     )
     .then( staffs => this.setState({ staffs }))
+    .catch(error => {
+      console.log(error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    })
   }
 
   handleChange(event) {

@@ -12,7 +12,16 @@ export default class StaffDetail extends Component {
 
   componentDidMount(){
     getDetails('staff', this.props.match.params.id)
-    .then(staff => this.setState({staff: staff}))
+    .catch(error => {
+    })
+    .then(staff => { if (staff.error) {
+      console.log(staff.error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    } else {
+      return this.setState({staff: staff})
+    }
+  })
   }
 
   assignments(){
@@ -21,6 +30,23 @@ export default class StaffDetail extends Component {
     } else {
       return ""
     }
+  }
+
+  services(){
+    if (this.state.staff.role.title === "SDL" || this.state.staff.role.title === "Service Provider" || this.state.staff.role.title === "Service Owner") {
+      return <li>Services: <ol>{this.state.staff.services.map(s => <li key={s.id}>{s.title}</li>)}</ol></li>
+    } else {
+      return ""
+    }
+
+  }
+
+  handleEdit(event){
+    event.preventDefault()
+    this.props.history.push({
+      pathname: this.state.staff.id + "/edit",
+      state: this.state.staff
+    })
   }
 
   handleDelete(event){
@@ -41,8 +67,10 @@ export default class StaffDetail extends Component {
           <li>Cell: {this.state.staff.cell_phone}</li>
           <li>Role: {this.state.staff.role.title}</li>
           {this.assignments()}
+          {this.services()}
         </ul>
         <button onClick={this.handleDelete.bind(this)}>Delete</button>
+        <button onClick={this.handleEdit.bind(this)}>Edit</button>
       </div>
 
     )

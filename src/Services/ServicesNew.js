@@ -26,6 +26,11 @@ export default class ServicesNew extends Component{
         return this.setState({ staffNames: data.staff, divisionNames: divisionNames, services: data.services })
       }
     )
+    .catch(error => {
+      console.log(error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    })
   }
 
   handleInputChange(event){

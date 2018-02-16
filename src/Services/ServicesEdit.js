@@ -7,12 +7,12 @@ export default class ServicesEdit extends Component{
   constructor(props){
     super()
     this.state = {
-      title: props.history.location.state.title,
-      description: props.history.location.state.description,
-      sla: props.history.location.state.sla,
-      sdl: `${props.history.location.state.sdl.first_name} ${props.history.location.state.sdl.last_name}`,
-      division: props.history.location.state.division.name,
-      id: props.history.location.state.id,
+      title: '',
+      description: '',
+      sla: '',
+      sdl: '',
+      division: '',
+      id: '',
       services: [],
       divisionNames: [],
       staffNames: []
@@ -24,9 +24,24 @@ export default class ServicesEdit extends Component{
     .then(
       data => {
         let divisionNames = data.divisions.map( d => d.name)
-        return this.setState({staffNames: data.staff, divisionNames: divisionNames, services: data.services })
+        return this.setState({
+          staffNames: data.staff,
+          divisionNames: divisionNames,
+          services: data.services,
+          title: this.props.history.location.state.title,
+          description: this.props.history.location.state.description,
+          sla: this.props.history.location.state.sla,
+          sdl: `${this.props.history.location.state.sdl.first_name} ${this.props.history.location.state.sdl.last_name}`,
+          division: this.props.history.location.state.division.name,
+          id: this.props.history.location.state.id
+        })
       }
     )
+    .catch(error => {
+      console.log(error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    })
   }
 
   handleInputChange(event){

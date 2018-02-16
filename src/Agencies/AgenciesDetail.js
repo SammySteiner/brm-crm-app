@@ -11,7 +11,15 @@ export default class AgencyDetail extends Component {
 
   componentDidMount(){
     getDetails('agencies', this.props.match.params.id)
-    .then(agency => this.setState({agency: agency}))
+    .then(agency => {
+      if (agency.error) {
+        console.log(agency.error)
+        alert('You must be logged in to access this page.')
+        return this.props.history.push('/login')
+      } else {
+        return this.setState({agency: agency})
+      }
+    })
   }
 
   handleDelete(event){

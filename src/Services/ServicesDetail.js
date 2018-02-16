@@ -11,7 +11,15 @@ export default class ServiceDetail extends Component {
 
   componentDidMount(){
     getDetails('services', this.props.match.params.id)
-    .then(service => this.setState({service: service}))
+    .then(service =>
+      {if (service.error) {
+        console.log(service.error)
+        alert('You must be logged in to access this page.')
+        return this.props.history.push('/login')
+      } else {
+        return this.setState({service: service})
+      }}
+      )
   }
 
   handleDelete(event){

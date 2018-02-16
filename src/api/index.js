@@ -1,10 +1,46 @@
 var DB_URL = "http://localhost:3000/api/v1/"
 
+export function logIn(params){
+  return fetch(DB_URL + 'auth', {
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  method: 'POST',
+  body: JSON.stringify( params )
+  })
+  .then( res => res.json() )
+}
+
+export function register(params){
+  return fetch(DB_URL + 'user', {
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  method: 'POST',
+  body: JSON.stringify( {user: params} )
+  })
+  .then( res => res.json() )
+}
+
+export function getUserEmails(){
+  return fetch(DB_URL + 'user', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }, method: 'GET'
+  })
+  .then(response => response.json())
+}
+
+
 export function getAgencies(){
   return fetch(DB_URL + "agencies", {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('jwt')
     },
     method: 'GET',
   })
@@ -16,6 +52,7 @@ export function getDirectory(resource){
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('jwt')
     },
     method: 'GET',
   })
@@ -27,6 +64,7 @@ export function getDetails(resource, id){
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('jwt')
     },
     method: 'GET',
   })
@@ -37,7 +75,8 @@ export function deleteResource(resource, id){
   return fetch(DB_URL + resource + "/" + id, {
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('jwt')
     },
     method: 'DELETE',
     body: JSON.stringify( { [resource]: {id: id} } )
@@ -50,6 +89,7 @@ export function fetchFormInfo(form){
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('jwt')
     },
     method: 'GET',
   })
@@ -60,7 +100,8 @@ export function createResource(state, form, url){
   return fetch(DB_URL + url, {
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': localStorage.getItem('jwt')
   },
   method: 'POST',
   body: JSON.stringify( {[form]: state} )
@@ -69,10 +110,11 @@ export function createResource(state, form, url){
 }
 
 export function editResource(info, form, url){
-  return fetch(DB_URL + url + info.id, {
+  return fetch(DB_URL + url + '/' + info.id, {
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': localStorage.getItem('jwt')
   },
   method: 'PATCH',
   body: JSON.stringify( {[form]: info} )

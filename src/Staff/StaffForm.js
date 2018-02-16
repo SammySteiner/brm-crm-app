@@ -3,15 +3,16 @@ import React from 'react'
 export default (props) => {
 
   var agencies = props.agencyNames.map( (a, i) => <option key={i} value={a}>{a}</option>)
-  var services = props.services.map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
-
+  var services_list = props.services_list.sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
+  var unassigned_sdl_services = props.services_list.filter( s => !s.sdl_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
+  var unassigned_so_services = props.services_list.filter( s => !s.service_owner_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
+  var unassigned_agencies = props.agencies.filter( a => !props.arms.some( arm => arm.agency_id === a.id)).sort( (a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)).map( (ua, i) => <option key={i} value={ua.name}>{ua.name}</option>)
   var roles = []
   if (props.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
     roles = props.roles.map( (r, i) => <option key={i} value={r}>{r}</option>)
   } else {
     roles = props.roles.filter(  r =>  (r !== "SDL" && r !== "Service Owner" && r !== "ARM Manager" && r !== "ARM" && r !== "Service Provider") ).map( (r, i) => <option key={i} value={r}>{r}</option>)
   }
-
   return(
     <form onSubmit={props.handleSubmit}>
       <div>
@@ -58,9 +59,19 @@ export default (props) => {
       {(props.role === "SDL" || props.role === "Service Owner" || props.role === "Service Provider") ?
       <div>
         <label>Service:
-          <select value={props.service} id='service' onChange={props.handleInputChange}>
+          <select multiple={true} value={props.services} id='services' onChange={props.handleInputChange}>
             <option></option>
-            {services}
+            {props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list}
+          </select>
+        </label>
+      </div>
+      : null}
+      {props.role === "ARM" ?
+      <div>
+        <label>Unassigned Agencies:
+          <select multiple={true} value={props.assignments} id='assignments' onChange={props.handleInputChange}>
+            <option></option>
+            {props.path === '/staff/new' ? unassigned_agencies : agencies}
           </select>
         </label>
       </div>

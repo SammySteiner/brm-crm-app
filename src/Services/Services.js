@@ -25,6 +25,11 @@ export default class Services extends Component {
       var textB = b.title.toUpperCase()
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
     )
+    .catch(error => {
+      console.log(error)
+      alert('You must be logged in to access this page.')
+      return this.props.history.push('/login')
+    })
     .then(services => this.setState({ services }))
   }
 

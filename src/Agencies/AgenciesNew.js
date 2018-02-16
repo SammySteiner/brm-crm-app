@@ -21,7 +21,13 @@ export default class AgencyNew extends Component{
     fetchFormInfo('agencies')
     .then(
       data => {
-        return this.setState({ agencies: data.agencies })
+        if (data.error) {
+          console.log(data.error)
+          alert('You must be logged in to access this page.')
+          return this.props.history.push('/login')
+        } else {
+          return this.setState({ agencies: data.agencies })
+        }
       }
     )
   }
