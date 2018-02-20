@@ -1,5 +1,6 @@
 import React from 'react'
 import StaffList from './StaffList.js'
+import { Container, Table } from 'semantic-ui-react'
 
 export default(props) => {
 
@@ -18,19 +19,19 @@ export default(props) => {
   }
 
   return(
-    <table className ="staff-list">
-      <thead>
-        <tr>
-          <th onClick={props.handleSortName.bind(this)} >Name</th>
-          <th onClick={props.handleSortRole.bind(this)} >Role</th>
-          <th onClick={props.handleSortAgency.bind(this)} >Agency</th>
-          <th>Email</th>
-          <th>Office Phone</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell onClick={props.handleSortName.bind(this)} >Name</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortRole.bind(this)} >Role</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortAgency.bind(this)} >Agency</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
+          <Table.HeaderCell>Office Phone</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {formattedStaffList()}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   )
 }

@@ -1,14 +1,16 @@
 import React from 'react'
+import { Table } from 'semantic-ui-react'
+import './StaffList.css'
 
 export default (props) => {
   return (
-    <tr>
-      <td onClick={props.handleSelectStaff} id={props.staff.id}>{props.staff.fullname}</td>
-      <td>{props.staff.role.title}</td>
-      <td onClick={props.handleSelectAgency} id={props.staff.agency ? props.staff.agency.id : null}>{ props.staff.agency ? props.staff.agency.name : 'N/A'}</td>
-      <td>{props.staff.email}</td>
-      <td>{props.staff.office_phone}</td>
-    </tr>
+    <Table.Row>
+      <Table.Cell singleLine selectable className='test' onClick={props.handleSelectStaff} id={props.staff.id}>{props.staff.fullname}</Table.Cell>
+      <Table.Cell>{props.staff.role.title}</Table.Cell>
+      <Table.Cell singleLine selectable className='test' onClick={props.handleSelectAgency} id={props.staff.agency ? props.staff.agency.id : null}>{ props.staff.agency ? props.staff.agency.name.toLowerCase() : 'N/A'}</Table.Cell>
+      <Table.Cell>{props.staff.email}</Table.Cell>
+      <Table.Cell>{props.staff.office_phone}</Table.Cell>
+    </Table.Row>
 
   )
 }

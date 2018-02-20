@@ -1,5 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../api'
+import { Button } from 'semantic-ui-react'
 
 export default class AgencyDetail extends Component {
   constructor(props){
@@ -70,8 +71,8 @@ export default class AgencyDetail extends Component {
           <li>CIO: {this.state.agency.cio ? this.state.agency.cio.first_name + " " + this.state.agency.cio.last_name : 'Data Not Available'}</li>
           <li>ARM: {this.state.agency.arm ? this.state.agency.arm.first_name + " " + this.state.agency.arm.last_name : 'Data Not Available'}</li>
         </ul>
-        <button onClick={this.handleDelete.bind(this)}>Delete</button>
-        <button onClick={this.handleEdit.bind(this)}>Edit</button>
+        <Button onClick={this.handleDelete.bind(this)}>Delete</Button>
+        <Button onClick={this.handleEdit.bind(this)}>Edit</Button>
       </div>
 
     )

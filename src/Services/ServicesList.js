@@ -1,12 +1,15 @@
 import React from 'react'
+import { Table } from 'semantic-ui-react'
+import './ServicesList.css'
+
 
 export default (props) => {
   return (
-    <tr>
-      <td onClick={props.handleSelectService} id={props.services.id}>{props.services.title}</td>
-      <td>{props.services.description}</td>
-      <td>{props.services.division ? props.services.division.name : ""}</td>
-      <td onClick={props.handleSelectStaff} id={props.services.sdl ? props.services.sdl.id : null}>{props.services.sdl ? props.services.sdl.fullname : ""}</td>
-    </tr>
+    <Table.Row>
+      <Table.Cell singleLine selectable className='test' onClick={props.handleSelectService} id={props.services.id}>{props.services.title}</Table.Cell>
+      <Table.Cell >{props.services.description}</Table.Cell>
+      <Table.Cell >{props.services.division ? props.services.division.name : ""}</Table.Cell>
+      <Table.Cell singleLine selectable className='test' onClick={props.handleSelectStaff} id={props.services.sdl ? props.services.sdl.id : null}>{props.services.sdl ? props.services.sdl.fullname : ""}</Table.Cell>
+    </Table.Row>
   )
 }

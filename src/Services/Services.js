@@ -4,6 +4,8 @@ import ServicesTable from './ServicesTable'
 import Search from '../Search.js'
 
 import { getDirectory } from '../api'
+import { Button, Grid, Container, Loader } from 'semantic-ui-react'
+
 
 export default class Services extends Component {
   constructor(){
@@ -46,6 +48,11 @@ export default class Services extends Component {
   handleSelectStaff(event){
     return this.props.history.push("/staff/" + event.target.id)
   }
+
+  newService(){
+    return this.props.history.push("services/new")
+  }
+
 
 
   handleSortTitle(){
@@ -124,21 +131,30 @@ export default class Services extends Component {
   render(){
     const filteredList = this.state.services.filter( s =>  s.title.toLowerCase().includes(this.state.search.toLowerCase()) || ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.division ?  s.division.name.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) )
     return(
-      !this.state.services[0] ? <h1>Loading</h1> :
-      <div className="services-list">
-        <div className="services">
-          <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
-          <ServicesTable
-            sortedAndFilteredList={filteredList}
-            handleSelectService={this.handleSelectService.bind(this)}
-            handleSelectStaff={this.handleSelectStaff.bind(this)}
-            handleSortTitle={this.handleSortTitle.bind(this)}
-            handleSortDescription={this.handleSortDescription.bind(this)}
-            handleSortDivision={this.handleSortDivision.bind(this)}
-            handleSortSDL={this.handleSortSDL.bind(this)}
-          />
-        </div>
-      </div>
+      !this.state.services[0] ? <Loader active inline='centered' content='Loading'/> :
+      <Grid verticle padded>
+        <Grid.Row columns={2}>
+          <Grid.Column width={2} floated='left' >
+            <Button type='button' onClick={this.newService.bind(this)}>Add a Service</Button>
+          </Grid.Column>
+          <Grid.Column floated='left' stretched width={10}>
+            <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            <ServicesTable
+              sortedAndFilteredList={filteredList}
+              handleSelectService={this.handleSelectService.bind(this)}
+              handleSelectStaff={this.handleSelectStaff.bind(this)}
+              handleSortTitle={this.handleSortTitle.bind(this)}
+              handleSortDescription={this.handleSortDescription.bind(this)}
+              handleSortDivision={this.handleSortDivision.bind(this)}
+              handleSortSDL={this.handleSortSDL.bind(this)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }

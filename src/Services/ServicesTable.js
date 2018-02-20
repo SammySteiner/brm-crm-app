@@ -1,5 +1,7 @@
 import React from 'react'
 import ServicesList from './ServicesList.js'
+import { Container, Table } from 'semantic-ui-react'
+
 
 export default(props) => {
 
@@ -18,18 +20,18 @@ export default(props) => {
   }
 
   return(
-    <table className ="services-list">
-      <thead>
-        <tr>
-          <th onClick={props.handleSortTitle.bind(this)} >Title</th>
-          <th onClick={props.handleSortDescription.bind(this)} >Description</th>
-          <th onClick={props.handleSortDivision.bind(this)} >Division</th>
-          <th onClick={props.handleSortSDL.bind(this)} >SDL</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell onClick={props.handleSortTitle.bind(this)} >Title</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortDescription.bind(this)} >Description</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortDivision.bind(this)} >Division</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortSDL.bind(this)} >SDL</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {formattedServicesList()}
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
   )
 }

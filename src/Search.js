@@ -1,13 +1,12 @@
 import React from 'react'
+import { Input } from 'semantic-ui-react'
 
 export default ( props ) => {
   return (
-    <div className="search">
-      <input
+      <Input
         type="text" value={props.searchTerm}
+        placeholder="Search..."
         onChange={props.handleChange}
       />
-      <i className="circular search link icon"></i>
-    </div>
   )
 }

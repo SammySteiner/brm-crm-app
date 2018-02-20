@@ -1,5 +1,6 @@
 import React from 'react'
 import AgenciesList from './AgenciesList.js'
+import { Container, Table } from 'semantic-ui-react'
 
 export default(props) => {
 
@@ -18,20 +19,20 @@ export default(props) => {
   }
 
   return(
-    <table className ="agencies-list">
-      <thead>
-        <tr>
-          <th onClick={props.handleSortName.bind(this)} >Name</th>
-          <th onClick={props.handleSortAcronym.bind(this)} >Acronym</th>
-          <th onClick={props.handleSortCIO.bind(this)} >CIO</th>
-          <th onClick={props.handleSortCommissioner.bind(this)} >Commissioner</th>
-          <th onClick={props.handleSortARM.bind(this)} >ARM</th>
-          <th onClick={props.handleSortMayoral.bind(this)} >Mayoral</th>
-        </tr>
-      </thead>
-      <tbody>
-        {formattedAgenciesList()}
-      </tbody>
-    </table>
+      <Table striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell onClick={props.handleSortName.bind(this)} >Name</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortAcronym.bind(this)} >Acronym</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortCIO.bind(this)} >CIO</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortCommissioner.bind(this)} >Commissioner</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortARM.bind(this)} >ARM</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortMayoral.bind(this)} >Mayoral</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body >
+          {formattedAgenciesList()}
+        </Table.Body>
+      </Table>
   )
 }

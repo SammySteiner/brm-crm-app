@@ -4,6 +4,7 @@ import AgenciesTable from './AgenciesTable'
 import Search from '../Search.js'
 
 import { getDirectory } from '../api'
+import { Button, Grid, Container, Loader } from 'semantic-ui-react'
 
 export default class Agencies extends Component {
   constructor(props){
@@ -164,24 +165,33 @@ export default class Agencies extends Component {
   render(){
     const filteredList = this.state.agencies.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
     return(
-      !this.state.agencies[0] ? <h1>Loading</h1> :
-      <div className="agency-list">
-        <div className="agency">
-          <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
-          <button type='button' onClick={this.newAgency.bind(this)}>Add an Agency</button>
-          <AgenciesTable
-            sortedAndFilteredList={filteredList}
-            handleSelectAgency={this.handleSelectAgency.bind(this)}
-            handleSelectStaff={this.handleSelectStaff.bind(this)}
-            handleSortName={this.handleSortName.bind(this)}
-            handleSortAcronym={this.handleSortAcronym.bind(this)}
-            handleSortCIO={this.handleSortCIO.bind(this)}
-            handleSortCommissioner={this.handleSortCommissioner.bind(this)}
-            handleSortARM={this.handleSortARM.bind(this)}
-            handleSortMayoral={this.handleSortMayoral.bind(this)}
-          />
-        </div>
-      </div>
+      !this.state.agencies[0] ? <Loader active inline='centered' content='Loading'/> :
+        <Grid verticle padded>
+          <Grid.Row columns={2}>
+            <Grid.Column width={2} floated='left' >
+              <Button type='button' onClick={this.newAgency.bind(this)}>Add an Agency</Button>
+            </Grid.Column>
+            <Grid.Column  floated='left' stretched width={10}>
+                <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row >
+            <Grid.Column >
+              <AgenciesTable
+                sortedAndFilteredList={filteredList}
+                handleSelectAgency={this.handleSelectAgency.bind(this)}
+                handleSelectStaff={this.handleSelectStaff.bind(this)}
+                handleSortName={this.handleSortName.bind(this)}
+                handleSortAcronym={this.handleSortAcronym.bind(this)}
+                handleSortCIO={this.handleSortCIO.bind(this)}
+                handleSortCommissioner={this.handleSortCommissioner.bind(this)}
+                handleSortARM={this.handleSortARM.bind(this)}
+                handleSortMayoral={this.handleSortMayoral.bind(this)}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
     )
   }
 }
