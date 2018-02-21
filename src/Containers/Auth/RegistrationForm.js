@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getUserEmails } from '../api'
+import { getUserEmails } from '../../api'
 import { Form, Grid, Container, Button } from 'semantic-ui-react'
 
 export default class RegistrationForm extends Component {

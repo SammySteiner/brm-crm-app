@@ -3,12 +3,12 @@ import { Route, withRouter, Switch } from 'react-router-dom'
 
 import { logIn, register } from './api'
 
-import NavBar from './NavBar/NavBar.js'
-import Footer from './Footer/Footer.js'
-import LoginForm from './Auth/LoginForm.js'
-import RegistrationForm from './Auth/RegistrationForm.js'
+import NavBar from './Containers/NavBar/NavBar.js'
+// import Footer from './Containers/Footer/Footer.js'
+import LoginForm from './Containers/Auth/LoginForm.js'
+import RegistrationForm from './Containers/Auth/RegistrationForm.js'
 import { isAuthenticated } from './Hocs/isAuthenticated'
-import Home from './Home/Home.js'
+import Home from './Containers/Home/Home.js'
 
 const AuthenticatedHomeContainer = isAuthenticated(Home)
 

@@ -1,5 +1,5 @@
 import React,{ Component } from 'react'
-import { getDetails, deleteResource } from '../api'
+import { getDetails, deleteResource } from '../../api'
 import { Button } from 'semantic-ui-react'
 
 export default class AgencyDetail extends Component {

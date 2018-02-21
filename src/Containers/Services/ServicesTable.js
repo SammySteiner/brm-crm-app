@@ -1,6 +1,6 @@
 import React from 'react'
 import ServicesList from './ServicesList.js'
-import { Container, Table } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 
 
 export default(props) => {

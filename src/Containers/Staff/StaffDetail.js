@@ -1,6 +1,5 @@
 import React,{ Component } from 'react'
-import { getDetails, deleteResource } from '../api'
-import { Redirect } from 'react-router-dom'
+import { getDetails, deleteResource } from '../../api'
 
 export default class StaffDetail extends Component {
   constructor(props){

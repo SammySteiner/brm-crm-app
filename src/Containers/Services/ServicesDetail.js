@@ -1,5 +1,5 @@
 import React,{ Component } from 'react'
-import { getDetails, deleteResource } from '../api'
+import { getDetails, deleteResource } from '../../api'
 
 export default class ServiceDetail extends Component {
   constructor(props){

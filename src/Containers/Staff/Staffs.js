@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 
-import StaffList from './StaffList'
 import StaffTable from './StaffTable'
 import Search from '../Search.js'
 
-import { getDirectory } from '../api'
-import { Button, Grid, Container, Loader } from 'semantic-ui-react'
+import { getDirectory } from '../../api'
+import { Button, Grid, Loader } from 'semantic-ui-react'
 
 
 export default class Staffs extends Component {
@@ -114,7 +112,7 @@ export default class Staffs extends Component {
     const filteredList = this.state.staffs.filter( s => s.fullname.toLowerCase().includes(this.state.search.toLowerCase()) || s.role.title.toLowerCase().includes(this.state.search.toLowerCase()) || (s.agency ? s.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (s.office_phone ? s.office_phone.includes(this.state.search) : false) )
     return(
       !this.state.staffs[0] ? <Loader active inline='centered' content='Loading'/>  :
-          <Grid verticle padded>
+          <Grid padded>
             <Grid.Row columns={2}>
               <Grid.Column width={2} floated='left' >
                 <Button type='button' onClick={this.newStaff.bind(this)}>Add a Staff Member</Button>

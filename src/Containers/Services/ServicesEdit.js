@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import ServicesForm from './ServicesForm.js'
-import { fetchFormInfo, editResource } from '../api'
+import { fetchFormInfo, editResource } from '../../api'
 
 export default class ServicesEdit extends Component{
   constructor(props){

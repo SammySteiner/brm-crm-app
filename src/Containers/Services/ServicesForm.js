@@ -5,7 +5,6 @@ import { Dropdown, Form, Button, Container } from 'semantic-ui-react'
 export default (props) => {
   var staff = [{key: '', value: '', text: ''}]
   props.staffNames.sort().forEach( (s, i) => staff.push({ key: i, value: s, text: s }))
-  var agencies = [{key: '', value: '', text: ''}]
   var divisions = [{key: '', value: '', text: ''}]
   props.divisionNames.forEach( (d, i) => divisions.push({ key: i, value: d, text: d }))
   return(

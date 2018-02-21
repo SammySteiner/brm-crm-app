@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import AgenciesTable from './AgenciesTable'
 import Search from '../Search.js'
 
-import { getDirectory } from '../api'
-import { Button, Grid, Container, Loader } from 'semantic-ui-react'
+import { getDirectory } from '../../api'
+import { Button, Grid, Loader } from 'semantic-ui-react'
 
 export default class Agencies extends Component {
   constructor(props){

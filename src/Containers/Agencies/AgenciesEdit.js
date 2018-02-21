@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import AgenciesForm from './AgenciesForm.js'
-import { fetchFormInfo, editResource } from '../api'
+import { fetchFormInfo, editResource } from '../../api'
 
 export default class AgenciesEdit extends Component{
   constructor(props){

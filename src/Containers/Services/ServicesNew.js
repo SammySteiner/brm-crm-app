@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import ServicesForm from './ServicesForm.js'
-import { fetchFormInfo, createResource } from '../api'
+import { fetchFormInfo, createResource } from '../../api'
 
 export default class ServicesNew extends Component{
   constructor(){

@@ -18,18 +18,21 @@ export default (props) => {
   } else {
     props.roles.filter(  r =>  (r !== "SDL" && r !== "Service Owner" && r !== "ARM Manager" && r !== "ARM" && r !== "Service Provider") ).forEach( (r, i) => roles.push({ key: i, value: r, text: r }))
   }
+  var requiredFields = !(props.first_name && props.last_name && props.email && props.agency)
   return(
     <Container textAlign='left'>
-
     <Form onSubmit={props.handleSubmit}>
-      <Form.Input label="Staff First Name:" type='text' value={props.first_name} onChange={props.handleInputChange} id='first_name'/>
-      <Form.Input label="Staff Last Name:" type='text' value={props.last_name} onChange={props.handleInputChange} id='last_name'/>
-      <Form.Input label="Staff Email:" type='text' value={props.email} onChange={props.handleInputChange} id='email'/>
+      <Form.Input required label="Staff First Name:" type='text' value={props.first_name} onChange={props.handleInputChange} id='first_name'/>
+      <Form.Input required label="Staff Last Name:" type='text' value={props.last_name} onChange={props.handleInputChange} id='last_name'/>
+      <Form.Input required label="Staff Email:" type='text' value={props.email} onChange={props.handleInputChange} id='email'/>
       <Form.Input label="Staff Office Phone:" type='tel' value={props.office_phone} onChange={props.handleInputChange} id='office_phone'/>
       <Form.Input label="Staff Cell Phone:" type='tel' value={props.cell_phone} onChange={props.handleInputChange} id='cell_phone'/>
-      <Dropdown fluid search selection placeholder='Agency' id='agency' value={props.agency} onChange={props.handleInputChange} options={agencies} />
+
+      <Form.Field label='Agency:'>
+        <Dropdown fluid required search selection placeholder='Agency' id='agency' value={props.agency} onChange={props.handleInputChange} options={agencies} />
+      </Form.Field>
       <br/>
-      <Dropdown fluid search selection placeholder='Role' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
+      <Dropdown fluid required search selection placeholder='Role' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
       <br/>
       {(props.role === "SDL" || props.role === "Service Owner" || props.role === "Service Provider") ?
       <Dropdown fluid search selection multiple placeholder='Services' id='services' value={props.services} onChange={props.handleInputChange} options={props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list} />
@@ -37,7 +40,7 @@ export default (props) => {
       {props.role === "ARM" ?
       <Dropdown fluid search selection multiple placeholder='Unassigned Agencies' id='assignments' value={props.assignments} onChange={props.handleInputChange} options={unassigned_agencies} />
       : null}
-      <Button type='submit' onClick={props.handleSubmit}>Submit</Button>
+      <Button disabled={requiredFields} color='blue' type='submit' onClick={props.handleSubmit}>Submit</Button>
     </Form>
   </Container>
 
