@@ -42,12 +42,21 @@ export default class StaffNew extends Component{
 
   }
 
-  handleInputChange(event){
-    let value = event.target.type === 'checkbox' ? event.target.checked : (event.target.id === 'services' ||  event.target.id === 'assignments') ? [...event.target.options].filter(o => o.selected).map(o => o.value) : event.target.value
-    this.setState({
-      [event.target.id]: value
-    })
+  handleInputChange(event, data){
+    let value = data.type === 'checkbox' ? data.checked : data.value
+    if (data.id === "role" ) {
+      this.setState({
+        assignments: [],
+        services: [],
+        [data.id]: value
+      })
+    } else {
+      this.setState({
+        [data.id]: value,
+      })
+    }
   }
+
 
   handleSubmit(event){
     event.preventDefault()

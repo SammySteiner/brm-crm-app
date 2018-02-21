@@ -166,7 +166,7 @@ export default class Agencies extends Component {
     const filteredList = this.state.agencies.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
     return(
       !this.state.agencies[0] ? <Loader active inline='centered' content='Loading'/> :
-        <Grid verticle padded>
+        <Grid padded>
           <Grid.Row columns={2}>
             <Grid.Column width={2} floated='left' >
               <Button type='button' onClick={this.newAgency.bind(this)}>Add an Agency</Button>

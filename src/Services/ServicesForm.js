@@ -1,40 +1,25 @@
 import React from 'react'
+import { Dropdown, Form, Button, Container } from 'semantic-ui-react'
+
 
 export default (props) => {
-  var staff = props.staffNames.sort().map( (s, i) => <option key={i} value={s}>{s}</option>)
-  var divisions = props.divisionNames.map( (d, i) => <option key={i} value={d}>{d}</option>)
+  var staff = [{key: '', value: '', text: ''}]
+  props.staffNames.sort().forEach( (s, i) => staff.push({ key: i, value: s, text: s }))
+  var agencies = [{key: '', value: '', text: ''}]
+  var divisions = [{key: '', value: '', text: ''}]
+  props.divisionNames.forEach( (d, i) => divisions.push({ key: i, value: d, text: d }))
   return(
-    <form onSubmit={props.handleSubmit}>
-      <div>
-        <label>Service Title: </label>
-        <input type='text' value={props.title} onChange={props.handleInputChange} id='title'></input>
-      </div>
-      <div>
-        <label>Service Description: </label>
-        <textarea value={props.description} onChange={props.handleInputChange} id='description'></textarea>
-      </div>
-      <div>
-        <label>SLA: </label>
-        <input type='number' value={props.sla} onChange={props.handleInputChange} id='sla'></input>
-      </div>
-      <div>
-        <label>SDL:
-          <select value={props.sdl} id='sdl' onChange={props.handleInputChange}>
-            <option></option>
-            {staff}
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>Division:
-          <select value={props.division} id='division' onChange={props.handleInputChange}>
-            <option></option>
-            {divisions}
-          </select>
-        </label>
-      </div>
-
-      <button type='submit' onClick={props.handleSubmit}>Submit</button>
-    </form>
+    <Container textAlign='left'>
+      <Form onSubmit={props.handleSubmit}>
+        <Form.Input label="Service Title:" type='text' value={props.title} onChange={props.handleInputChange} id='title'/>
+        <Form.TextArea autoHeight label="Service Description:" value={props.description} onChange={props.handleInputChange} id='description'/>
+        <Form.Input label="SLA:" type='number' value={props.sla} onChange={props.handleInputChange} id='sla'/>
+        <Dropdown fluid search selection placeholder='SDL' id='sdl' value={props.sdl} onChange={props.handleInputChange} options={staff} />
+        <br/>
+        <Dropdown fluid search selection placeholder='Division' id='division' value={props.division} onChange={props.handleInputChange} options={divisions} />
+        <br/>
+        <Button type='submit' onClick={props.handleSubmit}>Submit</Button>
+      </Form>
+    </Container>
   )
 }

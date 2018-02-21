@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Form, Grid, Container, Button } from 'semantic-ui-react'
+
 
 export default class LoginForm extends Component {
   constructor(props){
@@ -16,6 +18,10 @@ export default class LoginForm extends Component {
     })
   }
 
+  handleRegister(event){
+    this.props.history.push('/register')
+  }
+
   handleSubmit(event){
     event.preventDefault()
     this.props.handleLogin(this.state)
@@ -27,13 +33,21 @@ export default class LoginForm extends Component {
 
   render(){
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
-        <label>Email:</label>
-        <input type='text' value={this.state.email} id='email' onChange={this.handleChange.bind(this)}/>
-        <label>Password:</label>
-        <input type='password' value={this.state.password} id='password' onChange={this.handleChange.bind(this)}/>
-        <input type='submit' value='Log In' />
-      </form>
+      <Container textAlign="left">
+        <br/>
+        <Grid centered>
+          <Grid.Column width={8}>
+            <h1>Login</h1>
+            <br/>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+               <Form.Input label="Email:" type='text' value={this.state.email} onChange={this.handleChange.bind(this)} id='email'/>
+              <Form.Input label="Password:" type='password' value={this.state.password} onChange={this.handleChange.bind(this)} id='password'/>
+              <Button floated='right' primary size='large' type='submit' content='Log In' />
+              <Button floated='left' secondary size='mini' content='Register' onClick={this.handleRegister.bind(this)} />
+            </Form>
+          </Grid.Column>
+        </Grid>
+      </Container>
     )
   }
 }

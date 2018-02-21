@@ -46,6 +46,8 @@ export default class AgenciesEdit extends Component{
     })
   }
 
+  handleRadioChange = (e, { value }) => this.setState({ category: value })
+
   handleSubmit(event){
     event.preventDefault()
     let info = {id: this.state.id, name: this.state.name, acronym: this.state.acronym, category: this.state.category, mayoral: this.state.mayoral, citynet: this.state.citynet, address: this.state.address}
@@ -74,6 +76,7 @@ export default class AgenciesEdit extends Component{
           citynet={this.state.citynet}
           address={this.state.address}
           handleInputChange={this.handleInputChange.bind(this)}
+          handleRadioChange={this.handleRadioChange.bind(this)}
           handleSubmit={this.handleSubmit.bind(this)}
         />
       </div>

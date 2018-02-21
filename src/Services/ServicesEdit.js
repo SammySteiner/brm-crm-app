@@ -44,10 +44,10 @@ export default class ServicesEdit extends Component{
     })
   }
 
-  handleInputChange(event){
-    let value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+  handleInputChange(event, data){
+    let value = data.type === 'checkbox' ? data.checked : data.value
     this.setState({
-      [event.target.id]: value
+      [data.id]: value
     })
   }
 

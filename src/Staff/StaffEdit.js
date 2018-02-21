@@ -48,7 +48,7 @@ export default class ServicesEdit extends Component{
           role: this.props.history.location.state.role.title,
           services: this.props.history.location.state.services,
           id: this.props.history.location.state.id,
-          assignments: this.props.history.location.state.assignments
+          assignments: this.props.history.location.state.assignments.map( a => a.name )
         })
       }
     )
@@ -60,11 +60,19 @@ export default class ServicesEdit extends Component{
 
   }
 
-  handleInputChange(event){
-    let value = event.target.type === 'checkbox' ? event.target.checked : (event.target.id === 'services' ||  event.target.id === 'assignments') ? [...event.target.options].filter(o => o.selected).map(o => o.value) : event.target.value
-    this.setState({
-      [event.target.id]: value
-    })
+  handleInputChange(event, data){
+    let value = data.type === 'checkbox' ? data.checked : data.value
+    if (data.id === "role" ) {
+      this.setState({
+        assignments: [],
+        services: [],
+        [data.id]: value
+      })
+    } else {
+      this.setState({
+        [data.id]: value,
+      })
+    }
   }
 
   handleSubmit(event){
@@ -77,12 +85,10 @@ export default class ServicesEdit extends Component{
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.id !== this.state.id && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
                 if (!this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.services.includes( s.title)).some( s => s.sdl_id !== undefined && s.id !== this.state.id))) {
-                  debugger
                     editResource(info, 'staff', 'staff')
                     .then( staff => this.props.history.push(staff.id.toString()))
                 } else if (this.state.role === 'ARM' ) {
                   if (this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).length < 1) {
-                    debugger
                       editResource(info, 'staff', 'staff')
                       .then( staff => this.props.history.push(staff.id.toString()))
                   } else {
@@ -102,7 +108,6 @@ export default class ServicesEdit extends Component{
                   alert(message)
                 }
               } else {
-                debugger
                 editResource(info, 'staff', 'staff')
                 .then( staff => this.props.history.push(staff.id.toString()))
               }
@@ -121,7 +126,6 @@ export default class ServicesEdit extends Component{
     } else {
       alert(`Each employee needs a unique full name. ${this.state.first_name} ${this.state.last_name} is  already in the system. Having mutliple people with the same name can get confusing.`)
     }
-    debugger
   }
 
 
@@ -146,6 +150,7 @@ export default class ServicesEdit extends Component{
           assignments={this.state.assignments}
           services={this.state.services}
           services_list={this.state.services_list}
+          id={this.state.id}
           path={this.props.match.path}
           handleInputChange={this.handleInputChange.bind(this)}
           handleSubmit={this.handleSubmit.bind(this)}

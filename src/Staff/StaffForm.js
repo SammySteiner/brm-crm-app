@@ -1,83 +1,45 @@
 import React from 'react'
+import { Dropdown, Form, Button, Container } from 'semantic-ui-react'
 
 export default (props) => {
-
-  var agencies = props.agencyNames.map( (a, i) => <option key={i} value={a}>{a}</option>)
-  var services_list = props.services_list.sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
-  var unassigned_sdl_services = props.services_list.filter( s => !s.sdl_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
-  var unassigned_so_services = props.services_list.filter( s => !s.service_owner_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).map( (s , i) => <option key={i} value={s.title}>{s.title}</option>)
-  var unassigned_agencies = props.agencies.filter( a => !props.arms.some( arm => arm.agency_id === a.id)).sort( (a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)).map( (ua, i) => <option key={i} value={ua.name}>{ua.name}</option>)
-  var roles = []
+  var agencies = [{key: '', value: '', text: ''}]
+  props.agencyNames.forEach( (a, i) => agencies.push({ key: i, value: a, text: a }))
+  var services_list = [{key: '', value: '', text: ''}]
+  props.services_list.sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).forEach( s => services_list.push({ key: s.id, value: s.title, text: s.title }))
+  var unassigned_sdl_services = [{key: '', value: '', text: ''}]
+  props.services_list.filter( s => !s.sdl_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).forEach( s => unassigned_sdl_services.push({ key: s.id, value: s.title, text: s.title }))
+  var unassigned_so_services = [{key: '', value: '', text: ''}]
+  props.services_list.filter( s => !s.service_owner_id).sort( (a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)).forEach( s => unassigned_so_services.push({ key: s.id, value: s.title, text: s.title }))
+  var unassigned_agencies = [{key: '', value: '', text: ''}]
+  props.agencies.filter( a => !props.arms.some( arm => arm.agency_id === a.id && arm.arm_id !== props.id )).sort( (a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)).forEach( ua => unassigned_agencies.push({ key: ua.id, value: ua.name, text: ua.name }))
+  var roles = [{key: '', value: '', text: ''}]
   if (props.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
-    roles = props.roles.map( (r, i) => <option key={i} value={r}>{r}</option>)
+    props.roles.forEach( (r, i) => roles.push({ key: i, value: r, text: r }))
   } else {
-    roles = props.roles.filter(  r =>  (r !== "SDL" && r !== "Service Owner" && r !== "ARM Manager" && r !== "ARM" && r !== "Service Provider") ).map( (r, i) => <option key={i} value={r}>{r}</option>)
+    props.roles.filter(  r =>  (r !== "SDL" && r !== "Service Owner" && r !== "ARM Manager" && r !== "ARM" && r !== "Service Provider") ).forEach( (r, i) => roles.push({ key: i, value: r, text: r }))
   }
   return(
-    <form onSubmit={props.handleSubmit}>
-      <div>
-        {/* add warning if name is the same as first_name */}
-        <label>Staff First Name: </label>
-        <input type='text' value={props.first_name} onChange={props.handleInputChange} id='first_name'></input>
-      </div>
-      <div>
-        {/* add warning if name is the same as last_name */}
-        <label>Staff Last Name: </label>
-        <input type='text' value={props.last_name} onChange={props.handleInputChange} id='last_name'></input>
-      </div>
-      <div>
-        {/* add warning if name is the same as email */}
-        <label>Staff Email: </label>
-        <input type='text' value={props.email} onChange={props.handleInputChange} id='email'></input>
-      </div>
-      <div>
-        {/* add warning if name is the same as email */}
-        <label>Staff Office Phone: </label>
-        <input type='tel' value={props.office_phone} onChange={props.handleInputChange} id='office_phone'></input>
-      </div>
-      <div>
-        {/* add warning if name is the same as email */}
-        <label>Staff Cell Phone: </label>
-        <input type='tel' value={props.cell_phone} onChange={props.handleInputChange} id='cell_phone'></input>
-      </div>
-      <div>
-        <label>Agency:
-          <select value={props.agency} id='agency' onChange={props.handleInputChange}>
-            <option></option>
-            {agencies}
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>Role:
-          <select value={props.role} id='role' onChange={props.handleInputChange}>
-            <option></option>
-            {roles}
-          </select>
-        </label>
-      </div>
+    <Container textAlign='left'>
+
+    <Form onSubmit={props.handleSubmit}>
+      <Form.Input label="Staff First Name:" type='text' value={props.first_name} onChange={props.handleInputChange} id='first_name'/>
+      <Form.Input label="Staff Last Name:" type='text' value={props.last_name} onChange={props.handleInputChange} id='last_name'/>
+      <Form.Input label="Staff Email:" type='text' value={props.email} onChange={props.handleInputChange} id='email'/>
+      <Form.Input label="Staff Office Phone:" type='tel' value={props.office_phone} onChange={props.handleInputChange} id='office_phone'/>
+      <Form.Input label="Staff Cell Phone:" type='tel' value={props.cell_phone} onChange={props.handleInputChange} id='cell_phone'/>
+      <Dropdown fluid search selection placeholder='Agency' id='agency' value={props.agency} onChange={props.handleInputChange} options={agencies} />
+      <br/>
+      <Dropdown fluid search selection placeholder='Role' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
+      <br/>
       {(props.role === "SDL" || props.role === "Service Owner" || props.role === "Service Provider") ?
-      <div>
-        <label>Service:
-          <select multiple={true} value={props.services} id='services' onChange={props.handleInputChange}>
-            <option></option>
-            {props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list}
-          </select>
-        </label>
-      </div>
+      <Dropdown fluid search selection multiple placeholder='Services' id='services' value={props.services} onChange={props.handleInputChange} options={props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list} />
       : null}
       {props.role === "ARM" ?
-      <div>
-        <label>Unassigned Agencies:
-          <select multiple={true} value={props.assignments} id='assignments' onChange={props.handleInputChange}>
-            <option></option>
-            {props.path === '/staff/new' ? unassigned_agencies : agencies}
-          </select>
-        </label>
-      </div>
+      <Dropdown fluid search selection multiple placeholder='Unassigned Agencies' id='assignments' value={props.assignments} onChange={props.handleInputChange} options={unassigned_agencies} />
       : null}
+      <Button type='submit' onClick={props.handleSubmit}>Submit</Button>
+    </Form>
+  </Container>
 
-      <button type='submit' onClick={props.handleSubmit}>Submit</button>
-    </form>
   )
 }
