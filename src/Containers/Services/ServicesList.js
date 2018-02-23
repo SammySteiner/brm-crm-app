@@ -10,6 +10,7 @@ export default (props) => {
       <Table.Cell >{props.services.description}</Table.Cell>
       <Table.Cell >{props.services.division ? props.services.division.name : ""}</Table.Cell>
       <Table.Cell singleLine selectable className='test' onClick={props.handleSelectStaff} id={props.services.sdl ? props.services.sdl.id : null}>{props.services.sdl ? props.services.sdl.fullname : ""}</Table.Cell>
+      <Table.Cell singleLine selectable className='test' onClick={props.handleSelectStaff} id={props.services.service_owner ? props.services.service_owner.id : null}>{props.services.service_owner ? props.services.service_owner.fullname : ""}</Table.Cell>
     </Table.Row>
   )
 }

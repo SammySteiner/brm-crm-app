@@ -27,18 +27,25 @@ export default (props) => {
       <Form.Input required label="Staff Email:" type='text' value={props.email} onChange={props.handleInputChange} id='email'/>
       <Form.Input label="Staff Office Phone:" type='tel' value={props.office_phone} onChange={props.handleInputChange} id='office_phone'/>
       <Form.Input label="Staff Cell Phone:" type='tel' value={props.cell_phone} onChange={props.handleInputChange} id='cell_phone'/>
-
-      <Form.Field label='Agency:'>
-        <Dropdown fluid required search selection placeholder='Agency' id='agency' value={props.agency} onChange={props.handleInputChange} options={agencies} />
+      <Form.Field required>
+        <label>Agency:</label>
+        <Dropdown fluid search selection placeholder='Search...' id='agency' value={props.agency} onChange={props.handleInputChange} options={agencies} />
       </Form.Field>
-      <br/>
-      <Dropdown fluid required search selection placeholder='Role' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
-      <br/>
+      <Form.Field required>
+        <label>Role:</label>
+        <Dropdown fluid required search selection placeholder='Search...' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
+      </Form.Field>
       {(props.role === "SDL" || props.role === "Service Owner" || props.role === "Service Provider") ?
-      <Dropdown fluid search selection multiple placeholder='Services' id='services' value={props.services} onChange={props.handleInputChange} options={props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list} />
+      <Form.Field >
+        <label>Services:</label>
+        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.services} onChange={props.handleInputChange} options={props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list} />
+      </Form.Field>
       : null}
       {props.role === "ARM" ?
-      <Dropdown fluid search selection multiple placeholder='Unassigned Agencies' id='assignments' value={props.assignments} onChange={props.handleInputChange} options={unassigned_agencies} />
+      <Form.Field >
+        <label>Assignments:</label>
+        <Dropdown fluid search selection multiple placeholder='Search...' id='assignments' value={props.assignments} onChange={props.handleInputChange} options={unassigned_agencies} />
+      </Form.Field>
       : null}
       <Button disabled={requiredFields} color='blue' type='submit' onClick={props.handleSubmit}>Submit</Button>
     </Form>

@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { Button } from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid } from 'semantic-ui-react'
 
 export default class AgencyDetail extends Component {
   constructor(props){
@@ -21,6 +21,10 @@ export default class AgencyDetail extends Component {
         return this.setState({agency: agency})
       }
     })
+  }
+
+  handleSelectStaff(type){
+    return this.props.history.push("/staff/" + this.state.agency[type].id)
   }
 
   handleDelete(event){
@@ -54,27 +58,38 @@ export default class AgencyDetail extends Component {
     })
   }
 
-
   render(){
-    console.log(this.state.agency);
     return(
-      !this.state.agency.id ? <h1>Loading</h1> :
-      <div>
-        <ul className='agency-detail'>
-          <li>Name: {this.state.agency.name}</li>
-          <li>Acronym: {this.state.agency.acronym}</li>
-          <li>Mayoral: {this.state.agency.mayoral ? "Yes" : "No"}</li>
-          <li>Access to CityNet? {this.state.agency.citynet ? "Yes" : "No"}</li>
-          <li>Address: {this.available(this.state.agency.address)}</li>
-          <li>Category: {this.available(this.state.agency.category)}</li>
-          <li>Commissioner: {this.state.agency.commissioner ? this.state.agency.commissioner.first_name + " " + this.state.agency.commissioner.last_name : 'Data Not Available'}</li>
-          <li>CIO: {this.state.agency.cio ? this.state.agency.cio.first_name + " " + this.state.agency.cio.last_name : 'Data Not Available'}</li>
-          <li>ARM: {this.state.agency.arm ? this.state.agency.arm.first_name + " " + this.state.agency.arm.last_name : 'Data Not Available'}</li>
-        </ul>
-        <Button onClick={this.handleDelete.bind(this)}>Delete</Button>
-        <Button onClick={this.handleEdit.bind(this)}>Edit</Button>
-      </div>
-
+      !this.state.agency.id ? <Loader active inline='centered' content='Loading'/> :
+      <Container>
+        <Header as='h1' textAlign='center'>{this.state.agency.name} ({this.state.agency.acronym})</Header>
+        <Grid columns={2}>
+          <Grid.Row >
+            <Grid.Column >
+              <Card fluid>
+                <Card.Content header="Basic Info"/>
+                <Card.Content>
+                  <List>
+                    <List.Item icon='' content={`Address: ${this.available(this.state.agency.address)}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('commissioner')} content={`Commissioner: ${this.state.agency.commissioner ? this.state.agency.commissioner.first_name + " " + this.state.agency.commissioner.last_name : 'Data Not Available'}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('cio')} content={`CIO: ${this.state.agency.cio ? this.state.agency.cio.first_name + " " + this.state.agency.cio.last_name : 'Data Not Available'}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('arm')} content={`ARM: ${this.state.agency.arm ? this.state.agency.arm.first_name + " " + this.state.agency.arm.last_name : 'Data Not Available'}`} />
+                    <List.Item icon='' content={`Category: ${this.available(this.state.agency.category)}`} />
+                    <List.Item icon='' content={`CityNet Access: ${this.state.agency.citynet ? "Yes" : "No"}`} />
+                    <List.Item icon='' content={`Mayoral: ${this.state.agency.mayoral ? "Yes" : "No"}`} />
+                  </List>
+                </Card.Content>
+                <Card.Content extra>
+                  <Button size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
+                  <Button floated='right' size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
     )
   }
 }

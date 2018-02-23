@@ -13,10 +13,14 @@ export default (props) => {
         <Form.Input label="Service Title:" type='text' value={props.title} onChange={props.handleInputChange} id='title'/>
         <Form.TextArea autoHeight label="Service Description:" value={props.description} onChange={props.handleInputChange} id='description'/>
         <Form.Input label="SLA:" type='number' value={props.sla} onChange={props.handleInputChange} id='sla'/>
-        <Dropdown fluid search selection placeholder='SDL' id='sdl' value={props.sdl} onChange={props.handleInputChange} options={staff} />
-        <br/>
-        <Dropdown fluid search selection placeholder='Division' id='division' value={props.division} onChange={props.handleInputChange} options={divisions} />
-        <br/>
+        <Form.Field >
+          <label>Service Delivery Lead:</label>
+          <Dropdown fluid search selection placeholder='Search...' id='sdl' value={props.sdl} onChange={props.handleInputChange} options={staff} />
+        </Form.Field>
+        <Form.Field >
+          <label>Division:</label>
+          <Dropdown fluid search selection placeholder='Search...' id='division' value={props.division} onChange={props.handleInputChange} options={divisions} />
+        </Form.Field>
         <Button type='submit' onClick={props.handleSubmit}>Submit</Button>
       </Form>
     </Container>

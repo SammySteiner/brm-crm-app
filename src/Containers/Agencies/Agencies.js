@@ -169,7 +169,7 @@ export default class Agencies extends Component {
         <Grid padded>
           <Grid.Row columns={2}>
             <Grid.Column width={2} floated='left' >
-              <Button type='button' onClick={this.newAgency.bind(this)}>Add an Agency</Button>
+              <Button type='button' onClick={this.newAgency.bind(this)}>Add Agencies</Button>
             </Grid.Column>
             <Grid.Column  floated='left' stretched width={10}>
                 <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>

@@ -9,13 +9,14 @@ export default ( props ) => {
         <Menu.Item name='/staff' content='Staff' onClick={props.handleItemClick} />
         <Menu.Item name='/services' content='Services' onClick={props.handleItemClick} />
         <Menu.Item name='/agencies' content='Agencies' onClick={props.handleItemClick} />
+        {localStorage.id ?
         <Menu.Menu position='right'>
-          {localStorage.id ?
+          <Menu.Item content={props.fullname}/>
           <Menu.Item name='/logout' content='Logout' onClick={props.handleLogout} />
-          :
-          null
-          }
         </Menu.Menu>
+        :
+        null
+        }
       </Menu>
     </Segment>
   )

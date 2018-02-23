@@ -27,6 +27,7 @@ export default(props) => {
           <Table.HeaderCell onClick={props.handleSortDescription.bind(this)} >Description</Table.HeaderCell>
           <Table.HeaderCell onClick={props.handleSortDivision.bind(this)} >Division</Table.HeaderCell>
           <Table.HeaderCell onClick={props.handleSortSDL.bind(this)} >SDL</Table.HeaderCell>
+          <Table.HeaderCell onClick={props.handleSortSO.bind(this)} >Service Owner</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>

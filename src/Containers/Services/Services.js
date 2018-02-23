@@ -16,7 +16,8 @@ export default class Services extends Component {
       title: false,
       description: false,
       division: false,
-      sdl: false
+      sdl: false,
+      service_owner: false
     }
   }
 
@@ -52,8 +53,6 @@ export default class Services extends Component {
   newService(){
     return this.props.history.push("services/new")
   }
-
-
 
   handleSortTitle(){
     let servicesList = this.state.services
@@ -125,17 +124,33 @@ export default class Services extends Component {
       }
     var newState = Object.assign({}, this.state, {sdl: this.state.sdl ? false : true, services: servicesList})
     this.setState(newState)
-
+  }
+  handleSortSO(){
+    let servicesList = this.state.services
+    if (this.state.service_owner) {
+      servicesList.sort(function(a, b) {
+        var textA = a.service_owner
+        var textB = b.service_owner
+        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
+      })} else {
+        servicesList.sort(function(a, b) {
+          var textA = a.service_owner
+          var textB = b.service_owner
+          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
+        })
+      }
+    var newState = Object.assign({}, this.state, {service_owner: this.state.service_owner ? false : true, services: servicesList})
+    this.setState(newState)
   }
 
   render(){
-    const filteredList = this.state.services.filter( s =>  s.title.toLowerCase().includes(this.state.search.toLowerCase()) || ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.division ?  s.division.name.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) )
+    const filteredList = this.state.services.filter( s =>  s.title.toLowerCase().includes(this.state.search.toLowerCase()) || ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.division ?  s.division.name.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.service_owner ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
     return(
       !this.state.services[0] ? <Loader active inline='centered' content='Loading'/> :
-      <Grid verticle padded>
+      <Grid padded>
         <Grid.Row columns={2}>
           <Grid.Column width={2} floated='left' >
-            <Button type='button' onClick={this.newService.bind(this)}>Add a Service</Button>
+            <Button type='button' onClick={this.newService.bind(this)}>Add Services</Button>
           </Grid.Column>
           <Grid.Column floated='left' stretched width={10}>
             <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
@@ -151,6 +166,7 @@ export default class Services extends Component {
               handleSortDescription={this.handleSortDescription.bind(this)}
               handleSortDivision={this.handleSortDivision.bind(this)}
               handleSortSDL={this.handleSortSDL.bind(this)}
+              handleSortSO={this.handleSortSDL.bind(this)}
             />
           </Grid.Column>
         </Grid.Row>

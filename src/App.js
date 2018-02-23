@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Switch } from 'react-router-dom'
 
-import { logIn, register } from './api'
+import { logIn, register, getDetails } from './api'
 
 import NavBar from './Containers/NavBar/NavBar.js'
 // import Footer from './Containers/Footer/Footer.js'
@@ -16,10 +16,22 @@ class App extends Component {
 
   constructor(){
     super()
+    this.state = {
+      fullname: ''
+    }
 
     this.handleLogin = this.handleLogin.bind(this)
     this.handleRegistration = this.handleRegistration.bind(this)
 
+  }
+
+  componentDidMount(){
+    if (localStorage.jwt) {
+      getDetails('staff', localStorage.id)
+      .then((data) => {this.setState({
+        fullname: data.fullname
+      })
+    })}
   }
 
   handleLogin(params){
@@ -62,16 +74,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <NavBar handleItemClick={this.handleItemClick.bind(this)} handleLogout={this.handleLogout.bind(this)}/>
+        <NavBar fullname={this.state.fullname} handleItemClick={this.handleItemClick.bind(this)} handleLogout={this.handleLogout.bind(this)}/>
           <Switch>
             <Route exact path='/login' render={({history}) => <LoginForm history={history} handleLogin={this.handleLogin}/>} />
             <Route exact path='/register' render={({history}) => <RegistrationForm history={history} handleRegistration={this.handleRegistration}/>} />
             <Route path='/' render={({match, history}) => <AuthenticatedHomeContainer history={history} match={match} />} />
-
-            {/* <Route path='/staff' render={({match, history}) => <StaffHome history={history} match={match}/>}/>
-            <Route path='/agencies' render={({match, history}) => <AgenciesHome history={history} match={match}/>}/>
-            <Route path='/services' render={({match, history}) => <ServicesHome history={history} match={match}/>}/> */}
-
           </Switch>
         {/* <Footer/> */}
       </div>

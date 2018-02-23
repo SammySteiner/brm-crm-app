@@ -1,5 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
+import { List, Button, Card, Loader, Container, Header, Grid } from 'semantic-ui-react'
 
 export default class StaffDetail extends Component {
   constructor(props){
@@ -23,9 +24,25 @@ export default class StaffDetail extends Component {
   })
   }
 
+  handleSelectAgency(event){
+    return event.target.parentElement.id ? this.props.history.push("/agencies/" + event.target.parentElement.id) : this.props.history.push("/agencies/" + event.target.id)
+  }
+  handleSelectService(event){
+    return this.props.history.push("/services/" + event.target.id)
+  }
+
   assignments(){
     if (this.state.staff.role.title === "ARM") {
-      return <li>Assignments: <ol>{this.state.staff.assignments.map(a => <li key={a.id}>{a.name}</li>)}</ol></li>
+      return (
+        <Card fluid>
+          <Card.Content header='Agency Assignments'/>
+          <Card.Content>
+            <List ordered>
+              {this.state.staff.assignments.map(a => <List.Item key={a.id} id={a.id} onClick={this.handleSelectAgency.bind(this)}>{a.name}</List.Item>)}
+            </List>
+          </Card.Content>
+        </Card>
+      )
     } else {
       return ""
     }
@@ -33,7 +50,21 @@ export default class StaffDetail extends Component {
 
   services(){
     if (this.state.staff.role.title === "SDL" || this.state.staff.role.title === "Service Provider" || this.state.staff.role.title === "Service Owner") {
-      return <li>Services: <ol>{this.state.staff.services.map(s => <li key={s.id}>{s.title}</li>)}</ol></li>
+      return (
+        <Card fluid>
+          <Card.Content header='Services'/>
+          <Card.Content>
+            <List ordered>
+              {this.state.staff.sdl_services[0] ? <Header as='h4'>SDL</Header> : null}
+              {this.state.staff.sdl_services[0] ? this.state.staff.sdl_services.map(s => <List.Item key={s.id} id={s.id} onClick={this.handleSelectService.bind(this)}>{s.title}</List.Item>) : null}
+              {this.state.staff.so_services[0] ? <Header as='h4'>SO</Header> : null}
+              {this.state.staff.so_services[0] ? this.state.staff.so_services.map(s => <List.Item key={s.id} id={s.id} onClick={this.handleSelectService.bind(this)}>{s.title}</List.Item>) : null}
+              {this.state.staff.dc_services[0] ? <Header as='h4'>DC</Header> : null}
+              {this.state.staff.dc_services[0] ? this.state.staff.dc_services.map(s => <List.Item key={s.id} id={s.id} onClick={this.handleSelectService.bind(this)}>{s.title}</List.Item>) : null}
+            </List>
+          </Card.Content>
+        </Card>
+      )
     } else {
       return ""
     }
@@ -56,22 +87,36 @@ export default class StaffDetail extends Component {
 
   render(){
     return(
-      !this.state.staff.id ? <h1>Loading</h1> :
-      <div>
-        <ul className='staff-detail'>
-          <li>Name: {this.state.staff.fullname}</li>
-          <li>Agency: {this.state.staff.agency.name}</li>
-          <li>Email: {this.state.staff.email}</li>
-          <li>Office: {this.state.staff.office_phone}</li>
-          <li>Cell: {this.state.staff.cell_phone}</li>
-          <li>Role: {this.state.staff.role.title}</li>
-          {this.assignments()}
-          {this.services()}
-        </ul>
-        <button onClick={this.handleDelete.bind(this)}>Delete</button>
-        <button onClick={this.handleEdit.bind(this)}>Edit</button>
-      </div>
-
+      !this.state.staff.id ? <Loader active inline='centered' content='Loading'/> :
+      <Container>
+        <Header as='h1' textAlign='center'>{this.state.staff.fullname}</Header>
+        <Grid columns={2}>
+          <Grid.Row >
+            <Grid.Column >
+              <Card fluid>
+                <Card.Content header="Basic Info"/>
+                <Card.Content>
+                  <List id={this.state.staff.agency.id}>
+                    <List.Item icon='building outline' id={this.state.staff.agency.id.toString()} onClick={this.handleSelectAgency.bind(this)} content={this.state.staff.agency.name} />
+                    <List.Item icon='mail' content={this.state.staff.email} />
+                    <List.Item icon='phone' content={this.state.staff.office_phone} />
+                    <List.Item icon='mobile' content={this.state.staff.cell_phone} />
+                    <List.Item icon='id card' content={this.state.staff.role.title} />
+                  </List>
+                </Card.Content>
+                <Card.Content extra>
+                  <Button size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
+                  <Button floated='right' size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
+                </Card.Content>
+              </Card>
+            </Grid.Column>
+            <Grid.Column>
+              {this.assignments()}
+              {this.services()}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
     )
   }
 }
