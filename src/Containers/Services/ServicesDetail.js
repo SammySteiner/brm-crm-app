@@ -24,7 +24,9 @@ export default class ServiceDetail extends Component {
   }
 
   handleSelectStaff(type){
-    return this.props.history.push("/staff/" + this.state.service[type].id)
+    if (this.state.service[type]) {
+      return this.props.history.push("/staff/" + this.state.service[type].id)
+    }
   }
 
 
@@ -57,10 +59,10 @@ export default class ServiceDetail extends Component {
                   <List>
                     <List.Item icon='' content={`Description: ${this.state.service.description}`} />
                     <List.Item icon='' content={`SLA: ${this.state.service.sla}`} />
-                    <List.Item icon='' onClick={()=>this.handleSelectStaff('sdl')} content={`SDL: ${this.state.service.sdl.first_name} ${this.state.service.sdl.last_name}`} />
-                    <List.Item icon='' onClick={()=>this.handleSelectStaff('service_owner')} content={`Service Owner: ${this.state.service.service_owner.first_name} ${this.state.service.service_owner.last_name}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('sdl')} content={`SDL: ${this.state.service.sdl ? this.state.service.sdl.first_name + ' ' + this.state.service.sdl.last_name : 'Data Not Available'}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('service_owner')} content={`Service Owner: ${this.state.service.service_owner ? this.state.service.service_owner.first_name + ' ' + this.state.service.service_owner.last_name : 'Data Not Available'}`} />
                     <List.Item icon='' content={`Division: ${this.state.service.division.name}`} />
-                    <List.Item icon='' onClick={()=>this.handleSelectStaff('deputy_commissioner')} content={`Deputy Commissioner: ${this.state.service.deputy_commissioner.first_name} ${this.state.service.deputy_commissioner.last_name}`} />
+                    <List.Item icon='' onClick={()=>this.handleSelectStaff('deputy_commissioner')} content={`Deputy Commissioner: ${this.state.service.deputy_commissioner ? this.state.service.deputy_commissioner.first_name + ' ' + this.state.service.deputy_commissioner.last_name : 'Data Not Available'}`} />
                   </List>
                 </Card.Content>
                 <Card.Content extra>

@@ -107,7 +107,6 @@ export default class Staffs extends Component {
     this.setState(newState)
   }
 
-
   render(){
     const filteredList = this.state.staffs.filter( s => s.fullname.toLowerCase().includes(this.state.search.toLowerCase()) || s.role.title.toLowerCase().includes(this.state.search.toLowerCase()) || (s.agency ? s.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (s.office_phone ? s.office_phone.includes(this.state.search) : false) )
     return(

@@ -86,6 +86,7 @@ export default class StaffDetail extends Component {
   }
 
   render(){
+    console.log(this.state);
     return(
       !this.state.staff.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>

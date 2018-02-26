@@ -35,12 +35,24 @@ export default (props) => {
         <label>Role:</label>
         <Dropdown fluid required search selection placeholder='Search...' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
       </Form.Field>
-      {(props.role === "SDL" || props.role === "Service Owner" || props.role === "Service Provider") ?
+      {(props.sdl_services[0]) ?
       <Form.Field >
-        <label>Services:</label>
-        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.services} onChange={props.handleInputChange} options={props.path === '/staff/new' && props.role === "SDL" ? unassigned_sdl_services : props.path === '/staff/new' && props.role === "Service Owner" ? unassigned_so_services : services_list} />
+        <label>Services as SDL:</label>
+        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.sdl_services.map(s => s.title)} onChange={props.handleInputChange} options={props.path === '/staff/new' ? unassigned_sdl_services : services_list} />
       </Form.Field>
       : null}
+      {(props.so_services[0]) ?
+      <Form.Field >
+        <label>Services as Service Owner:</label>
+        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.so_services.map(s => s.title)} onChange={props.handleInputChange} options={props.path === '/staff/new'? unassigned_so_services : services_list} />
+      </Form.Field>
+      : null}
+      {/* {(props.provider_services[1]) ?
+      <Form.Field >
+        <label>Services as Service Provider:</label>
+        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.provier_services.map(s => s.title)} onChange={props.handleInputChange} options={services_list} />
+      </Form.Field>
+      : null} */}
       {props.role === "ARM" ?
       <Form.Field >
         <label>Assignments:</label>

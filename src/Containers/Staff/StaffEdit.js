@@ -14,7 +14,9 @@ export default class ServicesEdit extends Component{
       cell_phone: '',
       agency: '',
       role: '',
-      services: '',
+      dc_services: '',
+      so_services: '',
+      sdl_services: '',
       id: '',
       agencyNames: [],
       roles: [],
@@ -46,7 +48,9 @@ export default class ServicesEdit extends Component{
           cell_phone: this.props.history.location.state.cell_phone ? this.props.history.location.state.cell_phone : '',
           agency: this.props.history.location.state.agency.name,
           role: this.props.history.location.state.role.title,
-          services: this.props.history.location.state.services,
+          dc_services: this.props.history.location.state.dc_services,
+          so_services: this.props.history.location.state.so_services,
+          sdl_services: this.props.history.location.state.sdl_services,
           id: this.props.history.location.state.id,
           assignments: this.props.history.location.state.assignments.map( a => a.name )
         })
@@ -132,7 +136,7 @@ export default class ServicesEdit extends Component{
   render(){
     return(
       <div>
-        <h1>Edit a Service</h1>
+        <h1>Edit a Staff Member</h1>
         <StaffForm
           first_name={this.state.first_name}
           last_name={this.state.last_name}
@@ -143,7 +147,9 @@ export default class ServicesEdit extends Component{
           agencies={this.state.agencies}
           arms={this.state.arms}
           role={this.state.role}
-          services={this.state.services}
+          dc_services={this.state.dc_services}
+          so_services={this.state.so_services}
+          sdl_services={this.state.sdl_services}
           agencyNames={this.state.agencyNames}
           roles={this.state.roles}
           staff={this.state.staff}

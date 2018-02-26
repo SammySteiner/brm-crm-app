@@ -11,6 +11,7 @@ export default class ServicesNew extends Component{
       description: '',
       sla: '',
       sdl: '',
+      service_owner: '',
       division: '',
       services: [],
       divisionNames: [],
@@ -61,6 +62,7 @@ export default class ServicesNew extends Component{
           description={this.state.description}
           sla={this.state.sla}
           sdl={this.state.sdl}
+          service_owner={this.state.service_owner}
           division={this.state.division}
           services={this.state.services}
           divisionNames={this.state.divisionNames}

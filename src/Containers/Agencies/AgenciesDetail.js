@@ -24,7 +24,9 @@ export default class AgencyDetail extends Component {
   }
 
   handleSelectStaff(type){
-    return this.props.history.push("/staff/" + this.state.agency[type].id)
+    if (this.state.agency[type]) {
+      return this.props.history.push("/staff/" + this.state.agency[type].id)
+    }
   }
 
   handleDelete(event){

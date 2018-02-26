@@ -18,6 +18,10 @@ export default (props) => {
           <Dropdown fluid search selection placeholder='Search...' id='sdl' value={props.sdl} onChange={props.handleInputChange} options={staff} />
         </Form.Field>
         <Form.Field >
+          <label>Service Owner:</label>
+          <Dropdown fluid search selection placeholder='Search...' id='service_owner' value={props.service_owner} onChange={props.handleInputChange} options={staff} />
+        </Form.Field>
+        <Form.Field >
           <label>Division:</label>
           <Dropdown fluid search selection placeholder='Search...' id='division' value={props.division} onChange={props.handleInputChange} options={divisions} />
         </Form.Field>
