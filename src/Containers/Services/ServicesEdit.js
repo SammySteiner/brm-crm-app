@@ -31,7 +31,7 @@ export default class ServicesEdit extends Component{
           services: data.services,
           title: this.props.history.location.state.title,
           description: this.props.history.location.state.description,
-          sla: this.props.history.location.state.sla ?this.props.history.location.state.sla : '',
+          sla: this.props.history.location.state.sla ? this.props.history.location.state.sla : '',
           sdl: `${this.props.history.location.state.sdl ? this.props.history.location.state.sdl.first_name + ' ' + this.props.history.location.state.sdl.last_name : "Data Not Available"}`,
           service_owner: `${this.props.history.location.state.service_owner ? this.props.history.location.state.service_owner.first_name + ' ' +this.props.history.location.state.service_owner.last_name : "Data Not Available"}`,
           division: this.props.history.location.state.division.name,

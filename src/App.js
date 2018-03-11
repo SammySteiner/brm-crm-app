@@ -19,10 +19,8 @@ class App extends Component {
     this.state = {
       fullname: ''
     }
-
     this.handleLogin = this.handleLogin.bind(this)
     this.handleRegistration = this.handleRegistration.bind(this)
-
   }
 
   componentDidMount(){
