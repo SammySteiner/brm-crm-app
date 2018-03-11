@@ -119,8 +119,8 @@ export default class Connections extends Component {
   }
 
   render(){
-    const filteredList = this.state.connections
-    // const filteredList = this.state.connections.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
+    const filteredList = this.state.connections.filter( c =>
+      (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.agencies ? c.agencies[0].name.toLowerCase().includes(this.state.search.toLowerCase()) || c.agencies[0].acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.connection_type ? c.connection_type.via.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false))
     return(
       !this.state.connections[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>

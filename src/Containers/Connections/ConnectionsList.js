@@ -10,7 +10,7 @@ export default (props) => {
       <Table.Cell singleLine selectable className='test' onClick={props.handleSelectAgency} id={props.connections.id}>{props.connections.agencies[0].name.toLowerCase()}</Table.Cell>
       <Table.Cell singleLine className='test' > {props.connections.notes}</Table.Cell>
       <Table.Cell singleLine className='test' selectable onClick={props.handleSelectConnectionType} id={props.connections.connection_type.id}> {props.connections.connection_type.via}</Table.Cell>
-      <Table.Cell singleLine className='test' selectable > {props.connections.staff[0].fullname}</Table.Cell>
+      <Table.Cell singleLine className='test' selectable > {props.connections.arm.fullname}</Table.Cell>
       {/* <Table.Cell singleLine className='test' selectable onClick={props.agencies.arm ? props.handleSelectStaff : null} id={props.agencies.arm ? props.agencies.arm.id : null}> {props.agencies.arm ? props.agencies.arm.fullname : ""}</Table.Cell> */}
       <Table.Cell className='test'>{props.connections.engagements.length}</Table.Cell>
     </Table.Row>
