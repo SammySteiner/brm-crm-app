@@ -14,7 +14,8 @@ export default class Connections extends Component {
       search: '',
       title: false,
       date: false,
-      agencies: false
+      agencies: false,
+      arm: false
     }
   }
 
@@ -30,7 +31,6 @@ export default class Connections extends Component {
       alert('You must be logged in to access this page.')
       return this.props.history.push('/login')
     })
-
     .then(connections => this.setState({ connections }))
   }
 
@@ -45,6 +45,9 @@ export default class Connections extends Component {
   }
   handleSelectStaff(event){
     return this.props.history.push("/staff/" + event.target.id)
+  }
+  handleSelectConnection(event){
+    return this.props.history.push("/connections/" + event.currentTarget.id)
   }
   handleSelectConnectionType(event){
     debugger
@@ -77,13 +80,13 @@ export default class Connections extends Component {
     let connectionsList = this.state.connections
     if (this.state.agencies) {
       connectionsList.sort(function(a, b) {
-        var textA = a.agencies[0].name
-        var textB = b.agencies[0].name
+        var textA = a.agency.name
+        var textB = b.agency.name
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })} else {
         connectionsList.sort(function(a, b) {
-          var textA = a.agencies[0].name
-          var textB = b.agencies[0].name
+          var textA = a.agency.name
+          var textB = b.agency.name
           return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
         })
       }
@@ -93,20 +96,20 @@ export default class Connections extends Component {
   }
 
   handleSortARM(){
-    let agenciesList = this.state.agencies
+    let connectionsList = this.state.connections
     if (this.state.arm) {
-      agenciesList.sort(function(a, b) {
+      connectionsList.sort(function(a, b) {
         var textA = a.arm
         var textB = b.arm
         return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
       })} else {
-        agenciesList.sort(function(a, b) {
+        connectionsList.sort(function(a, b) {
           var textA = a.arm
           var textB = b.arm
           return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
         })
       }
-    var newState = Object.assign({}, this.state, {arm: this.state.arm ? false : true, agencies: agenciesList})
+    var newState = Object.assign({}, this.state, {arm: this.state.arm ? false : true, connections: connectionsList})
     this.setState(newState)
   }
 
@@ -120,7 +123,7 @@ export default class Connections extends Component {
 
   render(){
     const filteredList = this.state.connections.filter( c =>
-      (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.agencies ? c.agencies[0].name.toLowerCase().includes(this.state.search.toLowerCase()) || c.agencies[0].acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.connection_type ? c.connection_type.via.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false))
+      (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.agency ? c.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) || c.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.connection_type ? c.connection_type.via.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false))
     return(
       !this.state.connections[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>
@@ -138,6 +141,7 @@ export default class Connections extends Component {
                 sortedAndFilteredList={filteredList}
                 handleSelectAgency={this.handleSelectAgency.bind(this)}
                 handleSelectStaff={this.handleSelectStaff.bind(this)}
+                handleSelectConnection={this.handleSelectConnection.bind(this)}
                 handleSelectConnectionType={this.handleSelectConnectionType.bind(this)}
                 handleSortDate={this.handleSortDate.bind(this)}
                 handleSortAgency={this.handleSortAgency.bind(this)}

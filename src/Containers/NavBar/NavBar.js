@@ -9,6 +9,7 @@ export default ( props ) => {
         <Menu.Item name='/staff' content='Staff' onClick={props.handleItemClick} />
         <Menu.Item name='/services' content='Services' onClick={props.handleItemClick} />
         <Menu.Item name='/agencies' content='Agencies' onClick={props.handleItemClick} />
+        <Menu.Item name='/connections' content='Connections' onClick={props.handleItemClick} />
         {localStorage.id ?
         <Menu.Menu position='right'>
           <Menu.Item content={props.fullname}/>
