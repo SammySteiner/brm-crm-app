@@ -5,19 +5,18 @@ import { Table } from 'semantic-ui-react'
 export default(props) => {
 
   function formattedConnectionsList(){
-    let sortedList = []
-    let connectionsList = props.sortedAndFilteredList
-    for (var i = 0; i < connectionsList.length; i++) {
-      sortedList.push(<ConnectionsList
-        key={i}
-        handleSelectAgency={props.handleSelectAgency}
-        handleSelectStaff={props.handleSelectStaff}
-        handleSelectConnection={props.handleSelectConnection}
-        handleSelectConnectionType={props.handleSelectConnectionType}
-        connections={connectionsList[i]}
-      />)
-    }
-    return sortedList
+    return props.sortedAndFilteredList.map( (c, i) => {
+      return (
+        <ConnectionsList
+          key={i}
+          handleSelectAgency={props.handleSelectAgency}
+          handleSelectStaff={props.handleSelectStaff}
+          handleSelectConnection={props.handleSelectConnection}
+          handleSelectConnectionType={props.handleSelectConnectionType}
+          connections={c}
+        />
+      )
+    })
   }
 
   return(
@@ -27,7 +26,7 @@ export default(props) => {
             <Table.HeaderCell onClick={props.handleSortDate.bind(this)} >Date</Table.HeaderCell>
             <Table.HeaderCell onClick={props.handleSortAgency.bind(this)} >Agency</Table.HeaderCell>
             <Table.HeaderCell >Report</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortConnectionType.bind(this)} >Connection Type</Table.HeaderCell>
+            <Table.HeaderCell onClick={props.handleSortConnectionType.bind(this)} >Type</Table.HeaderCell>
             <Table.HeaderCell onClick={props.handleSortARM.bind(this)} >ARM</Table.HeaderCell>
             <Table.HeaderCell onClick={props.handleSortNumberOfEngagements.bind(this)} >Number of Engagements</Table.HeaderCell>
           </Table.Row>

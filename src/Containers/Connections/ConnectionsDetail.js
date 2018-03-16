@@ -77,7 +77,6 @@ export default class ConnectionsDetail extends Component {
               {e.prj ? <List.Item>PRJ: {e.prj}</List.Item> : null}
               <List.Item id={e.service.id} onClick={this.handleSelectService.bind(this)}>Service: {e.service.title}</List.Item>
               <List.Item>Priority: {e.priority}</List.Item>
-              <List.Item>Description: {e.description}</List.Item>
               <List.Item>Notes: {e.notes}</List.Item>
               {e.report ? <List.Item>Report: {e.report}</List.Item> : null}
             </List>

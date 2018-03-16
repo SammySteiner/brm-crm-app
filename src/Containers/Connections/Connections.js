@@ -12,10 +12,11 @@ export default class Connections extends Component {
     this.state = {
       connections: [],
       search: '',
-      title: false,
       date: false,
       agencies: false,
-      arm: false
+      arm: false,
+      type: false,
+      engagements: false
     }
   }
 
@@ -24,7 +25,7 @@ export default class Connections extends Component {
     .then( connections => connections.sort(function(a, b) {
       var textA = a.date
       var textB = b.date
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
+      return (textA < textB) ? 1 : (textA > textB) ? -1 : 0})
     )
     .catch(error => {
       console.log(error)
@@ -49,11 +50,6 @@ export default class Connections extends Component {
   handleSelectConnection(event){
     return this.props.history.push("/connections/" + event.currentTarget.id)
   }
-  handleSelectConnectionType(event){
-    debugger
-    // return this.props.history.push("/staff/" + event.target.id)
-  }
-
   newConnection(){
     return this.props.history.push("connections/new")
   }
@@ -80,17 +76,17 @@ export default class Connections extends Component {
     let connectionsList = this.state.connections
     if (this.state.agencies) {
       connectionsList.sort(function(a, b) {
-        var textA = a.agency.name
-        var textB = b.agency.name
+        var textA = a.agency.acronym
+        var textB = b.agency.acronym
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })} else {
         connectionsList.sort(function(a, b) {
-          var textA = a.agency.name
-          var textB = b.agency.name
+          var textA = a.agency.acronym
+          var textB = b.agency.acronym
           return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
         })
       }
-    var newState = Object.assign({}, this.state, {agencies: this.state.acronym ? false : true, connections: connectionsList})
+    var newState = Object.assign({}, this.state, {agencies: this.state.agencies ? false : true, connections: connectionsList})
     this.setState(newState)
 
   }
@@ -114,11 +110,39 @@ export default class Connections extends Component {
   }
 
   handleSortConnectionType(){
-    debugger
+    let connectionsList = this.state.connections
+    if (this.state.type) {
+      connectionsList.sort(function(a, b) {
+        var textA = a.connection_type.via
+        var textB = b.connection_type.via
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      })} else {
+        connectionsList.sort(function(a, b) {
+          var textA = a.connection_type.via
+          var textB = b.connection_type.via
+          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
+        })
+      }
+    var newState = Object.assign({}, this.state, {type: this.state.type ? false : true, connections: connectionsList})
+    this.setState(newState)
   }
 
   handleSortNumberOfEngagements(){
-    debugger
+    let connectionsList = this.state.connections
+    if (this.state.engagements) {
+      connectionsList.sort(function(a, b) {
+        var textA = a.engagements.length
+        var textB = b.engagements.length
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      })} else {
+        connectionsList.sort(function(a, b) {
+          var textA = a.engagements.length
+          var textB = b.engagements.length
+          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
+        })
+      }
+    var newState = Object.assign({}, this.state, {engagements: this.state.engagements ? false : true, connections: connectionsList})
+    this.setState(newState)
   }
 
   render(){
@@ -142,7 +166,6 @@ export default class Connections extends Component {
                 handleSelectAgency={this.handleSelectAgency.bind(this)}
                 handleSelectStaff={this.handleSelectStaff.bind(this)}
                 handleSelectConnection={this.handleSelectConnection.bind(this)}
-                handleSelectConnectionType={this.handleSelectConnectionType.bind(this)}
                 handleSortDate={this.handleSortDate.bind(this)}
                 handleSortAgency={this.handleSortAgency.bind(this)}
                 handleSortARM={this.handleSortARM.bind(this)}
@@ -152,7 +175,6 @@ export default class Connections extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-
     )
   }
 }

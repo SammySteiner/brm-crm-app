@@ -9,6 +9,7 @@ import StaffHome from '../Staff/StaffHome.js'
 import AgenciesHome from '../Agencies/AgenciesHome.js'
 import ServicesHome from '../Services/ServicesHome.js'
 import ConnectionsHome from '../Connections/ConnectionsHome.js'
+import EngagementsHome from '../Engagements/EngagementsHome.js'
 
 import { getDetails } from '../../api'
 
@@ -34,6 +35,7 @@ export default class Home extends Component {
           <Route path='/agencies' render={({match, history}) => <AgenciesHome history={history} match={match}/>}/>
           <Route path='/services' render={({match, history}) => <ServicesHome history={history} match={match}/>}/>
           <Route path='/connections' render={({match, history}) => <ConnectionsHome history={history} match={match}/>}/>
+          <Route path='/engagements' render={({match, history}) => <EngagementsHome history={history} match={match}/>}/>
         </Switch>
       </Container>
     )
