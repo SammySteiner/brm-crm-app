@@ -6,10 +6,10 @@ export default (props) => {
   return (
     <Table.Row id={props.engagements.id} onClick={props.handleSelectEngagement}>
       <Table.Cell singleLine >{d}</Table.Cell>
-      <Table.Cell >{props.engagements.agency}</Table.Cell>
+      <Table.Cell >{props.engagements.agency.acronym}</Table.Cell>
       <Table.Cell width={8} > {props.engagements.title}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.type}</Table.Cell>
-      <Table.Cell singleLine > {props.engagements.arm}</Table.Cell>
+      <Table.Cell singleLine > {props.engagements.arm.fullname}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.priority}</Table.Cell>
     </Table.Row>
 

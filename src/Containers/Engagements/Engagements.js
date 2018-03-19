@@ -38,17 +38,7 @@ export default class Engagements extends Component {
     })
   }
 
-  handleSelectAgency(event){
-    return this.props.history.push("/agencies/" + event.target.id)
-  }
-  handleSelectStaff(event){
-    return this.props.history.push("/staff/" + event.target.id)
-  }
-  handleSelectConnection(event){
-    return this.props.history.push("/connections/" + event.currentTarget.id)
-  }
   handleSelectEngagement(event){
-    debugger
     return this.props.history.push("/engagements/" + event.currentTarget.id)
   }
   newEngagement(){
@@ -56,9 +46,19 @@ export default class Engagements extends Component {
   }
 
   sortBy(collection, iterator) {
-    return collection.sort(function(x, y) {
-      return x[iterator] > y[iterator] ? 1 : -1
-    })
+    if (iterator[0] === "arm") {
+      return collection.sort(function(x, y) {
+        return x[iterator].last_name > y[iterator].last_name ? 1 : -1
+      })
+    } else if (iterator[0] === 'agency') {
+      return collection.sort(function(x, y) {
+        return x[iterator].acronym > y[iterator].acronym ? 1 : -1
+      })
+    } else {
+      return collection.sort(function(x, y) {
+        return x[iterator] > y[iterator] ? 1 : -1
+      })
+    }
   }
 
   handleSort = clickedColumn => () => {
@@ -80,8 +80,9 @@ export default class Engagements extends Component {
 
   render(){
     const filteredList = this.state.data.filter( d =>
-      (d.arm ? d.arm.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-      (d.agency ? d.agency.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.agency.name ? d.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.type ? d.type.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.date ? new Date(d.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
     )

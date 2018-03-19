@@ -12,21 +12,20 @@ export default(props) => {
         key={i}
         staff={staffList[i]}
         handleSelectStaff={props.handleSelectStaff}
-        handleSelectAgency={props.handleSelectAgency}
       />)
     }
     return sortedList
   }
 
   return(
-    <Table striped>
+    <Table striped selectable sortable>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell onClick={props.handleSortName.bind(this)} >Name</Table.HeaderCell>
-          <Table.HeaderCell onClick={props.handleSortRole.bind(this)} >Role</Table.HeaderCell>
-          <Table.HeaderCell onClick={props.handleSortAgency.bind(this)} >Agency</Table.HeaderCell>
-          <Table.HeaderCell>Email</Table.HeaderCell>
-          <Table.HeaderCell>Office Phone</Table.HeaderCell>
+          <Table.HeaderCell sorted={props.column === 'name' ? props.direction : null} onClick={props.handleSort('name')} >Name</Table.HeaderCell>
+          <Table.HeaderCell sorted={props.column === 'role' ? props.direction : null} onClick={props.handleSort('role')} >Role</Table.HeaderCell>
+          <Table.HeaderCell sorted={props.column === 'agency' ? props.direction : null} onClick={props.handleSort('agency')} >Agency</Table.HeaderCell>
+          <Table.HeaderCell sorted={props.column === 'email' ? props.direction : null} onClick={props.handleSort('email')}>Email</Table.HeaderCell>
+          <Table.HeaderCell sorted={props.column === 'office_phone' ? props.direction : null} onClick={props.handleSort('office_phone')}>Office Phone</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>

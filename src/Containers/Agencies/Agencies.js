@@ -10,21 +10,16 @@ export default class Agencies extends Component {
   constructor(props){
     super(props)
     this.state = {
-      agencies: [],
+      data: [],
       search: '',
-      name: false,
-      acronym: false,
-      cio: false,
-      commissioner: false,
-      arm: false,
-      mayoral: false
-
+      column: 'name',
+      direction: 'ascending',
     }
   }
 
   componentDidMount() {
     getDirectory('agencies')
-    .then( agencies => agencies.sort(function(a, b) {
+    .then( data => data.sort(function(a, b) {
       var textA = a.name.toUpperCase()
       var textB = b.name.toUpperCase()
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
@@ -35,7 +30,7 @@ export default class Agencies extends Component {
       return this.props.history.push('/login')
     })
 
-    .then(agencies => this.setState({ agencies }))
+    .then(data => this.setState({ data }))
   }
 
   handleChange(event) {
@@ -43,129 +38,54 @@ export default class Agencies extends Component {
       search: event.target.value
     })
   }
-
   handleSelectAgency(event){
-    return this.props.history.push("/agencies/" + event.target.id)
+    return this.props.history.push("/agencies/" + event.currentTarget.id)
   }
-  handleSelectStaff(event){
-    return this.props.history.push("/staff/" + event.target.id)
-  }
-
   newAgency(){
     return this.props.history.push("agencies/new")
   }
 
-  handleSortName(){
-    let agenciesList = this.state.agencies
-    if (this.state.name) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.name.toUpperCase()
-        var textB = b.name.toUpperCase()
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.name.toUpperCase()
-          var textB = b.name.toUpperCase()
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
+  sortBy(collection, iterator, c) {
+    if (c) {
+       if (iterator[0] === "arm" || iterator[0] === "cio" || iterator[0] === "commissioner") {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator].last_name > y[iterator].last_name ? 1 : -1
+        })
+      } else {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator] > y[iterator] ? 1 : -1
         })
       }
-    var newState = Object.assign({}, this.state, {name: this.state.name ? false : true, agencies: agenciesList})
-    this.setState(newState)
+    } else {
+      var core = []
+      var empty = []
+      collection.forEach( c =>
+        c[iterator] === null ? empty.push(c) : core.push(c)
+      )
+      return core.reverse().concat(empty)
+    }
   }
 
-  handleSortAcronym(){
-    let agenciesList = this.state.agencies
-    if (this.state.acronym) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.acronym
-        var textB = b.acronym
-        return (textA < textB || textA === null) ? 1 : (textA > textB || textB === null ) ? -1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.acronym
-          var textB = b.acronym
-          return (textA > textB || textA === null ) ? 1 : (textA < textB || textB === null) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {acronym: this.state.acronym ? false : true, agencies: agenciesList})
-    this.setState(newState)
-
-  }
-  handleSortCIO(){
-    let agenciesList = this.state.agencies
-    if (this.state.cio) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.cio
-        var textB = b.cio
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.cio
-          var textB = b.cio
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {cio: this.state.cio ? false : true, agencies: agenciesList})
-    this.setState(newState)
-
-  }
-  handleSortCommissioner(){
-    let agenciesList = this.state.agencies
-    if (this.state.commissioner) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.commissioner
-        var textB = b.commissioner
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.commissioner
-          var textB = b.commissioner
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {commissioner: this.state.commissioner ? false : true, agencies: agenciesList})
-    this.setState(newState)
-  }
-
-  handleSortARM(){
-    let agenciesList = this.state.agencies
-    if (this.state.arm) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.arm
-        var textB = b.arm
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.arm
-          var textB = b.arm
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {arm: this.state.arm ? false : true, agencies: agenciesList})
-    this.setState(newState)
-  }
-  handleSortMayoral(){
-    let agenciesList = this.state.agencies
-    if (this.state.mayoral) {
-      agenciesList.sort(function(a, b) {
-        var textA = a.mayoral
-        var textB = b.mayoral
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA > textB ) ? -1 : (textA < textB) ? 1 : 0
-      })} else {
-        agenciesList.sort(function(a, b) {
-          var textA = a.mayoral
-          var textB = b.mayoral
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA > textB ) ? 1 : (textA < textB) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {mayoral: this.state.mayoral ? false : true, agencies: agenciesList})
-    this.setState(newState)
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
   }
 
   render(){
-    const filteredList = this.state.agencies.filter( a =>  a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
+    console.log(this.state.data[0])
+    const filteredList = this.state.data.filter( a =>
+      a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||
+      (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
+    )
     return(
-      !this.state.agencies[0] ? <Loader active inline='centered' content='Loading'/> :
+      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>
           <Grid.Row columns={2}>
             <Grid.Column width={2} floated='left' >
@@ -180,13 +100,9 @@ export default class Agencies extends Component {
               <AgenciesTable
                 sortedAndFilteredList={filteredList}
                 handleSelectAgency={this.handleSelectAgency.bind(this)}
-                handleSelectStaff={this.handleSelectStaff.bind(this)}
-                handleSortName={this.handleSortName.bind(this)}
-                handleSortAcronym={this.handleSortAcronym.bind(this)}
-                handleSortCIO={this.handleSortCIO.bind(this)}
-                handleSortCommissioner={this.handleSortCommissioner.bind(this)}
-                handleSortARM={this.handleSortARM.bind(this)}
-                handleSortMayoral={this.handleSortMayoral.bind(this)}
+                handleSort={this.handleSort.bind(this)}
+                direction={this.state.direction}
+                column={this.state.column}
               />
             </Grid.Column>
           </Grid.Row>

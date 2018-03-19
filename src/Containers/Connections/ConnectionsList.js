@@ -9,9 +9,9 @@ export default (props) => {
       <Table.Cell singleLine className='tester' >{d}</Table.Cell>
       <Table.Cell singleLine className='tester' >{props.connections.agency.acronym}</Table.Cell>
       <Table.Cell width={8} > {props.connections.report}</Table.Cell>
-      <Table.Cell singleLine className='tester' > {props.connections.connection_type.via}</Table.Cell>
+      <Table.Cell singleLine className='tester' > {props.connections.type}</Table.Cell>
       <Table.Cell singleLine className='tester' > {props.connections.arm.fullname}</Table.Cell>
-      <Table.Cell className='tester'>{props.connections.engagements.length}</Table.Cell>
+      <Table.Cell className='tester'>{props.connections.engagements}</Table.Cell>
     </Table.Row>
 
   )

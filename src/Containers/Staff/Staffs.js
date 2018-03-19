@@ -11,22 +11,21 @@ export default class Staffs extends Component {
   constructor(){
     super()
     this.state = {
-      staffs: [],
-      abc: false,
-      role: false,
-      agency: false,
+      data: [],
+      column: 'name',
+      direction: 'ascending',
       search: ''
     }
   }
 
   componentDidMount(){
     getDirectory('staff')
-    .then( staffs => staffs.sort(function(a, b) {
+    .then( data => data.sort(function(a, b) {
       var textA = a.last_name.toUpperCase()
       var textB = b.last_name.toUpperCase()
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
     )
-    .then( staffs => this.setState({ staffs }))
+    .then( data => this.setState({ data }))
     .catch(error => {
       console.log(error)
       alert('You must be logged in to access this page.')
@@ -41,76 +40,55 @@ export default class Staffs extends Component {
   }
 
   handleSelectStaff(event){
-    return this.props.history.push("/staff/" + event.target.id)
+    return this.props.history.push("/staff/" + event.currentTarget.id)
   }
-  handleSelectAgency(event){
-    return this.props.history.push("/agencies/" + event.target.id)
-  }
-
   newStaff(){
     return this.props.history.push("staff/new")
   }
 
-
-
-  handleSortName(){
-    let staffList = this.state.staffs
-    if (this.state.abc) {
-      staffList.sort(function(a, b) {
-        var textA = a.last_name.toUpperCase()
-        var textB = b.last_name.toUpperCase()
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        staffList.sort(function(a, b) {
-          var textA = a.last_name.toUpperCase()
-          var textB = b.last_name.toUpperCase()
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
+  sortBy(collection, iterator, c) {
+    if (c) {
+       if (iterator[0] === "name") {
+        return collection.sort(function(x, y) {
+          return (x.last_name === null) ? 1 : (y.last_name === null) ? -1 : x.last_name > y.last_name ? 1 : -1
+        })
+      } else if (iterator[0] === "agency") {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator].name > y[iterator].name ? 1 : -1
+        })
+      } else {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator] > y[iterator] ? 1 : -1
         })
       }
-    var newState = Object.assign({}, this.state, {abc: this.state.abc ? false : true, staffs: staffList})
-    this.setState(newState)
+    } else {
+      var core = []
+      var empty = []
+      collection.forEach( c =>
+        c[iterator] === null ? empty.push(c) : core.push(c)
+      )
+      return core.reverse().concat(empty)
+    }
   }
 
-  handleSortRole(){
-    let staffList = this.state.staffs
-    if (this.state.role) {
-      staffList.sort(function(a, b) {
-        var textA = a.role.title.toUpperCase()
-        var textB = b.role.title.toUpperCase()
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        staffList.sort(function(a, b) {
-          var textA = a.role.title.toUpperCase()
-          var textB = b.role.title.toUpperCase()
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {role: this.state.role ? false : true, staffs: staffList})
-    this.setState(newState)
-  }
-
-  handleSortAgency(){
-    let staffList = this.state.staffs
-    if (this.state.agency) {
-      staffList.sort(function(a, b) {
-        var textA = a.agency
-        var textB = b.agency
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.name.toUpperCase() > textB.name.toUpperCase() ) ? -1 : (textA.name.toUpperCase() < textB.name.toUpperCase()) ? 1 : 0
-      })} else {
-        staffList.sort(function(a, b) {
-          var textA = a.agency
-          var textB = b.agency
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.name.toUpperCase() > textB.name.toUpperCase() ) ? 1 : (textA.name.toUpperCase() < textB.name.toUpperCase()) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {agency: this.state.agency ? false : true, staffs: staffList})
-    this.setState(newState)
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
   }
 
   render(){
-    const filteredList = this.state.staffs.filter( s => s.fullname.toLowerCase().includes(this.state.search.toLowerCase()) || s.role.title.toLowerCase().includes(this.state.search.toLowerCase()) || (s.agency ? s.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (s.office_phone ? s.office_phone.includes(this.state.search) : false) )
+    const filteredList = this.state.data.filter( s =>
+      (s.fullname ? s.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (s.role ? s.role.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (s.agency ? s.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (s.office_phone ? s.office_phone.includes(this.state.search) : false) )
     return(
-      !this.state.staffs[0] ? <Loader active inline='centered' content='Loading'/>  :
+      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/>  :
           <Grid padded>
             <Grid.Row columns={2}>
               <Grid.Column width={2} floated='left' >
@@ -124,11 +102,10 @@ export default class Staffs extends Component {
               <Grid.Column>
                 <StaffTable
                   sortedAndFilteredList={filteredList}
-                  handleSortName={this.handleSortName.bind(this)}
-                  handleSortRole={this.handleSortRole.bind(this)}
-                  handleSortAgency={this.handleSortAgency.bind(this)}
+                  handleSort={this.handleSort.bind(this)}
                   handleSelectStaff={this.handleSelectStaff.bind(this)}
-                  handleSelectAgency={this.handleSelectAgency.bind(this)}
+                  column={this.state.column}
+                  direction={this.state.direction}
                 />
               </Grid.Column>
             </Grid.Row>

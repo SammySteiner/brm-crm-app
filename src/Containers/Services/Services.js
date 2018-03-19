@@ -11,19 +11,16 @@ export default class Services extends Component {
   constructor(){
     super()
     this.state = {
-      services: [],
+      data: [],
       search: '',
-      title: false,
-      description: false,
-      division: false,
-      sdl: false,
-      service_owner: false
+      column: 'title',
+      direction: 'ascending',
     }
   }
 
   componentDidMount() {
     getDirectory('services')
-    .then( services => services.sort(function(a, b) {
+    .then( data => data.sort(function(a, b) {
       var textA = a.title.toUpperCase()
       var textB = b.title.toUpperCase()
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
@@ -33,7 +30,7 @@ export default class Services extends Component {
       alert('You must be logged in to access this page.')
       return this.props.history.push('/login')
     })
-    .then(services => this.setState({ services }))
+    .then(data => this.setState({ data }))
   }
 
   handleChange(event) {
@@ -43,110 +40,54 @@ export default class Services extends Component {
   }
 
   handleSelectService(event){
-    return this.props.history.push("/services/" + event.target.id)
+    return this.props.history.push("/services/" + event.currentTarget.id)
   }
-
-  handleSelectStaff(event){
-    return this.props.history.push("/staff/" + event.target.id)
-  }
-
   newService(){
     return this.props.history.push("services/new")
   }
 
-  handleSortTitle(){
-    let servicesList = this.state.services
-    if (this.state.title) {
-      servicesList.sort(function(a, b) {
-        var textA = a.title.toUpperCase()
-        var textB = b.title.toUpperCase()
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        servicesList.sort(function(a, b) {
-          var textA = a.title.toUpperCase()
-          var textB = b.title.toUpperCase()
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
+  sortBy(collection, iterator, c) {
+    if (c) {
+       if (iterator[0] === "sdl" || iterator[0] === "service_owner") {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator].last_name > y[iterator].last_name ? 1 : -1
+        })
+      } else {
+        return collection.sort(function(x, y) {
+          return (x[iterator] === null) ? 1 : (y[iterator] === null) ? -1 : x[iterator] > y[iterator] ? 1 : -1
         })
       }
-    var newState = Object.assign({}, this.state, {title: this.state.title ? false : true, services: servicesList})
-    this.setState(newState)
+    } else {
+      var core = []
+      var empty = []
+      collection.forEach( c =>
+        c[iterator] === null ? empty.push(c) : core.push(c)
+      )
+      return core.reverse().concat(empty)
+    }
   }
 
-  handleSortDescription(){
-    let servicesList = this.state.services
-    if (this.state.description) {
-      servicesList.sort(function(a, b) {
-        var textA = a.description
-        var textB = b.description
-        return (textA < textB || textA === null) ? 1 : (textA > textB || textB === null ) ? -1 : 0
-      })} else {
-        servicesList.sort(function(a, b) {
-          var textA = a.description
-          var textB = b.description
-          return (textA > textB || textA === null ) ? 1 : (textA < textB || textB === null) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {description: this.state.description ? false : true, services: servicesList})
-    this.setState(newState)
-
-  }
-  handleSortDivision(){
-    let servicesList = this.state.services
-    if (this.state.division) {
-      servicesList.sort(function(a, b) {
-        var textA = a.division
-        var textB = b.division
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.name > textB.name ) ? -1 : (textA.name < textB.name) ? 1 : 0
-      })} else {
-        servicesList.sort(function(a, b) {
-          var textA = a.division
-          var textB = b.division
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.name > textB.name ) ? 1 : (textA.name < textB.name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {division: this.state.division ? false : true, services: servicesList})
-    this.setState(newState)
-
-  }
-  handleSortSDL(){
-    let servicesList = this.state.services
-    if (this.state.sdl) {
-      servicesList.sort(function(a, b) {
-        var textA = a.sdl
-        var textB = b.sdl
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        servicesList.sort(function(a, b) {
-          var textA = a.sdl
-          var textB = b.sdl
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {sdl: this.state.sdl ? false : true, services: servicesList})
-    this.setState(newState)
-  }
-  handleSortSO(){
-    let servicesList = this.state.services
-    if (this.state.service_owner) {
-      servicesList.sort(function(a, b) {
-        var textA = a.service_owner
-        var textB = b.service_owner
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        servicesList.sort(function(a, b) {
-          var textA = a.service_owner
-          var textB = b.service_owner
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {service_owner: this.state.service_owner ? false : true, services: servicesList})
-    this.setState(newState)
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
   }
 
   render(){
-    const filteredList = this.state.services.filter( s =>  s.title.toLowerCase().includes(this.state.search.toLowerCase()) || ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.division ?  s.division.name.toLowerCase().includes(this.state.search.toLowerCase()) : false ) || ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || ( s.service_owner ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false))
+    console.log(this.state)
+    const filteredList = this.state.data.filter( s =>
+      (s.title ? s.title.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      ( s.division ?  s.division.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||
+      ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      ( s.service_owner ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
+    )
     return(
-      !this.state.services[0] ? <Loader active inline='centered' content='Loading'/> :
+      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
       <Grid padded>
         <Grid.Row columns={2}>
           <Grid.Column width={2} floated='left' >
@@ -161,12 +102,9 @@ export default class Services extends Component {
             <ServicesTable
               sortedAndFilteredList={filteredList}
               handleSelectService={this.handleSelectService.bind(this)}
-              handleSelectStaff={this.handleSelectStaff.bind(this)}
-              handleSortTitle={this.handleSortTitle.bind(this)}
-              handleSortDescription={this.handleSortDescription.bind(this)}
-              handleSortDivision={this.handleSortDivision.bind(this)}
-              handleSortSDL={this.handleSortSDL.bind(this)}
-              handleSortSO={this.handleSortSDL.bind(this)}
+              handleSort={this.handleSort.bind(this)}
+              column={this.state.column}
+              direction={this.state.direction}
             />
           </Grid.Column>
         </Grid.Row>

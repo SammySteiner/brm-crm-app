@@ -10,13 +10,10 @@ export default class Connections extends Component {
   constructor(props){
     super(props)
     this.state = {
-      connections: [],
+      data: [],
       search: '',
-      date: false,
-      agencies: false,
-      arm: false,
-      type: false,
-      engagements: false
+      column: null,
+      direction: null
     }
   }
 
@@ -32,7 +29,7 @@ export default class Connections extends Component {
       alert('You must be logged in to access this page.')
       return this.props.history.push('/login')
     })
-    .then(connections => this.setState({ connections }))
+    .then(data => this.setState({ data }))
   }
 
   handleChange(event) {
@@ -41,12 +38,6 @@ export default class Connections extends Component {
     })
   }
 
-  handleSelectAgency(event){
-    return this.props.history.push("/agencies/" + event.target.id)
-  }
-  handleSelectStaff(event){
-    return this.props.history.push("/staff/" + event.target.id)
-  }
   handleSelectConnection(event){
     return this.props.history.push("/connections/" + event.currentTarget.id)
   }
@@ -54,102 +45,49 @@ export default class Connections extends Component {
     return this.props.history.push("connections/new")
   }
 
-  handleSortDate(){
-    let connectionsList = this.state.connections
-    if (this.state.date) {
-      connectionsList.sort(function(a, b) {
-        var textA = a.date
-        var textB = b.date
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        connectionsList.sort(function(a, b) {
-          var textA = a.date
-          var textB = b.date
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {date: this.state.date ? false : true, connections: connectionsList})
-    this.setState(newState)
+  sortBy(collection, iterator) {
+    if (iterator[0] === "arm") {
+      return collection.sort(function(x, y) {
+        return x[iterator].last_name > y[iterator].last_name ? 1 : -1
+      })
+    } else if (iterator[0] === 'agency') {
+      return collection.sort(function(x, y) {
+        return x[iterator].acronym > y[iterator].acronym ? 1 : -1
+      })
+    } else {
+      return collection.sort(function(x, y) {
+        return x[iterator] > y[iterator] ? 1 : -1
+      })
+    }
   }
 
-  handleSortAgency(){
-    let connectionsList = this.state.connections
-    if (this.state.agencies) {
-      connectionsList.sort(function(a, b) {
-        var textA = a.agency.acronym
-        var textB = b.agency.acronym
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        connectionsList.sort(function(a, b) {
-          var textA = a.agency.acronym
-          var textB = b.agency.acronym
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {agencies: this.state.agencies ? false : true, connections: connectionsList})
-    this.setState(newState)
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    if (column !== clickedColumn) {
+      return this.setState({
+        column: clickedColumn,
+        data: this.sortBy(data, [clickedColumn]),
+        direction: 'ascending',
+      })
 
-  }
-
-  handleSortARM(){
-    let connectionsList = this.state.connections
-    if (this.state.arm) {
-      connectionsList.sort(function(a, b) {
-        var textA = a.arm
-        var textB = b.arm
-        return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? -1 : (textA.last_name < textB.last_name) ? 1 : 0
-      })} else {
-        connectionsList.sort(function(a, b) {
-          var textA = a.arm
-          var textB = b.arm
-          return (textA === null) ? 1 : (textB === null) ? -1 : (textA.last_name > textB.last_name ) ? 1 : (textA.last_name < textB.last_name) ? -1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {arm: this.state.arm ? false : true, connections: connectionsList})
-    this.setState(newState)
-  }
-
-  handleSortConnectionType(){
-    let connectionsList = this.state.connections
-    if (this.state.type) {
-      connectionsList.sort(function(a, b) {
-        var textA = a.connection_type.via
-        var textB = b.connection_type.via
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        connectionsList.sort(function(a, b) {
-          var textA = a.connection_type.via
-          var textB = b.connection_type.via
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {type: this.state.type ? false : true, connections: connectionsList})
-    this.setState(newState)
-  }
-
-  handleSortNumberOfEngagements(){
-    let connectionsList = this.state.connections
-    if (this.state.engagements) {
-      connectionsList.sort(function(a, b) {
-        var textA = a.engagements.length
-        var textB = b.engagements.length
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      })} else {
-        connectionsList.sort(function(a, b) {
-          var textA = a.engagements.length
-          var textB = b.engagements.length
-          return (textA > textB) ? -1 : (textA < textB) ? 1 : 0
-        })
-      }
-    var newState = Object.assign({}, this.state, {engagements: this.state.engagements ? false : true, connections: connectionsList})
-    this.setState(newState)
+    } else {
+      return this.setState({
+        data: data.reverse(),
+        direction: direction === 'ascending' ? 'descending' : 'ascending',
+      })
+    }
   }
 
   render(){
-    const filteredList = this.state.connections.filter( c =>
-      (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.agency ? c.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) || c.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.connection_type ? c.connection_type.via.toLowerCase().includes(this.state.search.toLowerCase()) : false) || (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false))
+    const filteredList = this.state.data.filter( c =>
+      (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (c.agency.acronym ? c.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (c.agency.name ? c.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (c.type ? c.type.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
+    )
     return(
-      !this.state.connections[0] ? <Loader active inline='centered' content='Loading'/> :
+      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>
           <Grid.Row columns={2}>
             <Grid.Column width={2} floated='left' >
@@ -163,14 +101,10 @@ export default class Connections extends Component {
             <Grid.Column >
               <ConnectionsTable
                 sortedAndFilteredList={filteredList}
-                handleSelectAgency={this.handleSelectAgency.bind(this)}
-                handleSelectStaff={this.handleSelectStaff.bind(this)}
                 handleSelectConnection={this.handleSelectConnection.bind(this)}
-                handleSortDate={this.handleSortDate.bind(this)}
-                handleSortAgency={this.handleSortAgency.bind(this)}
-                handleSortARM={this.handleSortARM.bind(this)}
-                handleSortConnectionType={this.handleSortConnectionType.bind(this)}
-                handleSortNumberOfEngagements={this.handleSortNumberOfEngagements.bind(this)}
+                handleSort={this.handleSort.bind(this)}
+                column={this.state.column}
+                direction={this.state.direction}
               />
             </Grid.Column>
           </Grid.Row>

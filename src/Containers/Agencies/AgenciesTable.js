@@ -11,7 +11,6 @@ export default(props) => {
       sortedList.push(<AgenciesList
         key={i}
         handleSelectAgency={props.handleSelectAgency}
-        handleSelectStaff={props.handleSelectStaff}
         agencies={agenciesList[i]}
       />)
     }
@@ -19,15 +18,15 @@ export default(props) => {
   }
 
   return(
-      <Table striped>
+      <Table striped selectable sortable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell onClick={props.handleSortName.bind(this)} >Name</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortAcronym.bind(this)} >Acronym</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortCIO.bind(this)} >CIO</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortCommissioner.bind(this)} >Commissioner</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortARM.bind(this)} >ARM</Table.HeaderCell>
-            <Table.HeaderCell onClick={props.handleSortMayoral.bind(this)} >Mayoral</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'name' ? props.direction : null} onClick={props.handleSort('name')} >Name</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'acronym' ? props.direction : null} onClick={props.handleSort('acronym')} >Acronym</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'cio' ? props.direction : null} onClick={props.handleSort('cio')} >CIO</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'commissioner' ? props.direction : null} onClick={props.handleSort('commissioner')} >Commissioner</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'arm' ? props.direction : null} onClick={props.handleSort('arm')}>ARM</Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'mayoral' ? props.direction : null} onClick={props.handleSort('mayoral')}>Mayoral</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body >
