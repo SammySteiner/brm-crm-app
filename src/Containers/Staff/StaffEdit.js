@@ -14,9 +14,10 @@ export default class ServicesEdit extends Component{
       cell_phone: '',
       agency: '',
       role: '',
-      dc_services: '',
-      so_services: '',
-      sdl_services: '',
+      dc_services: [],
+      so_services: [],
+      sdl_services: [],
+      // provider_services: [],
       id: '',
       agencyNames: [],
       roles: [],
@@ -48,9 +49,11 @@ export default class ServicesEdit extends Component{
           cell_phone: this.props.history.location.state.cell_phone ? this.props.history.location.state.cell_phone : '',
           agency: this.props.history.location.state.agency.name,
           role: this.props.history.location.state.role.title,
-          dc_services: this.props.history.location.state.dc_services,
-          so_services: this.props.history.location.state.so_services,
-          sdl_services: this.props.history.location.state.sdl_services,
+          dc_services: this.props.history.location.state.dc_services.map(s => s.title),
+          so_services: this.props.history.location.state.so_services.map(s => s.title),
+          sdl_services: this.props.history.location.state.sdl_services.map(s => s.title),
+          // provider_services: this.props.history.location.state.provider_services.map(s => s.title),
+          // provider_services: [],
           id: this.props.history.location.state.id,
           assignments: this.props.history.location.state.assignments.map( a => a.name )
         })
@@ -65,7 +68,7 @@ export default class ServicesEdit extends Component{
   }
 
   handleInputChange(event, data){
-    let value = data.type === 'checkbox' ? data.checked : data.value
+    let value = (data.type === 'checkbox') ? data.checked : data.value
     if (data.id === "role" ) {
       this.setState({
         assignments: [],
@@ -88,9 +91,15 @@ export default class ServicesEdit extends Component{
           if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone && s.id !== this.state.id)) {
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.id !== this.state.id && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
-                if (!this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.services.includes( s.title)).some( s => s.sdl_id !== undefined && s.id !== this.state.id))) {
-                    editResource(info, 'staff', 'staff')
-                    .then( staff => this.props.history.push(staff.id.toString()))
+                if (this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.sdl_services.includes( s.title)).some( s => s.sdl_id !== undefined && s.id !== this.state.id))) {
+                  debugger
+                  message = `Services can only have one SDL. `
+                  this.state.services_list.filter( s => this.state.sdl_services.includes( s.title )).forEach( s => {
+                    if (typeof(s.id) === "number") {
+                      message += `${this.state.staff.find( st => st.id === s.sdl_id).first_name} ${this.state.staff.find( st => st.id === s.sdl_id).last_name} is the SDL for ${s.title}. `
+                    }
+                  })
+                  alert(message)
                 } else if (this.state.role === 'ARM' ) {
                   if (this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).length < 1) {
                       editResource(info, 'staff', 'staff')
@@ -103,13 +112,9 @@ export default class ServicesEdit extends Component{
                     alert(message)
                   }
                 } else {
-                  message = `Services can only have one SDL. `
-                  this.state.services_list.filter( s => this.state.services.includes( s.title )).forEach( s => {
-                    if (typeof(s.id) === "number") {
-                      message += `${this.state.staff.find( st => st.id === s.sdl_id).first_name} ${this.state.staff.find( st => st.id === s.sdl_id).last_name} is the SDL for ${s.title}. `
-                    }
-                  })
-                  alert(message)
+                  debugger
+                  editResource(info, 'staff', 'staff')
+                  .then( staff => this.props.history.push(staff.id.toString()))
                 }
               } else {
                 editResource(info, 'staff', 'staff')
@@ -150,6 +155,7 @@ export default class ServicesEdit extends Component{
           dc_services={this.state.dc_services}
           so_services={this.state.so_services}
           sdl_services={this.state.sdl_services}
+          // provider_services={this.state.provider_services}
           agencyNames={this.state.agencyNames}
           roles={this.state.roles}
           staff={this.state.staff}

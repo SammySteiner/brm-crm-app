@@ -14,14 +14,18 @@ export default class StaffNew extends Component{
       cell_phone: '',
       agency: '',
       role: '',
-      services: [],
+      dc_services: [],
+      so_services: [],
+      sdl_services: [],
+      // provider_services: [],
+      id: '',
       agencyNames: [],
       roles: [],
       staff: [],
       services_list: [],
       agencies: [],
       arms: [],
-      assignments: []
+      assignments: ''
     }
   }
 
@@ -67,20 +71,20 @@ export default class StaffNew extends Component{
           if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone)) {
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
-                if (!this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.services.includes( s.title)).some( s => s.sdl_id !== undefined))) {
-                    createResource(info, 'staff', 'staff')
-                    .then( staff => this.props.history.push(staff.id.toString()))
-                } else if (this.state.role === 'ARM' ) {
-                    createResource(info, 'staff', 'staff')
-                    .then( staff => this.props.history.push(staff.id.toString()))
-                } else {
+                if (this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.sdl_services.includes( s.title)).some( s => s.sdl_id !== undefined))) {
                   var message = `Services can only have one SDL. `
-                  this.state.services_list.filter( s => this.state.services.includes( s.title )).forEach( s => {
+                  this.state.services_list.filter( s => this.state.sdl_services.includes( s.title )).forEach( s => {
                     if (typeof(s.id) === "number") {
                       message += `${this.state.staff.find( st => st.id === s.sdl_id).first_name} ${this.state.staff.find( st => st.id === s.sdl_id).last_name} is the SDL for ${s.title}. `
                     }
                   })
                   alert(message)
+                } else if (this.state.role === 'ARM' ) {
+                    createResource(info, 'staff', 'staff')
+                    .then( staff => this.props.history.push(staff.id.toString()))
+                } else {
+                  createResource(info, 'staff', 'staff')
+                  .then( staff => this.props.history.push(staff.id.toString()))
                 }
               } else {
                 createResource(info, 'staff', 'staff')
@@ -105,6 +109,7 @@ export default class StaffNew extends Component{
 
 
   render(){
+    console.log(this.state);
     return(
       <div>
         <h1>Add a Staff Member</h1>
@@ -118,15 +123,20 @@ export default class StaffNew extends Component{
           agencies={this.state.agencies}
           arms={this.state.arms}
           role={this.state.role}
-          services={this.state.services}
+          dc_services={this.state.dc_services}
+          so_services={this.state.so_services}
+          sdl_services={this.state.sdl_services}
+          // provider_services={this.state.provider_services}
           agencyNames={this.state.agencyNames}
           roles={this.state.roles}
           staff={this.state.staff}
           assignments={this.state.assignments}
           services_list={this.state.services_list}
+          id={this.state.id}
           path={this.props.match.path}
           handleInputChange={this.handleInputChange.bind(this)}
           handleSubmit={this.handleSubmit.bind(this)}
+
         />
       </div>
     )

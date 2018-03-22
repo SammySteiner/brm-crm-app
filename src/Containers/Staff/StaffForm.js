@@ -35,22 +35,22 @@ export default (props) => {
         <label>Role:</label>
         <Dropdown fluid required search selection placeholder='Search...' id='role' value={props.role} onChange={props.handleInputChange} options={roles} />
       </Form.Field>
-      {(props.sdl_services[0]) ?
+      {(props.role === "SDL") ?
       <Form.Field >
         <label>Services as SDL:</label>
-        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.sdl_services.map(s => s.title)} onChange={props.handleInputChange} options={props.path === '/staff/new' ? unassigned_sdl_services : services_list} />
+        <Dropdown fluid search selection multiple placeholder='Search...' id='sdl_services' value={props.sdl_services} onChange={props.handleInputChange} options={props.path === '/staff/new' ? unassigned_sdl_services : services_list} />
       </Form.Field>
       : null}
-      {(props.so_services[0]) ?
+      {(props.role === "Service Owner") ?
       <Form.Field >
         <label>Services as Service Owner:</label>
-        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.so_services.map(s => s.title)} onChange={props.handleInputChange} options={props.path === '/staff/new'? unassigned_so_services : services_list} />
+        <Dropdown fluid search selection multiple placeholder='Search...' id='so_services' value={props.so_services} onChange={props.handleInputChange} options={props.path === '/staff/new'? unassigned_so_services : services_list} />
       </Form.Field>
       : null}
-      {/* {(props.provider_services[1]) ?
+      {/* {(props.role === "Service Provider") ?
       <Form.Field >
         <label>Services as Service Provider:</label>
-        <Dropdown fluid search selection multiple placeholder='Search...' id='services' value={props.provier_services.map(s => s.title)} onChange={props.handleInputChange} options={services_list} />
+        <Dropdown fluid search selection multiple placeholder='Search...' id='provider_services' value={props.provier_services} onChange={props.handleInputChange} options={services_list} />
       </Form.Field>
       : null} */}
       {props.role === "ARM" ?

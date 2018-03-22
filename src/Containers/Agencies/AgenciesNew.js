@@ -50,7 +50,6 @@ export default class AgencyNew extends Component{
 
 
   render(){
-    console.log(this.state);
     return(
       <div>
         <h1>Add an Agency</h1>
