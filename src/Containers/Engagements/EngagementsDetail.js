@@ -34,7 +34,7 @@ export default class EngagementsDetail extends Component {
   }
 
   handleDelete(event){
-    deleteResource('connections', this.state.connection.id)
+    deleteResource('engagements', this.state.engagement.id)
     // .then( staff => {
     //   if (staff[0] !== undefined) {
     //     var alertIntro = `${staff[0].agency.name} has successfully been deleted from the database. The staff of the agency have not been deleted, including: `

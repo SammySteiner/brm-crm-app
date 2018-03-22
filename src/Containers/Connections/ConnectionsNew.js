@@ -49,7 +49,15 @@ export default class ConnectionsNew extends Component{
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
-    let info = {date: s.datetime, report: s.report, notes: s.notes, connection_type: s.type, arm: s.arm, agency: s.agency, attendees: s.attendees}
+    let info = {
+      date: s.datetime,
+      report: s.report,
+      notes: s.notes,
+      connection_type: s.type,
+      arm: s.arm,
+      agency: s.agency,
+      attendees: s.attendees
+    }
     createResource(info, 'connection', 'connections')
     .then( connection => this.props.history.push(connection.id.toString()))
   }
