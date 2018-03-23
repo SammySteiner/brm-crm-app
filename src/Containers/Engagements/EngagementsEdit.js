@@ -44,27 +44,29 @@ export default class EngagementsEdit extends Component{
           alert('You must be logged in to access this page.')
           return this.props.history.push('/login')
         } else {
+          var s = this.props.history.location.state
           return this.setState({
-            id: this.props.history.location.state.id,
-            title: this.props.history.location.state.title,
-            report: this.props.history.location.state.report,
-            notes: this.props.history.location.state.notes,
-            type: this.props.history.location.state.type,
-            ksr: this.props.history.location.state.ksr,
-            inc: this.props.history.location.state.inc,
-            prj: this.props.history.location.state.prj,
-            priority: this.props.history.location.state.priority,
-            service: this.props.history.location.state.service,
-            created_by: this.props.history.location.state.created_by,
-            created_on: this.props.history.location.state.created_on,
-            last_modified_by: this.props.history.location.state.last_modified_by,
-            last_modified_on: this.props.history.location.state.last_modified_on,
-            start_time: this.props.history.location.state.start_time,
-            resolved_on: this.props.history.location.state.resolved_on,
-            resolution_notes: this.props.history.location.state.resolution_notes,
-            arm: this.props.history.location.state.arm,
-            agency: this.props.history.location.state.agency,
-            connection: this.props.history.location.state.connection,
+            id: s.id,
+            title: s.title,
+            report: s.report,
+            notes: s.notes,
+            type: s.engagement_type.via,
+            ksr: s.ksr,
+            inc: s.inc,
+            prj: s.prj ? s.prj : '',
+            priority: s.priority.toString(),
+            service: s.service.title,
+            team: s.staff_engagements.map( se => se.staff.fullname),
+            created_by: s.created_by,
+            created_on: s.created_on,
+            last_modified_by: s.last_modified_by,
+            last_modified_on: s.last_modified_on,
+            start_time: s.start_time,
+            resolved_on: s.resolved_on ? s.resolved_on : '',
+            resolution_notes: s.resolution_notes ? s.resolution_notes : '',
+            arm: s.arm,
+            agency: s.agency,
+            connection: s.connection.title,
             connections: data.connections,
             types: data.types,
             staff: data.staff,
@@ -82,12 +84,13 @@ export default class EngagementsEdit extends Component{
     })
   }
 
-  handleRadioChange = (e, { value }) => this.setState({ category: value })
+  handleRadioChange = (e, { value }) => this.setState({ priority: value })
 
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
-    let info = {title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, resolution_notes: s.resolution_notes, connection: s.connection, created_on: s.created_on, created_by: s.created_by, last_modified_by: s.last_modified_by, last_modified_on: s.last_modified_on}
+    let connection = s.connections.find( c => c.title === s.connection).id
+    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, resolution_notes: s.resolution_notes, connection: connection, team: s.team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.goBack())
   }
@@ -118,6 +121,7 @@ export default class EngagementsEdit extends Component{
           arm={this.state.arm}
           agency={this.state.agency}
           connection={this.state.connection}
+          connections={this.state.connections}
           team={this.state.team}
           types={this.state.types}
           staff={this.state.staff}

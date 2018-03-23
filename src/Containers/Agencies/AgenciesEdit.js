@@ -64,7 +64,6 @@ export default class AgenciesEdit extends Component{
   }
 
   render(){
-    console.log(this.state);
     return(
       <div>
         <h1>Edit an Agency</h1>

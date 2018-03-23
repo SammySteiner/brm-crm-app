@@ -76,7 +76,6 @@ export default class ConnectionsEdit extends Component{
   }
 
   render(){
-    console.log(this.state);
     return(
       <div>
         <h1>Edit a Connection</h1>

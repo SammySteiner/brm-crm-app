@@ -78,7 +78,6 @@ export default class Services extends Component {
   }
 
   render(){
-    console.log(this.state)
     const filteredList = this.state.data.filter( s =>
       (s.title ? s.title.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||

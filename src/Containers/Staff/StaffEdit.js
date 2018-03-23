@@ -92,7 +92,6 @@ export default class ServicesEdit extends Component{
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.id !== this.state.id && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
                 if (this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.sdl_services.includes( s.title)).some( s => s.sdl_id !== undefined && s.id !== this.state.id))) {
-                  debugger
                   message = `Services can only have one SDL. `
                   this.state.services_list.filter( s => this.state.sdl_services.includes( s.title )).forEach( s => {
                     if (typeof(s.id) === "number") {
@@ -100,10 +99,18 @@ export default class ServicesEdit extends Component{
                     }
                   })
                   alert(message)
+                } else if (this.state.role === 'Service Owner' && (this.state.services_list.filter( s => this.state.so_services.includes( s.title)).some( s => s.service_owner_id !== undefined && s.id !== this.state.id))) {
+                  message = `Services can only have one Service Owner. `
+                  this.state.services_list.filter( s => this.state.so_services.includes( s.title )).forEach( s => {
+                    if (typeof(s.id) === "number") {
+                      message += `${this.state.staff.find( st => st.id === s.service_owner_id).first_name} ${this.state.staff.find( st => st.id === s.service_owner_id).last_name} is the Service Owner for ${s.title}. `
+                    }
+                  })
+                  alert(message)
                 } else if (this.state.role === 'ARM' ) {
                   if (this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).length < 1) {
                       editResource(info, 'staff', 'staff')
-                      .then( staff => this.props.history.push(staff.id.toString()))
+                      .then( staff => this.props.history.goBack())
                   } else {
                     var message = `Agencies can only have one ARM. `
                     this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).forEach( a => {
@@ -112,13 +119,12 @@ export default class ServicesEdit extends Component{
                     alert(message)
                   }
                 } else {
-                  debugger
                   editResource(info, 'staff', 'staff')
-                  .then( staff => this.props.history.push(staff.id.toString()))
+                  .then( staff => this.props.history.goBack())
                 }
               } else {
                 editResource(info, 'staff', 'staff')
-                .then( staff => this.props.history.push(staff.id.toString()))
+                .then( staff => this.props.history.goBack())
               }
             } else {
               alert(`${this.state.staff.filter( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1)[0]['first_name']} ${this.state.staff.filter( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1)[0]['last_name']} is the current ${this.state.role} of ${this.state.agency}. Remove or reassign the ${this.state.role} of ${this.state.agency} before adding someone to that posittion.`)

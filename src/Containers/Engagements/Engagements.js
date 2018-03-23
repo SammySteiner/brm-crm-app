@@ -11,8 +11,8 @@ export default class Engagements extends Component {
     super(props)
     this.state = {
       data: [],
-      column: null,
-      direction: null,
+      column: 'date',
+      direction: 'ascending',
       search: '',
     }
   }
@@ -20,8 +20,8 @@ export default class Engagements extends Component {
   componentDidMount() {
     getDirectory('engagements')
     .then( data => data.sort(function(a, b) {
-      var textA = a.start_time
-      var textB = b.start_time
+      var textA = a.date
+      var textB = b.date
       return (textA < textB) ? 1 : (textA > textB) ? -1 : 0})
     )
     .catch(error => {
@@ -79,6 +79,7 @@ export default class Engagements extends Component {
 
 
   render(){
+    console.log(this.state);
     const filteredList = this.state.data.filter( d =>
       (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||

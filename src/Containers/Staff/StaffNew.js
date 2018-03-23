@@ -109,7 +109,6 @@ export default class StaffNew extends Component{
 
 
   render(){
-    console.log(this.state);
     return(
       <div>
         <h1>Add a Staff Member</h1>

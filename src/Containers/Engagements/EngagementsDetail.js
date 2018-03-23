@@ -59,7 +59,7 @@ export default class EngagementsDetail extends Component {
   handleEdit(event){
     event.preventDefault()
     this.props.history.push({
-      pathname: this.state.connection.id + "/edit",
+      pathname: this.state.engagement.id + "/edit",
       state: this.state.engagement
     })
   }
@@ -96,12 +96,11 @@ export default class EngagementsDetail extends Component {
   }
 
   render(){
-    console.log(this.state.engagement)
     return(
       !this.state.engagement.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>
         <Header as='h1' textAlign='center'>Engagement: {this.state.engagement.title}</Header>
-        <Grid columns={4} stackable>
+        <Grid columns={3} stackable>
           <Grid.Row >
             <Grid.Column >
               <Card fluid>
@@ -111,7 +110,7 @@ export default class EngagementsDetail extends Component {
                     <List.Item icon='calendar' content={`Date: ${new Date(this.state.engagement.start_time).toDateString()}`}/>
                     <List.Item icon='time' content={`Start Time: ${new Date(this.state.engagement.start_time).toLocaleTimeString()}`}/>
                     <List.Item icon='user' onClick={this.handleSelectStaff.bind(this)} id={this.state.engagement.connection.arm.id} content={`ARM: ${this.state.engagement.connection.arm.fullname}`} />
-                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connection.agency.id} content={`Agency: ${this.state.engagement.connection.agency.name}`} />
+                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connection.agency.id} content={`Agency: ${this.state.engagement.connection.agency.acronym}`} />
                     <List.Item icon='conversation' content={`Type: ${this.state.engagement.engagement_type.via}`} />
                     {this.state.engagement.ksr ? <List.Item >KSR: {this.state.engagement.ksr}</List.Item> : null}
                     {this.state.engagement.inc ? <List.Item >INC: {this.state.engagement.inc}</List.Item> : null}
@@ -143,6 +142,8 @@ export default class EngagementsDetail extends Component {
                 <Card.Content>{this.state.engagement.notes}</Card.Content>
               </Card>
             </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
             <Grid.Column>
               <Card fluid>
                 <Card.Content header="Team"/>
@@ -153,8 +154,6 @@ export default class EngagementsDetail extends Component {
                 </Card.Content>
               </Card>
             </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
             <Grid.Column>
               <Card fluid>
                 <Card.Content header="Service"/>

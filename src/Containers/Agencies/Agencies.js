@@ -77,7 +77,6 @@ export default class Agencies extends Component {
   }
 
   render(){
-    console.log(this.state.data[0])
     const filteredList = this.state.data.filter( a =>
       a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||

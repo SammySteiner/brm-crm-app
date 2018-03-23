@@ -15,7 +15,9 @@ export default class ServicesNew extends Component{
       division: '',
       services: [],
       divisionNames: [],
-      staffNames: []
+      staffNames: [],
+      soStaff: [],
+      sdlStaff: []
     }
   }
 
@@ -24,7 +26,7 @@ export default class ServicesNew extends Component{
     .then(
       data => {
         let divisionNames = data.divisions.map( d => d.name)
-        return this.setState({ staffNames: data.staff, divisionNames: divisionNames, services: data.services })
+        return this.setState({ staffNames: data.staff, soStaff: data.so_staff, sdlStaff: data.sdl_staff, divisionNames: divisionNames, services: data.services })
       }
     )
     .catch(error => {
@@ -43,7 +45,7 @@ export default class ServicesNew extends Component{
 
   handleSubmit(event){
     event.preventDefault()
-    let info = {title: this.state.title, description: this.state.description, sla: this.state.sla, sdl: this.state.sdl, division: this.state.division}
+    let info = {title: this.state.title, description: this.state.description, sla: this.state.sla, sdl: this.state.sdl, service_owner: this.state.service_owner, division: this.state.division}
     if (!this.state.services.map( s => s.title.toLowerCase() ).includes(this.state.title.toLowerCase())) {
       createResource(info, 'service', 'services')
       .then( service => this.props.history.push(service.id.toString()))
@@ -67,6 +69,8 @@ export default class ServicesNew extends Component{
           services={this.state.services}
           divisionNames={this.state.divisionNames}
           staffNames={this.state.staffNames}
+          sdlStaff={this.state.sdlStaff}
+          soStaff={this.state.soStaff}
           handleInputChange={this.handleInputChange.bind(this)}
           handleSubmit={this.handleSubmit.bind(this)}
         />

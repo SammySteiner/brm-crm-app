@@ -67,7 +67,8 @@ export default class ConnectionsDetail extends Component {
   generateEngagementCards(){
     return this.state.connection.engagements.map( (e, i) => {
       return(
-        <Card fluid key={i}>
+        <Grid.Column key={i}>
+        <Card fluid >
           <Card.Content header={`Engagement: ${i + 1}`}/>
           <Card.Content>
             <List>
@@ -98,17 +99,10 @@ export default class ConnectionsDetail extends Component {
             </List>
           </Card.Content>
         </Card>
+      </Grid.Column>
+
       )
     })
-  }
-
-  generateEngagements(){
-    var cards = this.generateEngagementCards()
-    return (
-          <Card.Group itemsPerRow={3} stackable>
-          {cards}
-        </Card.Group>
-    )
   }
 
   attendees(){
@@ -118,13 +112,12 @@ export default class ConnectionsDetail extends Component {
   }
 
   render(){
-    console.log(this.state.connection)
     return(
       !this.state.connection.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>
         <Header as='h1' textAlign='center'>Connection with {this.state.connection.agency.acronym}</Header>
-        <Grid columns={4} stackable>
-          <Grid.Row >
+        <Grid stackable>
+          <Grid.Row columns={4}>
             <Grid.Column >
               <Card fluid>
                 <Card.Content header="Basic Info"/>
@@ -168,7 +161,9 @@ export default class ConnectionsDetail extends Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
-            {this.generateEngagements()}
+          <Grid.Row columns={3} >
+            {this.generateEngagementCards()}
+          </Grid.Row>
         </Grid>
       </Container>
     )
