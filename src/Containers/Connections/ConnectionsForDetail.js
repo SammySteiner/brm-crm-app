@@ -4,13 +4,14 @@ import ConnectionsTable from './ConnectionsTable'
 import Search from '../Search.js'
 
 import { getDirectory } from '../../api'
-import { Button, Grid, Loader } from 'semantic-ui-react'
+import { Button, Grid, Loader, Header } from 'semantic-ui-react'
 
-export default class Connections extends Component {
+export default class ConnectionsForDetail extends Component {
   constructor(props){
     super(props)
     this.state = {
       data: [],
+      loading: true,
       search: '',
       column: 'date',
       direction: 'ascending',
@@ -34,7 +35,7 @@ export default class Connections extends Component {
       alert('You must be logged in to access this page.')
       return this.props.history.push('/login')
     })
-    .then(data => this.setState({ data }))
+    .then(data => this.setState({ loading: false, data }))
   }
 
   handleChange(event) {
@@ -104,18 +105,12 @@ export default class Connections extends Component {
       (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
     )
     return(
-      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
+      this.state.loading ? <Loader active inline='centered' content='Loading'/>
+      : !this.state.data[0] ? <Header as='h4'>No Connections</Header> :
         <Grid padded>
-          <Grid.Row columns={2}>
-            <Grid.Column width={2} floated='left' >
-              <Button type='button' onClick={this.newConnection.bind(this)}>New Connection</Button>
-            </Grid.Column>
-            <Grid.Column  floated='left' stretched width={10}>
-                <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row >
             <Grid.Column >
+              <Header as='h2'>Connections</Header>
               <ConnectionsTable
                 sortedAndFilteredList={sortedList}
                 handleSelectConnection={this.handleSelectConnection.bind(this)}

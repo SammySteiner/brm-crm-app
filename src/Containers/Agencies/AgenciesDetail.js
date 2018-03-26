@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider} from 'semantic-ui-react'
+import ConnectionsForDetail from '../Connections/ConnectionsForDetail.js'
 
 export default class AgencyDetail extends Component {
   constructor(props){
@@ -84,6 +85,12 @@ export default class AgencyDetail extends Component {
               </Card>
             </Grid.Column>
             <Grid.Column>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <ConnectionsForDetail history={this.props.history} source={'agencies'} field={'acronym'} where={this.state.agency.acronym}/>
             </Grid.Column>
           </Grid.Row>
           <Divider/>
