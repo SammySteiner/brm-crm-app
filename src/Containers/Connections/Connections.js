@@ -12,8 +12,13 @@ export default class Connections extends Component {
     this.state = {
       data: [],
       search: '',
-      column: null,
-      direction: null
+      column: 'date',
+      direction: 'ascending',
+      filters: {
+        type: '',
+        arm: '',
+        engagements: ''
+      }
     }
   }
 
@@ -36,6 +41,13 @@ export default class Connections extends Component {
     this.setState({
       search: event.target.value
     })
+  }
+
+  handleFilter(event, data){
+    var filters = {...this.state.filters}
+    var value = data.content === 'All' ? '' : data.content
+    filters[data.id] = value
+    this.setState({filters})
   }
 
   handleSelectConnection(event){
@@ -79,7 +91,13 @@ export default class Connections extends Component {
   }
 
   render(){
+
     const filteredList = this.state.data.filter( c =>
+      (this.state.filters.arm ? c.arm.fullname === this.state.filters.arm : true) &&
+      (this.state.filters.type ? c.type === this.state.filters.type : true) &&
+      (this.state.filters.engagements ? c.engagements === this.state.filters.engagements : true)
+    )
+    const sortedList = filteredList.filter( c =>
       (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.agency.acronym ? c.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.agency.name ? c.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
@@ -100,11 +118,16 @@ export default class Connections extends Component {
           <Grid.Row >
             <Grid.Column >
               <ConnectionsTable
-                sortedAndFilteredList={filteredList}
+                sortedAndFilteredList={sortedList}
                 handleSelectConnection={this.handleSelectConnection.bind(this)}
                 handleSort={this.handleSort.bind(this)}
                 column={this.state.column}
                 direction={this.state.direction}
+                handleFilter={this.handleFilter.bind(this)}
+                filters={this.state.filters}
+                types={['All', ...new Set(this.state.data.map(item => item.type))]}
+                arms={['All', ...new Set(this.state.data.map(item => item.arm.fullname))]}
+                engagements={['All', ...new Set(this.state.data.map(item => item.engagements))]}
               />
             </Grid.Column>
           </Grid.Row>

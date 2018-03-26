@@ -94,7 +94,6 @@ export default class Engagements extends Component {
 
 
   render(){
-    console.log(this.state);
     const filteredList = this.state.data.filter(
       d =>
       (this.state.filters.priority ? d.priority === this.state.filters.priority : true) &&

@@ -31,7 +31,6 @@ export default(props) => {
                   {props.types.map( t => <Dropdown.Item key={t} id='type' content={t} onClick={props.handleFilter} />)}
                 </Dropdown.Menu>
               </Dropdown>
-
             </Table.HeaderCell>
             <Table.HeaderCell sorted={props.column === 'arm' ? props.direction : null} onClick={props.handleSort('arm')}>
               ARM
