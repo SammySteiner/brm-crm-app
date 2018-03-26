@@ -4,7 +4,7 @@ import EngagementsTable from './EngagementsTable'
 import Search from '../Search.js'
 
 import { getDirectory } from '../../api'
-import { Button, Grid, Loader, Checkbox } from 'semantic-ui-react'
+import { Button, Grid, Loader, Checkbox, Dropdown } from 'semantic-ui-react'
 
 export default class Engagements extends Component {
   constructor(props){
@@ -15,6 +15,12 @@ export default class Engagements extends Component {
       direction: 'ascending',
       search: '',
       status: true,
+      filters: {
+        priority: '',
+        arm: '',
+        type: '',
+        agency: ''
+      }
     }
   }
 
@@ -38,6 +44,13 @@ export default class Engagements extends Component {
     this.setState({
       [data.id]: value
     })
+  }
+
+  handleFilter(event, data){
+    var filters = {...this.state.filters}
+    var value = data.content === 'All' ? '' : data.content
+    filters[data.id] = value
+    this.setState({filters})
   }
 
   handleSelectEngagement(event){
@@ -82,8 +95,15 @@ export default class Engagements extends Component {
 
   render(){
     console.log(this.state);
-    const filteredList = this.state.data.filter( d =>
-      this.state.status ? !d.resolved_on : false ||
+    const filteredList = this.state.data.filter(
+      d =>
+      (this.state.filters.priority ? d.priority === this.state.filters.priority : true) &&
+      (this.state.filters.arm ? d.arm.fullname === this.state.filters.arm : true) &&
+      (this.state.filters.type ? d.type === this.state.filters.type : true) &&
+      (this.state.status ? !d.resolved_on : true)
+
+    )
+    const sortedList = filteredList.filter( d =>
       (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.name ? d.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
@@ -107,11 +127,15 @@ export default class Engagements extends Component {
           <Grid.Row >
             <Grid.Column >
               <EngagementsTable
-                sortedAndFilteredList={filteredList}
+                sortedAndFilteredList={sortedList}
                 handleSelectEngagement={this.handleSelectEngagement.bind(this)}
                 handleSort={this.handleSort.bind(this)}
                 direction={this.state.direction}
                 column={this.state.column}
+                filters={this.state.filters}
+                handleFilter={this.handleFilter.bind(this)}
+                types={['All', ...new Set(this.state.data.map(item => item.type))]}
+                arms={['All', ...new Set(this.state.data.map(item => item.arm.fullname))]}
               />
             </Grid.Column>
           </Grid.Row>
