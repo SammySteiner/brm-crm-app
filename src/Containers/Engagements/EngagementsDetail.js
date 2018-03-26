@@ -1,5 +1,5 @@
 import React,{ Component } from 'react'
-import { getDetails, deleteResource } from '../../api'
+import { getDetails, deleteResource, editResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
 
 export default class EngagementsDetail extends Component {
@@ -70,6 +70,15 @@ export default class EngagementsDetail extends Component {
     })
   }
 
+  handleResolve(){
+    var s = this.state.engagement
+    var team = s.staff_engagements.map(se => se.staff.fullname)
+    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.engagement_type.via, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service.title, start_time: s.start_time, resolved_on: new Date(), connection: s.connection.id, team: team}
+    editResource(info, 'engagement', 'engagements')
+    .then( engagement => this.props.history.push("engagements/" + s.id))
+
+  }
+
 
   generateConnection(){
     return (
@@ -130,16 +139,17 @@ export default class EngagementsDetail extends Component {
                     <List.Item id={this.state.engagement.last_modified_by.id} onClick={this.handleSelectStaff.bind(this)}>Last Modified By: {this.state.engagement.last_modified_by.fullname}</List.Item>
                   </List>
                 </Card.Content>
-                <Card.Content extra>
-                  <Button size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
-                  <Button floated='right' size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
-                </Card.Content>
               </Card>
             </Grid.Column>
             <Grid.Column>
               <Card fluid>
                 <Card.Content header="Report"/>
                 <Card.Content>{this.state.engagement.report}</Card.Content>
+                <Card.Content extra>
+                  Status: {this.state.engagement.resolved_on ? 'Resolved' : 'In Progress'}
+                  <br/>
+                  {this.state.engagement.resolved_on ? `Resolved on: ${new Date(this.state.engagement.resolved_on).toLocaleDateString()}` : null}
+                </Card.Content>
               </Card>
             </Grid.Column>
             <Grid.Column>
@@ -182,6 +192,7 @@ export default class EngagementsDetail extends Component {
             <Grid.Column >
               <Button negative size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
               <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
+              <Button primary size='medium' floated="right" onClick={this.handleResolve.bind(this)}>Resolve Now</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>
