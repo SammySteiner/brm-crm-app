@@ -7,6 +7,7 @@ export default ( props ) => {
         type="text" value={props.searchTerm}
         placeholder="Search..."
         onChange={props.handleChange}
+        id='search'
       />
   )
 }

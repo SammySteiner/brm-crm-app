@@ -4,7 +4,7 @@ import EngagementsTable from './EngagementsTable'
 import Search from '../Search.js'
 
 import { getDirectory } from '../../api'
-import { Button, Grid, Loader } from 'semantic-ui-react'
+import { Button, Grid, Loader, Checkbox } from 'semantic-ui-react'
 
 export default class Engagements extends Component {
   constructor(props){
@@ -14,6 +14,7 @@ export default class Engagements extends Component {
       column: 'date',
       direction: 'ascending',
       search: '',
+      status: true,
     }
   }
 
@@ -32,9 +33,10 @@ export default class Engagements extends Component {
     .then(data => this.setState({ data }))
   }
 
-  handleChange(event) {
+  handleInputChange(event, data){
+    let value = data.type === 'checkbox' ? data.checked : data.value
     this.setState({
-      search: event.target.value
+      [data.id]: value
     })
   }
 
@@ -79,7 +81,9 @@ export default class Engagements extends Component {
 
 
   render(){
+    console.log(this.state);
     const filteredList = this.state.data.filter( d =>
+      this.state.status ? !d.resolved_on : false ||
       (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.name ? d.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
@@ -89,12 +93,15 @@ export default class Engagements extends Component {
     return(
       !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>
-          <Grid.Row columns={2}>
+          <Grid.Row columns={3}>
             <Grid.Column width={2} floated='left' >
               <Button type='button' onClick={this.newEngagement.bind(this)}>New Engagement</Button>
             </Grid.Column>
-            <Grid.Column  floated='left' stretched width={10}>
-                <Search search={this.state.search} handleChange={this.handleChange.bind(this)}/>
+            <Grid.Column stretched floated='left' width={10}>
+                <Search search={this.state.search} handleChange={this.handleInputChange.bind(this)}/>
+            </Grid.Column>
+            <Grid.Column width={2}>
+              <Checkbox id='status' label="Active Only" type='checkbox' checked={this.state.status} onChange={this.handleInputChange.bind(this)} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row >
