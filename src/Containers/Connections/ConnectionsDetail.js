@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { List, Button, Card, Loader, Container, Header, Grid } from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid, Divider} from 'semantic-ui-react'
 
 export default class ConnectionsDetail extends Component {
   constructor(props){
@@ -32,6 +32,9 @@ export default class ConnectionsDetail extends Component {
   handleSelectService(event){
     return this.props.history.push("/services/" + event.currentTarget.id)
   }
+  handleSelectEngagement(event){
+    return this.props.history.push("/engagements/" + event.currentTarget.id)
+  }
 
   handleDelete(event){
     deleteResource('connections', this.state.connection.id)
@@ -49,6 +52,11 @@ export default class ConnectionsDetail extends Component {
     //   }
     // })
     .then( () => this.props.history.goBack())
+
+  }
+
+  handleAddEngagement(){
+    this.props.history.push('/engagements/new', {connection: this.state.connection.title})
   }
 
 
@@ -68,15 +76,15 @@ export default class ConnectionsDetail extends Component {
     return this.state.connection.engagements.map( (e, i) => {
       return(
         <Grid.Column key={i}>
-        <Card fluid >
+        <Card fluid id={e.id} onClick={this.handleSelectEngagement.bind(this)} as='div'>
           <Card.Content header={`Engagement: ${i + 1}`}/>
           <Card.Content>
             <List>
-              <List.Item>Subject: {e.title}</List.Item>
+              <List.Item>Title: {e.title}</List.Item>
               {e.ksr ? <List.Item>KSR: {e.ksr}</List.Item> : null}
               {e.inc ? <List.Item>INC: {e.inc}</List.Item> : null}
               {e.prj ? <List.Item>PRJ: {e.prj}</List.Item> : null}
-              <List.Item id={e.service.id} onClick={this.handleSelectService.bind(this)}>Service: {e.service.title}</List.Item>
+              <List.Item>Service: {e.service.title}</List.Item>
               <List.Item>Priority: {e.priority}</List.Item>
               <List.Item>Notes: {e.notes}</List.Item>
               {e.report ? <List.Item>Report: {e.report}</List.Item> : null}
@@ -87,15 +95,15 @@ export default class ConnectionsDetail extends Component {
             <List ordered>
               {e.staff_engagements.map( e => {
                 return(
-                  <List.Item key={e.id} id={e.staff_id} onClick={this.handleSelectStaff.bind(this)}>{e.fullname}</List.Item>
+                  <List.Item key={e.id}>{e.fullname}</List.Item>
                 )
               })}
             </List>
           </Card.Content>
           <Card.Content extra>
             <List>
-              <List.Item id={e.created_by.id} onClick={this.handleSelectStaff.bind(this)}>Created By: {e.created_by.fullname}</List.Item>
-              <List.Item id={e.last_modified_by.id} onClick={this.handleSelectStaff.bind(this)}>Last Modified By: {e.last_modified_by.fullname}</List.Item>
+              <List.Item >Created By: {e.created_by.fullname}</List.Item>
+              <List.Item >Last Modified By: {e.last_modified_by.fullname}</List.Item>
             </List>
           </Card.Content>
         </Card>
@@ -126,15 +134,11 @@ export default class ConnectionsDetail extends Component {
                     <List.Item icon='calendar' content={`Date: ${new Date(this.state.connection.date).toDateString()}`}/>
                     <List.Item icon='time' content={`Time: ${new Date(this.state.connection.date).toLocaleTimeString()}`}/>
                     <List.Item icon='user' onClick={this.handleSelectStaff.bind(this)} id={this.state.connection.arm.id} content={`ARM: ${this.state.connection.arm.fullname}`} />
-                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.connection.agency.id} content={`Agency: ${this.state.connection.agency.name}`} />
+                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.connection.agency.id} content={`Agency: ${this.state.connection.agency.acronym}`} />
                     <List.Item icon='conversation' content={`Type: ${this.state.connection.connection_type.via}`} />
 
                     {/* date and time, Agency, ARM, Other Staff, Type, Report Notes, Number of Engagements, List of services involved, All relevant Doitt folk, Engagments each as a seperate card*/}
                   </List>
-                </Card.Content>
-                <Card.Content extra>
-                  <Button size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
-                  <Button floated='right' size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
                 </Card.Content>
               </Card>
             </Grid.Column>
@@ -163,6 +167,14 @@ export default class ConnectionsDetail extends Component {
           </Grid.Row>
           <Grid.Row columns={3} >
             {this.generateEngagementCards()}
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column >
+              <Button negative  size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
+              <Button primary floated="right" size='medium' onClick={this.handleAddEngagement.bind(this)}>Add Engagement</Button>
+              <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>

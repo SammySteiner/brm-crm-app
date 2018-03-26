@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { List, Button, Card, Loader, Container, Header, Grid } from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
 
 export default class ServiceDetail extends Component {
   constructor(props){
@@ -65,13 +65,16 @@ export default class ServiceDetail extends Component {
                     <List.Item icon='' onClick={()=>this.handleSelectStaff('deputy_commissioner')} content={`Deputy Commissioner: ${this.state.service.deputy_commissioner ? this.state.service.deputy_commissioner.first_name + ' ' + this.state.service.deputy_commissioner.last_name : 'Data Not Available'}`} />
                   </List>
                 </Card.Content>
-                <Card.Content extra>
-                  <Button size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
-                  <Button floated='right' size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
-                </Card.Content>
               </Card>
             </Grid.Column>
             <Grid.Column>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column >
+              <Button negative size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
+              <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

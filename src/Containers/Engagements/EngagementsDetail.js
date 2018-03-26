@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { List, Button, Card, Loader, Container, Header, Grid } from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
 
 export default class EngagementsDetail extends Component {
   constructor(props){
@@ -15,6 +15,9 @@ export default class EngagementsDetail extends Component {
     .then(engagement => {
       if (engagement.error) {
         console.log(engagement.error)
+        if (engagement.error === "Page no longer exits.") {
+          return this.props.history.push('/connections')
+        }
         alert('You must be logged in to access this page.')
         return this.props.history.push('/login')
       } else {
@@ -31,6 +34,9 @@ export default class EngagementsDetail extends Component {
   }
   handleSelectService(event){
     return this.props.history.push("/services/" + event.currentTarget.id)
+  }
+  handleSelectConnection(event){
+    return this.props.history.push("/connections/" + event.currentTarget.id)
   }
 
   handleDelete(event){
@@ -100,7 +106,7 @@ export default class EngagementsDetail extends Component {
       !this.state.engagement.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>
         <Header as='h1' textAlign='center'>Engagement: {this.state.engagement.title}</Header>
-        <Grid columns={3} stackable>
+        <Grid columns={3} stackable >
           <Grid.Row >
             <Grid.Column >
               <Card fluid>
@@ -163,12 +169,19 @@ export default class EngagementsDetail extends Component {
               </Card>
             </Grid.Column>
             <Grid.Column>
-              <Card fluid>
+              <Card fluid onClick={this.handleSelectConnection.bind(this)} id={this.state.engagement.connection.id} as='div'>
                 <Card.Content header="Connection"/>
                 <Card.Content>
                   {this.generateConnection()}
                 </Card.Content>
               </Card>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column >
+              <Button negative size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
+              <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

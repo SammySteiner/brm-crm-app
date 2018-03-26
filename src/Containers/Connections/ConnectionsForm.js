@@ -19,8 +19,6 @@ export default (props) => {
     <Container textAlign='left'>
         <Form onSubmit={props.handleSubmit} >
           <Form.Input label="Connection Date and Time: " type='datetime-local' value={datetime} onChange={props.handleInputChange} id='datetime'/>
-          <Form.TextArea label="Connection Report: " type='textArea' value={props.report} onChange={props.handleInputChange} id='report'/>
-          <Form.TextArea label="Connection Notes: " type='textArea' value={props.notes} onChange={props.handleInputChange} id='notes'/>
           <Form.Field >
             <label>Type:</label>
             <Dropdown fluid search selection placeholder='Search...' id='type' value={props.type} onChange={props.handleInputChange} options={types} />
@@ -37,6 +35,8 @@ export default (props) => {
             <label>Attendees:</label>
             <Dropdown fluid search selection multiple placeholder='Search...' id='attendees' value={props.attendees} onChange={props.handleInputChange} options={staff} />
           </Form.Field>
+          <Form.TextArea label="Connection Notes: " type='textArea' value={props.notes} onChange={props.handleInputChange} id='notes'/>
+          <Form.TextArea label="Connection Report: " type='textArea' value={props.report} onChange={props.handleInputChange} id='report'/>
           <Button type='submit' onClick={props.handleSubmit}>Submit</Button>
       </Form>
     </Container>

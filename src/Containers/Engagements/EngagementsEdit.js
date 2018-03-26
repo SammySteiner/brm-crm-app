@@ -23,7 +23,6 @@ export default class EngagementsEdit extends Component{
       last_modified_on: '',
       start_time: '',
       resolved_on: '',
-      resolution_notes: '',
       arm: '',
       agency: '',
       connection: '',
@@ -63,7 +62,6 @@ export default class EngagementsEdit extends Component{
             last_modified_on: s.last_modified_on,
             start_time: s.start_time,
             resolved_on: s.resolved_on ? s.resolved_on : '',
-            resolution_notes: s.resolution_notes ? s.resolution_notes : '',
             arm: s.arm,
             agency: s.agency,
             connection: s.connection.title,
@@ -90,7 +88,7 @@ export default class EngagementsEdit extends Component{
     event.preventDefault()
     let s = this.state
     let connection = s.connections.find( c => c.title === s.connection).id
-    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, resolution_notes: s.resolution_notes, connection: connection, team: s.team}
+    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.goBack())
   }
@@ -113,7 +111,6 @@ export default class EngagementsEdit extends Component{
           service={this.state.service}
           start_time={this.state.start_time}
           resolved_on={this.state.resolved_on}
-          resolution_notes={this.state.resolution_notes}
           created_by={this.state.created_by}
           created_on={this.state.created_on}
           last_modified_by={this.state.last_modified_by}

@@ -79,7 +79,6 @@ export default class Engagements extends Component {
 
 
   render(){
-    console.log(this.state);
     const filteredList = this.state.data.filter( d =>
       (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
