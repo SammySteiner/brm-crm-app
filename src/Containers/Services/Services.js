@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
 import ServicesTable from './ServicesTable'
 import Search from '../Search.js'
-
 import { getDirectory } from '../../api'
 import { Button, Grid, Loader } from 'semantic-ui-react'
 
@@ -46,6 +44,16 @@ export default class Services extends Component {
     return this.props.history.push("services/new")
   }
 
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
+  }
+
   sortBy(collection, iterator, c) {
     if (c) {
        if (iterator[0] === "sdl" || iterator[0] === "service_owner") {
@@ -67,24 +75,19 @@ export default class Services extends Component {
     }
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-    var c = (column !== clickedColumn)
-    return this.setState({
-      column: clickedColumn,
-      data: this.sortBy(data, [clickedColumn], c),
-      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
-  render(){
-    const filteredList = this.state.data.filter( s =>
+  filterData(){
+    // remove values from the data for presentation that do not match the search query
+    return this.state.data.filter( s =>
       (s.title ? s.title.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.division ?  s.division.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||
       ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.service_owner ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
     )
+  }
+
+  render(){
+    const filteredList = this.filterData()
     return(
       !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
       <Grid padded>

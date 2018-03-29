@@ -75,7 +75,7 @@ export default class EngagementsDetail extends Component {
     var team = s.staff_engagements.map(se => se.staff.fullname)
     let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.engagement_type.via, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service.title, start_time: s.start_time, resolved_on: new Date(), connection: s.connection.id, team: team}
     editResource(info, 'engagement', 'engagements')
-    .then( engagement => this.props.history.push("engagements/" + s.id))
+    .then( engagement => this.componentDidMount())
 
   }
 
@@ -83,10 +83,10 @@ export default class EngagementsDetail extends Component {
   generateConnection(){
     return (
       <List>
-        <List.Item icon='calendar' content={`Date: ${new Date(this.state.engagement.connection.date).toDateString()}`}/>
-        <List.Item icon='time' content={`Time: ${new Date(this.state.engagement.connection.date).toLocaleTimeString()}`}/>
-        <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connection.agency.id} content={`Agency: ${this.state.engagement.connection.agency.name}`} />
-        <List.Item icon='conversation' content={`Type: ${this.state.engagement.connection.connection_type.via}`} />
+        <List.Item icon='calendar' content={`Date: ${new Date(this.state.engagement.connections[0].date).toDateString()}`}/>
+        <List.Item icon='time' content={`Time: ${new Date(this.state.engagement.connections[0].date).toLocaleTimeString()}`}/>
+        <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connections[0].agency.id} content={`Agency: ${this.state.engagement.connections[0].agency.name}`} />
+        <List.Item icon='conversation' content={`Type: ${this.state.engagement.connections[0].connection_type.via}`} />
 
       </List>
     )
@@ -94,6 +94,7 @@ export default class EngagementsDetail extends Component {
   generateService(){
     return (
       <List>
+        <List.Item icon='' content={`Title: ${this.state.engagement.service.title}`} />
         <List.Item icon='' content={`Description: ${this.state.engagement.service.description}`} />
         <List.Item icon='' content={`SLA: ${this.state.engagement.service.sla ? this.state.engagement.service.sla : 'Data Not Available'}`} />
         <List.Item icon='' onClick={this.handleSelectStaff.bind(this)} id={this.state.engagement.service.sdl ? this.state.engagement.service.sdl.id : null} content={`SDL: ${this.state.engagement.service.sdl ? this.state.engagement.service.sdl.fullname : 'Data Not Available'}`} />
@@ -124,8 +125,8 @@ export default class EngagementsDetail extends Component {
                   <List>
                     <List.Item icon='calendar' content={`Date: ${new Date(this.state.engagement.start_time).toDateString()}`}/>
                     <List.Item icon='time' content={`Start Time: ${new Date(this.state.engagement.start_time).toLocaleTimeString()}`}/>
-                    <List.Item icon='user' onClick={this.handleSelectStaff.bind(this)} id={this.state.engagement.connection.arm.id} content={`ARM: ${this.state.engagement.connection.arm.fullname}`} />
-                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connection.agency.id} content={`Agency: ${this.state.engagement.connection.agency.acronym}`} />
+                    <List.Item icon='user' onClick={this.handleSelectStaff.bind(this)} id={this.state.engagement.connections[0].arm.id} content={`ARM: ${this.state.engagement.connections[0].arm.fullname}`} />
+                    <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connections[0].agency.id} content={`Agency: ${this.state.engagement.connections[0].agency.acronym}`} />
                     <List.Item icon='conversation' content={`Type: ${this.state.engagement.engagement_type.via}`} />
                     {this.state.engagement.ksr ? <List.Item >KSR: {this.state.engagement.ksr}</List.Item> : null}
                     {this.state.engagement.inc ? <List.Item >INC: {this.state.engagement.inc}</List.Item> : null}
@@ -179,7 +180,7 @@ export default class EngagementsDetail extends Component {
               </Card>
             </Grid.Column>
             <Grid.Column>
-              <Card fluid onClick={this.handleSelectConnection.bind(this)} id={this.state.engagement.connection.id} as='div'>
+              <Card fluid onClick={this.handleSelectConnection.bind(this)} id={this.state.engagement.connections[0].id} as='div'>
                 <Card.Content header="Connection"/>
                 <Card.Content>
                   {this.generateConnection()}
@@ -192,7 +193,7 @@ export default class EngagementsDetail extends Component {
             <Grid.Column >
               <Button negative size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
               <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
-              <Button primary size='medium' floated="right" onClick={this.handleResolve.bind(this)}>Resolve Now</Button>
+              {this.state.engagement.resolved_on ? null : <Button primary size='medium' floated="right" onClick={this.handleResolve.bind(this)}>Resolve Now</Button>}
             </Grid.Column>
           </Grid.Row>
         </Grid>

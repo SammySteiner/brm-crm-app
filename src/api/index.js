@@ -47,15 +47,15 @@ export function getAgencies(){
     .then(response => response.json())
 }
 
-export function getDirectory(resource, source = '', field = '', where = '' ){
+export function getDirectory(resource, table = '', attribute = '', value = '' ){
   return fetch(DB_URL + resource, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': localStorage.getItem('jwt'),
-      'where': where,
-      'field': field,
-      'source': source
+      'table': table,
+      'attribute': attribute,
+      'value': value
     },
     method: 'GET',
   })

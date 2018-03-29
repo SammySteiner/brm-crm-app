@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 
 import ConnectionsTable from './ConnectionsTable'
-import Search from '../Search.js'
 
 import { getDirectory } from '../../api'
-import { Button, Grid, Loader, Header } from 'semantic-ui-react'
+import { Grid, Loader, Header } from 'semantic-ui-react'
 
-export default class ConnectionsForDetail extends Component {
+export default class ConnectionsSimpleTable extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -24,7 +23,7 @@ export default class ConnectionsForDetail extends Component {
   }
 
   componentDidMount() {
-    getDirectory('connections', this.props.source, this.props.field, this.props.where)
+    getDirectory('connections', this.props.table, this.props.attribute, this.props.value)
     .then( connections => connections.sort(function(a, b) {
       var textA = a.date
       var textB = b.date

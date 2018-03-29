@@ -7,7 +7,7 @@ export default (props) => {
     <Table.Row id={props.engagements.id} onClick={props.handleSelectEngagement}>
       <Table.Cell singleLine >{d}</Table.Cell>
       <Table.Cell >{props.engagements.agency.acronym}</Table.Cell>
-      <Table.Cell width={8} > {props.engagements.title}</Table.Cell>
+      <Table.Cell width={8} > {props.engagements.report}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.type}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.arm.fullname}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.priority}</Table.Cell>

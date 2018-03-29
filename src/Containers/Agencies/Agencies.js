@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
 import AgenciesTable from './AgenciesTable'
 import Search from '../Search.js'
-
 import { getDirectory } from '../../api'
 import { Button, Grid, Loader } from 'semantic-ui-react'
 
@@ -38,11 +36,23 @@ export default class Agencies extends Component {
       search: event.target.value
     })
   }
+
   handleSelectAgency(event){
     return this.props.history.push("/agencies/" + event.currentTarget.id)
   }
+
   newAgency(){
     return this.props.history.push("agencies/new")
+  }
+
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
   }
 
   sortBy(collection, iterator, c) {
@@ -66,23 +76,18 @@ export default class Agencies extends Component {
     }
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-    var c = (column !== clickedColumn)
-    return this.setState({
-      column: clickedColumn,
-      data: this.sortBy(data, [clickedColumn], c),
-      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
-  render(){
-    const filteredList = this.state.data.filter( a =>
+  filterData(){
+    // remove values from the data for presentation that do not match the search query
+    return this.state.data.filter( a =>
       a.name.toLowerCase().includes(this.state.search.toLowerCase()) || (a.acronym ? a.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (a.cio ?  a.cio.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||
       (a.commissioner ? a.commissioner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (a.arm ? a.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
     )
+  }
+
+  render(){
+    const filteredList = this.filterData()
     return(
       !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>

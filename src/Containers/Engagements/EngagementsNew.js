@@ -60,7 +60,7 @@ export default class EngagementsNew extends Component{
     event.preventDefault()
     let s = this.state
     let connection = s.connections.find( c => c.title === s.connection).id
-    let info = {title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
+    let info = {report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
     createResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.push(engagement.id.toString()))
   }

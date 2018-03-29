@@ -23,7 +23,7 @@ export default(props) => {
             <Table.HeaderCell sorted={props.column === 'agency' ? props.direction : null} onClick={props.handleSort('agency')} >
               Agency
             </Table.HeaderCell>
-            <Table.HeaderCell >Title</Table.HeaderCell>
+            <Table.HeaderCell >Report</Table.HeaderCell>
             <Table.HeaderCell sorted={props.column === 'type' ? props.direction : null} onClick={props.handleSort('type')} >
               Engagement Type
               <Dropdown icon='filter'>

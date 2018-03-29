@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
+
 import EngagementsTable from './EngagementsTable'
-import Search from '../Search.js'
 import { getDirectory } from '../../api'
-import { Button, Grid, Loader, Checkbox } from 'semantic-ui-react'
+import { Grid, Loader, Header } from 'semantic-ui-react'
 
 export default class Engagements extends Component {
   constructor(props){
     super(props)
     this.state = {
       data: [],
+      loading: true,
       column: 'date',
       direction: 'ascending',
       search: '',
@@ -23,7 +24,7 @@ export default class Engagements extends Component {
   }
 
   componentDidMount() {
-    getDirectory('engagements')
+    getDirectory('engagements', this.props.table, this.props.attribute, this.props.value)
     .then( data => data.sort(function(a, b) {
       var textA = a.date
       var textB = b.date
@@ -34,7 +35,7 @@ export default class Engagements extends Component {
       alert('You must be logged in to access this page.')
       return this.props.history.push('/login')
     })
-    .then(data => this.setState({ data }))
+    .then(data => this.setState({ loading: false, data }))
   }
 
   handleInputChange(event, data){
@@ -58,22 +59,6 @@ export default class Engagements extends Component {
     return this.props.history.push("engagements/new")
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-    if (column !== clickedColumn) {
-      this.setState({
-        column: clickedColumn,
-        data: this.sortBy(data, [clickedColumn]),
-        direction: 'ascending',
-      })
-      return
-    }
-    this.setState({
-      data: data.reverse(),
-      direction: direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
   sortBy(collection, iterator) {
     if (iterator[0] === "arm") {
       return collection.sort(function(x, y) {
@@ -90,48 +75,46 @@ export default class Engagements extends Component {
     }
   }
 
-filterData(){
-  // remove values from the data for presentation that do not match the filters
-  return this.state.data.filter(
-    d =>
-    (this.state.filters.priority ? d.priority === this.state.filters.priority : true) &&
-    (this.state.filters.arm ? d.arm.fullname === this.state.filters.arm : true) &&
-    (this.state.filters.type ? d.type === this.state.filters.type : true) &&
-    (this.state.status ? !d.resolved_on : true)
-  )
-}
-
-sortData(filteredList){
-  // remove values from the data for presentation that do not match the search query
-  return filteredList.filter( d =>
-    (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-    (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-    (d.agency.name ? d.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-    (d.type ? d.type.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-    (d.date ? new Date(d.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
-  )
-}
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    if (column !== clickedColumn) {
+      this.setState({
+        column: clickedColumn,
+        data: this.sortBy(data, [clickedColumn]),
+        direction: 'ascending',
+      })
+      return
+    }
+    this.setState({
+      data: data.reverse(),
+      direction: direction === 'ascending' ? 'descending' : 'ascending',
+    })
+  }
 
 
   render(){
-    const filteredList = this.filterData()
-    const sortedList = this.sortData(filteredList)
+    const filteredList = this.state.data.filter(
+      d =>
+      (this.state.filters.priority ? d.priority === this.state.filters.priority : true) &&
+      (this.state.filters.arm ? d.arm.fullname === this.state.filters.arm : true) &&
+      (this.state.filters.type ? d.type === this.state.filters.type : true) &&
+      (this.state.status ? !d.resolved_on : true)
+
+    )
+    const sortedList = filteredList.filter( d =>
+      (d.arm.fullname ? d.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.agency.acronym ? d.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.agency.name ? d.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.type ? d.type.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      (d.date ? new Date(d.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
+    )
     return(
-      !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
+      this.state.loading ? <Loader active inline='centered' content='Loading'/>
+      : !this.state.data[0] ? <Header as='h4'>No Engagements</Header> :
         <Grid padded>
-          <Grid.Row columns={3}>
-            <Grid.Column width={2} floated='left' >
-              <Button type='button' onClick={this.newEngagement.bind(this)}>New Engagement</Button>
-            </Grid.Column>
-            <Grid.Column stretched floated='left' width={10}>
-                <Search search={this.state.search} handleChange={this.handleInputChange.bind(this)}/>
-            </Grid.Column>
-            <Grid.Column width={2}>
-              <Checkbox id='status' label="Active Only" type='checkbox' checked={this.state.status} onChange={this.handleInputChange.bind(this)} />
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row >
             <Grid.Column >
+              <Header as='h2'>Engagements</Header>
               <EngagementsTable
                 sortedAndFilteredList={sortedList}
                 handleSelectEngagement={this.handleSelectEngagement.bind(this)}

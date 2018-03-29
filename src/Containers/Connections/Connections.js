@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
 import ConnectionsTable from './ConnectionsTable'
 import Search from '../Search.js'
-
 import { getDirectory } from '../../api'
 import { Button, Grid, Loader } from 'semantic-ui-react'
 
@@ -57,6 +55,22 @@ export default class Connections extends Component {
     return this.props.history.push("connections/new")
   }
 
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    if (column !== clickedColumn) {
+      return this.setState({
+        column: clickedColumn,
+        data: this.sortBy(data, [clickedColumn]),
+        direction: 'ascending',
+      })
+    } else {
+      return this.setState({
+        data: data.reverse(),
+        direction: direction === 'ascending' ? 'descending' : 'ascending',
+      })
+    }
+  }
+
   sortBy(collection, iterator) {
     if (iterator[0] === "arm") {
       return collection.sort(function(x, y) {
@@ -73,36 +87,29 @@ export default class Connections extends Component {
     }
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-    if (column !== clickedColumn) {
-      return this.setState({
-        column: clickedColumn,
-        data: this.sortBy(data, [clickedColumn]),
-        direction: 'ascending',
-      })
-
-    } else {
-      return this.setState({
-        data: data.reverse(),
-        direction: direction === 'ascending' ? 'descending' : 'ascending',
-      })
-    }
-  }
-
-  render(){
-    const filteredList = this.state.data.filter( c =>
+  filterData(){
+    // remove values from the data for presentation that do not match the filters
+    return this.state.data.filter( c =>
       (this.state.filters.arm ? c.arm.fullname === this.state.filters.arm : true) &&
       (this.state.filters.type ? c.type === this.state.filters.type : true) &&
       (this.state.filters.engagements ? c.engagements === this.state.filters.engagements : true)
     )
-    const sortedList = filteredList.filter( c =>
+  }
+
+  sortData(filteredList){
+    // remove values from the data for presentation that do not match the search query
+    return filteredList.filter( c =>
       (c.arm ? c.arm.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.agency.acronym ? c.agency.acronym.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.agency.name ? c.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.type ? c.type.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (c.date ? new Date(c.date).toDateString().toLowerCase().includes(this.state.search.toLowerCase()): false)
     )
+  }
+
+  render(){
+    const filteredList = this.filterData()
+    const sortedList = this.sortData(filteredList)
     return(
       !this.state.data[0] ? <Loader active inline='centered' content='Loading'/> :
         <Grid padded>
@@ -119,7 +126,7 @@ export default class Connections extends Component {
               <ConnectionsTable
                 sortedAndFilteredList={sortedList}
                 handleSelectConnection={this.handleSelectConnection.bind(this)}
-                handleSort={this.handleSort.bind(this)}
+                handleSort={this.handleSort}
                 column={this.state.column}
                 direction={this.state.direction}
                 handleFilter={this.handleFilter.bind(this)}

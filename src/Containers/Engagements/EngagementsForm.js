@@ -20,7 +20,6 @@ export default (props) => {
   return(
     <Container textAlign='left'>
         <Form onSubmit={props.handleSubmit} >
-          <Form.Input label="Title: " type='text' id='title' value={props.title} onChange={props.handleInputChange}/>
           <Form.Input label="Engagement Start Time: " type='datetime-local' value={start_time} onChange={props.handleInputChange} id='start_time'/>
           <Form.Field >
             <label>Type:</label>

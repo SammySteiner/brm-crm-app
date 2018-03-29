@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
 import StaffTable from './StaffTable'
 import Search from '../Search.js'
-
 import { getDirectory } from '../../api'
 import { Button, Grid, Loader } from 'semantic-ui-react'
 
@@ -46,6 +44,16 @@ export default class Staffs extends Component {
     return this.props.history.push("staff/new")
   }
 
+  handleSort = clickedColumn => () => {
+    const { column, data, direction } = this.state
+    var c = (column !== clickedColumn)
+    return this.setState({
+      column: clickedColumn,
+      data: this.sortBy(data, [clickedColumn], c),
+      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
+    })
+  }
+
   sortBy(collection, iterator, c) {
     if (c) {
        if (iterator[0] === "name") {
@@ -71,22 +79,18 @@ export default class Staffs extends Component {
     }
   }
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state
-    var c = (column !== clickedColumn)
-    return this.setState({
-      column: clickedColumn,
-      data: this.sortBy(data, [clickedColumn], c),
-      direction: c ? 'ascending' : direction === 'ascending' ? 'descending' : 'ascending',
-    })
-  }
-
-  render(){
-    const filteredList = this.state.data.filter( s =>
+  filterData(){
+    // remove values from the data for presentation that do not match the search query
+    return this.state.data.filter( s =>
       (s.fullname ? s.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (s.role ? s.role.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       (s.agency ? s.agency.name.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-      (s.office_phone ? s.office_phone.includes(this.state.search) : false) )
+      (s.office_phone ? s.office_phone.includes(this.state.search) : false)
+    )
+  }
+
+  render(){
+    const filteredList = this.filterData()
     return(
       !this.state.data[0] ? <Loader active inline='centered' content='Loading'/>  :
           <Grid padded>

@@ -1,6 +1,8 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
+import EngagementsSimpleTable from '../Engagements/EngagementsSimpleTable.js'
+
 
 export default class ServiceDetail extends Component {
   constructor(props){
@@ -68,6 +70,12 @@ export default class ServiceDetail extends Component {
               </Card>
             </Grid.Column>
             <Grid.Column>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <EngagementsSimpleTable history={this.props.history} table={'services'} attribute={'title'} value={this.state.service.title}/>
             </Grid.Column>
           </Grid.Row>
           <Divider/>

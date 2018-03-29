@@ -88,7 +88,7 @@ export default class EngagementsEdit extends Component{
     event.preventDefault()
     let s = this.state
     let connection = s.connections.find( c => c.title === s.connection).id
-    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
+    let info = {id: s.id, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.goBack())
   }
@@ -97,7 +97,7 @@ export default class EngagementsEdit extends Component{
   render(){
     return(
       <div>
-        <h1>Add a Connection</h1>
+        <h1>Add an Engagement</h1>
         <EngagementsForm
           id={this.state.id}
           title={this.state.title}

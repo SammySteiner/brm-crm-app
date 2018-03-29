@@ -1,6 +1,5 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
-import './StaffList.css'
 
 export default (props) => {
   return (
