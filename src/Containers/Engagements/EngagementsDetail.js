@@ -57,6 +57,10 @@ export default class EngagementsDetail extends Component {
     .then( () => this.props.history.goBack())
   }
 
+  handleNewConnection(){
+    this.props.history.push('/connections/new', {engagements: this.state.engagement.title})
+  }
+
 
   available(field){
     return field === null ? 'Data Not Available' : field
@@ -194,6 +198,7 @@ export default class EngagementsDetail extends Component {
             <Grid.Column >
               <Button negative size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
               <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
+              <Button secondary size='mini' onClick={this.handleNewConnection.bind(this)}>New Connection</Button>
               {this.state.engagement.resolved_on ? null : <Button primary size='medium' floated="right" onClick={this.handleResolve.bind(this)}>Resolve Now</Button>}
             </Grid.Column>
           </Grid.Row>
