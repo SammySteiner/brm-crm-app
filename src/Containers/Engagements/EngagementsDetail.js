@@ -72,8 +72,9 @@ export default class EngagementsDetail extends Component {
 
   handleResolve(){
     var s = this.state.engagement
-    var team = s.staff_engagements.map(se => se.staff.fullname)
-    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.engagement_type.via, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service.title, start_time: s.start_time, resolved_on: new Date(), connection: s.connection.id, team: team}
+    let connections = s.connections.map( c => c.id)
+    let team = s.staff_engagements.map( se => se.staff.id)
+    let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.engagement_type.via, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service.title, start_time: s.start_time, resolved_on: new Date(), connections: connections, team: team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.componentDidMount())
 

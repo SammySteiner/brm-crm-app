@@ -25,12 +25,12 @@ export default class EngagementsEdit extends Component{
       resolved_on: '',
       arm: '',
       agency: '',
-      connection: '',
+      connections: [],
       team: [],
       types: [],
       staff: [],
       services: [],
-      connections: []
+      connections_list: []
     }
   }
 
@@ -64,8 +64,8 @@ export default class EngagementsEdit extends Component{
             resolved_on: s.resolved_on ? s.resolved_on : '',
             arm: s.arm,
             agency: s.agency,
-            connection: s.connection.title,
-            connections: data.connections,
+            connections: s.connections.map( c => c.title ),
+            connections_list: data.connections_list,
             types: data.types,
             staff: data.staff,
             services: data.services
@@ -87,8 +87,9 @@ export default class EngagementsEdit extends Component{
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
-    let connection = s.connections.find( c => c.title === s.connection).id
-    let info = {id: s.id, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
+    let connections = s.connections.map( c => s.connections_list.find( cl => cl.title === c).id)
+    let team = s.team.map( t => s.staff.find(staff => staff.fullname === t).id)
+    let info = {id: s.id, report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connections: connections, team: team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.goBack())
   }
@@ -117,8 +118,8 @@ export default class EngagementsEdit extends Component{
           last_modified_on={this.state.last_modified_on}
           arm={this.state.arm}
           agency={this.state.agency}
-          connection={this.state.connection}
           connections={this.state.connections}
+          connections_list={this.state.connections_list}
           team={this.state.team}
           types={this.state.types}
           staff={this.state.staff}

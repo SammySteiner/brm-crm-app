@@ -15,6 +15,7 @@ export default class ConnectionsEdit extends Component{
       arm: '',
       agency: '',
       engagements: [],
+      unresolved_engagements: [],
       attendees: [],
       arms: [],
       agencies: [],
@@ -34,12 +35,13 @@ export default class ConnectionsEdit extends Component{
         type: this.props.history.location.state.connection_type.via,
         arm: this.props.history.location.state.arm.fullname,
         agency: this.props.history.location.state.agency.name,
-        engagements: this.props.history.location.state.engagements,
+        engagements: this.props.history.location.state.engagements.map( e => e.title),
         attendees: this.props.history.location.state.staff_connections.map( sc => sc.fullname),
         arms: data.arms,
         agencies: data.agencies,
         types: data.types,
-        staff: data.staff
+        staff: data.staff,
+        unresolved_engagements: data.unresolved_engagements
        })}
     )
     .catch(error => {
@@ -61,6 +63,8 @@ export default class ConnectionsEdit extends Component{
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
+    let engagements = s.engagements.map( title => s.unresolved_engagements.find( e => e.title === title).id)
+    let attendees = s.attendees.map( fullname => s.staff.find( staff => staff.fullname === fullname).id)
     let info = {
       id: s.id,
       date: s.datetime,
@@ -69,7 +73,8 @@ export default class ConnectionsEdit extends Component{
       connection_type: s.type,
       arm: s.arm,
       agency: s.agency,
-      attendees: s.attendees
+      attendees: attendees,
+      engagements: engagements
     }
     editResource(info, 'connection', 'connections')
     .then( connection => this.props.history.goBack())
@@ -87,6 +92,7 @@ export default class ConnectionsEdit extends Component{
           arm={this.state.arm}
           agency={this.state.agency}
           engagements={this.state.engagements}
+          unresolved_engagements={this.state.unresolved_engagements}
           attendees={this.state.attendees}
           arms={this.state.arms}
           agencies={this.state.agencies}

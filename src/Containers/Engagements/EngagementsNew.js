@@ -20,18 +20,18 @@ export default class EngagementsNew extends Component{
       resolved_on: '',
       arm: '',
       agency: '',
-      connection: '',
+      connections: [],
       team: [],
       types: [],
       staff: [],
       services: [],
-      connections: []
+      connections_list: []
     }
   }
 
   componentDidMount(){
     if (this.props.history.location.state) {
-      this.setState({connection: this.props.history.location.state.connection})
+      this.setState({connections: [this.props.history.location.state.connections]})
     }
     fetchFormInfo('engagements')
     .then(
@@ -41,7 +41,7 @@ export default class EngagementsNew extends Component{
           alert('You must be logged in to access this page.')
           return this.props.history.push('/login')
         } else {
-          return this.setState({ connections: data.connections, types: data.types, staff: data.staff, services: data.services})
+          return this.setState({ connections_list: data.connections_list, types: data.types, staff: data.staff, services: data.services})
         }
       }
     )
@@ -59,14 +59,16 @@ export default class EngagementsNew extends Component{
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
-    let connection = s.connections.find( c => c.title === s.connection).id
-    let info = {report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connection: connection, team: s.team}
+    let connections = s.connections.map( c => s.connections_list.find( cl => cl.title === c).id)
+    let team = s.team.map( t => s.staff.find(staff => staff.fullname === t).id)
+    let info = {report: s.report, notes: s.notes, type: s.type, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service, start_time: s.start_time, resolved_on: s.resolved_on, connections: connections, team: team}
     createResource(info, 'engagement', 'engagements')
     .then( engagement => this.props.history.push(engagement.id.toString()))
   }
 
 
   render(){
+    console.log(this.state);
     return(
       <div>
         <h1>Add an Engagement</h1>
@@ -84,8 +86,8 @@ export default class EngagementsNew extends Component{
           resolved_on={this.state.resolved_on}
           arm={this.state.arm}
           agency={this.state.agency}
-          connection={this.state.connection}
           connections={this.state.connections}
+          connections_list={this.state.connections_list}
           team={this.state.team}
           types={this.state.types}
           staff={this.state.staff}

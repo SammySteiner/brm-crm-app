@@ -14,9 +14,9 @@ export default (props) => {
   var services = [{key: '', value: '', text: ''}]
   props.services.sort().forEach( (t, i) => services.push({ key: i, value: t, text: t }))
   var connections_list = [{key: '', value: '', text: ''}]
-  props.connections.sort( (a, b) => a.date < b.date ? 1 : -1).forEach( (c, i) => connections_list.push({ key: i, value: c.title, text: c.title }))
+  props.connections_list.sort( (a, b) => a.date < b.date ? 1 : -1).forEach( (c, i) => connections_list.push({ key: i, value: c.title, text: c.title }))
   var staff = [{key: '', value: '', text: ''}]
-  props.staff.sort().forEach( (a, i) => staff.push({ key: i, value: a, text: a }))
+  props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
   return(
     <Container textAlign='left'>
         <Form onSubmit={props.handleSubmit} >
@@ -30,8 +30,8 @@ export default (props) => {
             <Dropdown fluid search selection placeholder='Search...' id='service' value={props.service} onChange={props.handleInputChange} options={services} />
           </Form.Field>
           <Form.Field >
-            <label>Connection:</label>
-            <Dropdown fluid search selection placeholder='Search...' id='connection' value={props.connection} onChange={props.handleInputChange} options={connections_list} />
+            <label>Connections:</label>
+            <Dropdown fluid search selection multiple placeholder='Search...' id='connections' value={props.connections} onChange={props.handleInputChange} options={connections_list} />
           </Form.Field>
           <Form.Field >
             <label>Team:</label>

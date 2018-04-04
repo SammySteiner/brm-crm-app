@@ -14,7 +14,9 @@ export default (props) => {
   var agencies = [{key: '', value: '', text: ''}]
   props.agencies.sort().forEach( (a, i) => agencies.push({ key: i, value: a, text: a }))
   var staff = [{key: '', value: '', text: ''}]
-  props.staff.sort().forEach( (a, i) => staff.push({ key: i, value: a, text: a }))
+  props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
+  var unresolved_engagements = [{key: '', value: '', text: ''}]
+  props.unresolved_engagements.forEach( a => unresolved_engagements.push({ key: a.id, value: a.title, text: a.title }))
   return(
     <Container textAlign='left'>
         <Form onSubmit={props.handleSubmit} >
@@ -34,6 +36,10 @@ export default (props) => {
           <Form.Field >
             <label>Attendees:</label>
             <Dropdown fluid search selection multiple placeholder='Search...' id='attendees' value={props.attendees} onChange={props.handleInputChange} options={staff} />
+          </Form.Field>
+          <Form.Field >
+            <label>Engagements:</label>
+            <Dropdown fluid search selection multiple placeholder='Search...' id='engagements' value={props.engagements} onChange={props.handleInputChange} options={unresolved_engagements} />
           </Form.Field>
           <Form.TextArea label="Connection Notes: " type='textArea' value={props.notes} onChange={props.handleInputChange} id='notes'/>
           <Form.TextArea label="Connection Report: " type='textArea' value={props.report} onChange={props.handleInputChange} id='report'/>

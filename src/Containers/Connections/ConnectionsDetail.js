@@ -55,8 +55,8 @@ export default class ConnectionsDetail extends Component {
 
   }
 
-  handleAddEngagement(){
-    this.props.history.push('/engagements/new', {connection: this.state.connection.title})
+  handleCreateEngagement(){
+    this.props.history.push('/engagements/new', {connections: this.state.connection.title})
   }
 
 
@@ -172,7 +172,7 @@ export default class ConnectionsDetail extends Component {
           <Grid.Row columns={1}>
             <Grid.Column >
               <Button negative  size='mini' onClick={this.handleDelete.bind(this)}>Delete</Button>
-              <Button primary floated="right" size='medium' onClick={this.handleAddEngagement.bind(this)}>Add Engagement</Button>
+              <Button primary floated="right" size='medium' onClick={this.handleCreateEngagement.bind(this)}>Create Engagement</Button>
               <Button secondary size='mini' onClick={this.handleEdit.bind(this)}>Edit</Button>
             </Grid.Column>
           </Grid.Row>
