@@ -40,7 +40,7 @@ export default(props) => {
               </Dropdown>
             </Table.HeaderCell>
             <Table.HeaderCell sorted={props.column === 'engagements' ? props.direction : null} onClick={props.handleSort('engagements')}>
-              Number of Engagements
+              Engagements
               <Dropdown icon='filter'>
                 <Dropdown.Menu>
                   {props.engagements.map( t => <Dropdown.Item key={t} id='engagements' content={t} onClick={props.handleFilter} />)}

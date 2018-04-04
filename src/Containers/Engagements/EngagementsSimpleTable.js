@@ -18,7 +18,8 @@ export default class Engagements extends Component {
         priority: '',
         arm: '',
         type: '',
-        agency: ''
+        agency: '',
+        connections: ''
       }
     }
   }
@@ -125,6 +126,7 @@ export default class Engagements extends Component {
                 handleFilter={this.handleFilter.bind(this)}
                 types={['All', ...new Set(this.state.data.map(item => item.type))]}
                 arms={['All', ...new Set(this.state.data.map(item => item.arm.fullname))]}
+                connections={['All', ...new Set(this.state.data.map(item => item.connections))]}
               />
             </Grid.Column>
           </Grid.Row>

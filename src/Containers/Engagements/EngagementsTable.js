@@ -48,6 +48,14 @@ export default(props) => {
                 </Dropdown.Menu>
               </Dropdown>
             </Table.HeaderCell>
+            <Table.HeaderCell sorted={props.column === 'connections' ? props.direction : null} onClick={props.handleSort('connections')}>
+              Connections
+              <Dropdown icon='filter'>
+                <Dropdown.Menu>
+                  {props.connections.map( c => <Dropdown.Item key={c} id='connections' content={c} onClick={props.handleFilter} />)}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body >

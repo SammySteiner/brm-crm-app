@@ -11,6 +11,7 @@ export default (props) => {
       <Table.Cell singleLine > {props.engagements.type}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.arm.fullname}</Table.Cell>
       <Table.Cell singleLine > {props.engagements.priority}</Table.Cell>
+      <Table.Cell singleLine > {props.engagements.connections}</Table.Cell>
     </Table.Row>
 
   )
