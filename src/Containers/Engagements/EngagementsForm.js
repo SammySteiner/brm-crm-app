@@ -15,6 +15,11 @@ export default (props) => {
   props.services.sort().forEach( (t, i) => services.push({ key: i, value: t, text: t }))
   var connections_list = [{key: '', value: '', text: ''}]
   props.connections_list.sort( (a, b) => a.date < b.date ? 1 : -1).forEach( (c, i) => connections_list.push({ key: i, value: c.title, text: c.title }))
+  if (props.connections[0]) {
+    var agency = props.connections[0].agency
+    var fullConnectionsList = connections_list
+    connections_list = fullConnectionsList.filter( a => a.value.includes(props.connections_list.find( c => c.title === props.connections[0]).agency))
+  }
   var staff = [{key: '', value: '', text: ''}]
   props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
   return(

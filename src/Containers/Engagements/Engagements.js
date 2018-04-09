@@ -98,7 +98,8 @@ filterData(){
     (this.state.filters.priority ? d.priority === this.state.filters.priority : true) &&
     (this.state.filters.arm ? d.arm.fullname === this.state.filters.arm : true) &&
     (this.state.filters.type ? d.type === this.state.filters.type : true) &&
-    (this.state.status ? !d.resolved_on : true)
+    (this.state.status ? !d.resolved_on : true) &&
+    (this.state.filters.connections ? d.connections === this.state.filters.connections : true)
   )
 }
 

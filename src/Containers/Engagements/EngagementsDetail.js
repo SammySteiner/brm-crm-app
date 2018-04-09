@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource, editResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
+import '../../Black.css'
 
 export default class EngagementsDetail extends Component {
   constructor(props){
@@ -81,21 +82,38 @@ export default class EngagementsDetail extends Component {
     let info = {id: s.id, title: s.title, report: s.report, notes: s.notes, type: s.engagement_type.via, ksr: s.ksr, inc: s.inc, prj: s.prj, priority: s.priority, service: s.service.title, start_time: s.start_time, resolved_on: new Date(), connections: connections, team: team}
     editResource(info, 'engagement', 'engagements')
     .then( engagement => this.componentDidMount())
-
   }
 
-
-  generateConnection(){
-    return (
-      <List>
-        <List.Item icon='calendar' content={`Date: ${new Date(this.state.engagement.connections[0].date).toDateString()}`}/>
-        <List.Item icon='time' content={`Time: ${new Date(this.state.engagement.connections[0].date).toLocaleTimeString()}`}/>
-        <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={this.state.engagement.connections[0].agency.id} content={`Agency: ${this.state.engagement.connections[0].agency.name}`} />
-        <List.Item icon='conversation' content={`Type: ${this.state.engagement.connections[0].connection_type.via}`} />
-
-      </List>
-    )
+  generateConnectionCards(){
+    return this.state.engagement.connections.map( (c, i) => {
+      return(
+        <Grid.Column key={i}>
+        <Card fluid id={c.id} onClick={this.handleSelectConnection.bind(this)} className="black">
+          <Card.Content header={`Connection: ${i + 1}`}/>
+          <Card.Content as='p'>
+            <List>
+              <List.Item icon='calendar' content={`Date: ${new Date(c.date).toDateString()}`}/>
+              <List.Item icon='time' content={`Time: ${new Date(c.date).toLocaleTimeString()}`}/>
+              <List.Item icon='building' onClick={this.handleSelectAgency.bind(this)} id={c.agency.id} content={`Agency: ${c.agency.name}`} />
+              <List.Item icon='conversation' content={`Type: ${c.connection_type.via}`} />
+            </List>
+          </Card.Content>
+          <Card.Content>
+            <Card.Header>Attendees:</Card.Header>
+            <List ordered>
+              {c.staff.map( s => {
+                return(
+                  <List.Item key={s.id}>{s.fullname}</List.Item>
+                )
+              })}
+            </List>
+          </Card.Content>
+        </Card>
+      </Grid.Column>
+      )
+    })
   }
+
   generateService(){
     return (
       <List>
@@ -117,11 +135,12 @@ export default class EngagementsDetail extends Component {
   }
 
   render(){
+    console.log(this.state);
     return(
       !this.state.engagement.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>
-        <Header as='h1' textAlign='center'>Engagement: {this.state.engagement.title}</Header>
-        <Grid columns={3} stackable >
+        <Header as='h1' textAlign='center'>{this.state.engagement.title}</Header>
+        <Grid columns={4} stackable >
           <Grid.Row >
             <Grid.Column >
               <Card fluid>
@@ -137,6 +156,12 @@ export default class EngagementsDetail extends Component {
                     {this.state.engagement.inc ? <List.Item >INC: {this.state.engagement.inc}</List.Item> : null}
                     {this.state.engagement.prj ? <List.Item >PRJ: {this.state.engagement.prj}</List.Item> : null}
                     {this.state.engagement.priority ? <List.Item >Priority: {this.state.engagement.priority}</List.Item> : null}
+                  </List>
+                </Card.Content>
+                <Card.Content>
+                  <Header as="h4" content="Team:"/>
+                  <List ordered>
+                    {this.team()}
                   </List>
                 </Card.Content>
                 <Card.Content extra>
@@ -164,34 +189,18 @@ export default class EngagementsDetail extends Component {
                 <Card.Content>{this.state.engagement.notes}</Card.Content>
               </Card>
             </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
             <Grid.Column>
-              <Card fluid>
-                <Card.Content header="Team"/>
-                <Card.Content>
-                  <List>
-                    {this.team()}
-                  </List>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Grid.Column>
-              <Card fluid>
+              <Card fluid id={this.state.engagement.service.id} onClick={this.handleSelectService.bind(this)} className='black'>
                 <Card.Content header="Service"/>
                 <Card.Content>
                   {this.generateService()}
                 </Card.Content>
               </Card>
             </Grid.Column>
-            <Grid.Column>
-              <Card fluid onClick={this.handleSelectConnection.bind(this)} id={this.state.engagement.connections[0].id} as='div'>
-                <Card.Content header="Connection"/>
-                <Card.Content>
-                  {this.generateConnection()}
-                </Card.Content>
-              </Card>
-            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={3} >
+            {this.generateConnectionCards()}
           </Grid.Row>
           <Divider/>
           <Grid.Row columns={1}>

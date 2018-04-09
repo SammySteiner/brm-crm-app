@@ -12,11 +12,15 @@ export default (props) => {
   var arms = [{key: '', value: '', text: ''}]
   props.arms.sort().forEach( (a, i) => arms.push({ key: i, value: a, text: a }))
   var agencies = [{key: '', value: '', text: ''}]
-  props.agencies.sort().forEach( (a, i) => agencies.push({ key: i, value: a, text: a }))
+  props.agencies.sort((a,b) => a.name > b.name ? 1 : -1).forEach( (a, i) => agencies.push({ key: i, value: a.name, text: a.name }))
   var staff = [{key: '', value: '', text: ''}]
   props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
   var unresolved_engagements = [{key: '', value: '', text: ''}]
-  props.unresolved_engagements.forEach( a => unresolved_engagements.push({ key: a.id, value: a.title, text: a.title }))
+  if (!!props.agency) {
+    var acronym = props.agencies.find( a => a.name === props.agency).acronym ? props.agencies.find( a => a.name === props.agency).acronym : ''
+    props.unresolved_engagements.filter( pue => pue.title.toLowerCase().includes(acronym.toLowerCase())).forEach( pue => unresolved_engagements.push({ key: pue.id, value: pue.title, text: pue.title }))
+  }
+
   return(
     <Container textAlign='left'>
         <Form onSubmit={props.handleSubmit} >
@@ -37,7 +41,7 @@ export default (props) => {
             <label>Attendees:</label>
             <Dropdown fluid search selection multiple placeholder='Search...' id='attendees' value={props.attendees} onChange={props.handleInputChange} options={staff} />
           </Form.Field>
-          <Form.Field >
+          <Form.Field disabled={!props.agency}>
             <label>Engagements:</label>
             <Dropdown fluid search selection multiple placeholder='Search...' id='engagements' value={props.engagements} onChange={props.handleInputChange} options={unresolved_engagements} />
           </Form.Field>

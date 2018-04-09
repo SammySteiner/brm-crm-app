@@ -67,8 +67,8 @@ export default class StaffNew extends Component{
     let info = {first_name: this.state.first_name, last_name: this.state.last_name, email: this.state.email, office_phone: this.state.office_phone, cell_phone: this.state.cell_phone, agency: this.state.agency, role: this.state.role, services: this.state.services, assignments:this.state.assignments}
     if (!this.state.staff.some( s => s.first_name === this.state.first_name && s.last_name === this.state.last_name)) {
       if (!this.state.staff.some(s => s.email === this.state.email)) {
-        if (!this.state.staff.some(s => s.office_phone === this.state.office_phone)) {
-          if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone)) {
+        if (!this.state.staff.some(s => s.office_phone === this.state.office_phone) || this.state.office_phone === '') {
+          if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone) || this.state.cell_phone === '') {
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
                 if (this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.sdl_services.includes( s.title)).some( s => s.sdl_id !== undefined))) {

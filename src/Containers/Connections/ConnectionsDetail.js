@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider} from 'semantic-ui-react'
+import '../../Black.css'
 
 export default class ConnectionsDetail extends Component {
   constructor(props){
@@ -73,10 +74,11 @@ export default class ConnectionsDetail extends Component {
   }
 
   generateEngagementCards(){
+
     return this.state.connection.engagements.map( (e, i) => {
       return(
         <Grid.Column key={i}>
-        <Card fluid id={e.id} onClick={this.handleSelectEngagement.bind(this)} as='div'>
+        <Card fluid id={e.id} onClick={this.handleSelectEngagement.bind(this)} className="black">
           <Card.Content header={`Engagement: ${i + 1}`}/>
           <Card.Content>
             <List>
@@ -84,9 +86,8 @@ export default class ConnectionsDetail extends Component {
               {e.ksr ? <List.Item>KSR: {e.ksr}</List.Item> : null}
               {e.inc ? <List.Item>INC: {e.inc}</List.Item> : null}
               {e.prj ? <List.Item>PRJ: {e.prj}</List.Item> : null}
-              <List.Item>Service: {e.service.title}</List.Item>
               <List.Item>Priority: {e.priority}</List.Item>
-              <List.Item>Notes: {e.notes}</List.Item>
+              {e.notes ? <List.Item>Notes: {e.notes}</List.Item> : null}
               {e.report ? <List.Item>Report: {e.report}</List.Item> : null}
             </List>
           </Card.Content>
@@ -104,6 +105,7 @@ export default class ConnectionsDetail extends Component {
             <List>
               <List.Item >Created By: {e.created_by.fullname}</List.Item>
               <List.Item >Last Modified By: {e.last_modified_by.fullname}</List.Item>
+              <List.Item> Status: {e.resolved_on ? `Resolved on:  ${new Date(e.resolved_on).toLocaleDateString()}` : 'In Progress'}</List.Item>
             </List>
           </Card.Content>
         </Card>
@@ -115,7 +117,7 @@ export default class ConnectionsDetail extends Component {
 
   attendees(){
     return this.state.connection.staff_connections.map( sc => {
-      return <List.Item key={sc.id} id={sc.id} onClick={this.handleSelectStaff.bind(this)}>{sc.fullname}</List.Item>
+      return <List.Item key={sc.id} id={sc.id} onClick={this.handleSelectStaff.bind(this)} >{sc.fullname}</List.Item>
     })
   }
 
@@ -155,16 +157,17 @@ export default class ConnectionsDetail extends Component {
               </Card>
             </Grid.Column>
             <Grid.Column>
-              <Card fluid>
+              <Card fluid >
                 <Card.Content header="Attendees"/>
                 <Card.Content>
-                  <List>
+                  <List >
                     {this.attendees()}
                   </List>
                 </Card.Content>
               </Card>
             </Grid.Column>
           </Grid.Row>
+          <Divider/>
           <Grid.Row columns={3} >
             {this.generateEngagementCards()}
           </Grid.Row>

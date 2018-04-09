@@ -87,12 +87,12 @@ export default class ServicesEdit extends Component{
     let info = {id: this.state.id, first_name: this.state.first_name, last_name: this.state.last_name, email: this.state.email, office_phone: this.state.office_phone, cell_phone: this.state.cell_phone, agency: this.state.agency, role: this.state.role, services: this.state.services, assignments:this.state.assignments}
     if (!this.state.staff.some( s => s.first_name === this.state.first_name && s.last_name === this.state.last_name && s.id !== this.state.id)) {
       if (!this.state.staff.some(s => s.email === this.state.email && s.id !== this.state.id)) {
-        if (!this.state.staff.some(s => s.office_phone === this.state.office_phone && s.id !== this.state.id)) {
-          if (!this.state.staff.some(s => s.cell_phone === this.state.cell_phone && s.id !== this.state.id)) {
+        if (!this.state.staff.some(s => (s.office_phone === this.state.office_phone && s.id !== this.state.id)) || this.state.office_phone === '') {
+          if (!this.state.staff.some(s => (s.cell_phone === this.state.cell_phone && s.id !== this.state.id)) || this.state.cell_phone === '') {
             if (!((this.state.role === "CIO" || this.state.role === "Commissioner") && this.state.staff.some( s => s.agency_id === this.state.agencyNames.indexOf(this.state.agency) + 1 && s.id !== this.state.id && s.role_id === this.state.roles.indexOf(this.state.role) + 1))) {
               if (this.state.agency === "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS, DEPARTMENT OF") {
                 if (this.state.role === 'SDL' && (this.state.services_list.filter( s => this.state.sdl_services.includes( s.title)).some( s => s.sdl_id !== undefined && s.id !== this.state.id))) {
-                  message = `Services can only have one SDL. `
+                  var message = `Services can only have one SDL. `
                   this.state.services_list.filter( s => this.state.sdl_services.includes( s.title )).forEach( s => {
                     if (typeof(s.id) === "number") {
                       message += `${this.state.staff.find( st => st.id === s.sdl_id).first_name} ${this.state.staff.find( st => st.id === s.sdl_id).last_name} is the SDL for ${s.title}. `
@@ -100,7 +100,7 @@ export default class ServicesEdit extends Component{
                   })
                   alert(message)
                 } else if (this.state.role === 'Service Owner' && (this.state.services_list.filter( s => this.state.so_services.includes( s.title)).some( s => s.service_owner_id !== undefined && s.id !== this.state.id))) {
-                  message = `Services can only have one Service Owner. `
+                    message = `Services can only have one Service Owner. `
                   this.state.services_list.filter( s => this.state.so_services.includes( s.title )).forEach( s => {
                     if (typeof(s.id) === "number") {
                       message += `${this.state.staff.find( st => st.id === s.service_owner_id).first_name} ${this.state.staff.find( st => st.id === s.service_owner_id).last_name} is the Service Owner for ${s.title}. `
@@ -108,11 +108,11 @@ export default class ServicesEdit extends Component{
                   })
                   alert(message)
                 } else if (this.state.role === 'ARM' ) {
-                  if (this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).length < 1) {
+                  if (this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id && arm.arm_id !== this.state.id)).length < 1) {
                       editResource(info, 'staff', 'staff')
                       .then( staff => this.props.history.goBack())
                   } else {
-                    var message = `Agencies can only have one ARM. `
+                    message = `Agencies can only have one ARM. `
                     this.state.agencies.filter( agency => this.state.assignments.some( assignment => agency.name === assignment)).filter( assigned => this.state.arms.some( arm => assigned.id === arm.agency_id)).forEach( a => {
                       message += `${a.name} already has an ARM. Remove or reassign the ARM from ${a.name}. `
                     })

@@ -68,10 +68,9 @@ export default class EngagementsNew extends Component{
 
 
   render(){
-    console.log(this.state);
     return(
       <div>
-        <h1>Add an Engagement</h1>
+        <h1>Create an Engagement</h1>
         <EngagementsForm
           title={this.state.title}
           report={this.state.report}

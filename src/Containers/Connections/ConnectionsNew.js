@@ -73,7 +73,7 @@ export default class ConnectionsNew extends Component{
   render(){
     return(
       <div>
-        <h1>Add a Connection</h1>
+        <h1>Create a Connection</h1>
         <ConnectionsForm
           datetime={this.state.datetime}
           report={this.state.report}

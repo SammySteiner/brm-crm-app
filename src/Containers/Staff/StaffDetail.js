@@ -1,6 +1,8 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
 import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
+import ConnectionsSimpleTable from '../Connections/ConnectionsSimpleTable.js'
+import EngagementsSimpleTable from '../Engagements/EngagementsSimpleTable.js'
 
 export default class StaffDetail extends Component {
   constructor(props){
@@ -109,6 +111,18 @@ export default class StaffDetail extends Component {
             <Grid.Column>
               {this.assignments()}
               {this.services()}
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <ConnectionsSimpleTable history={this.props.history} table={'staff_connections'} attribute={'staff_id'} value={this.state.staff.id}/>
+            </Grid.Column>
+          </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <EngagementsSimpleTable history={this.props.history} table={'staff_engagements'} attribute={'staff_id'} value={this.state.staff.id}/>
             </Grid.Column>
           </Grid.Row>
           <Divider/>

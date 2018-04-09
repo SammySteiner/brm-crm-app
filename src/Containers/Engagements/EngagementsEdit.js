@@ -98,7 +98,7 @@ export default class EngagementsEdit extends Component{
   render(){
     return(
       <div>
-        <h1>Add an Engagement</h1>
+        <h1>Edit an Engagement</h1>
         <EngagementsForm
           id={this.state.id}
           title={this.state.title}
