@@ -81,8 +81,8 @@ export default class Services extends Component {
       (s.title ? s.title.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.description ? s.description.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
       ( s.division ?  s.division.toLowerCase().includes(this.state.search.toLowerCase()) : false ) ||
-      ( s.sdl ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
-      ( s.service_owner ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
+      ( s.sdl.fullname ? s.sdl.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false) ||
+      ( s.service_owner.fullname ? s.service_owner.fullname.toLowerCase().includes(this.state.search.toLowerCase()) : false)
     )
   }
 

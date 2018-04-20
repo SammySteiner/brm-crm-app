@@ -16,7 +16,7 @@ export default (props) => {
   var staff = [{key: '', value: '', text: ''}]
   props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
   var unresolved_engagements = [{key: '', value: '', text: ''}]
-  if (!!props.agency) {
+  if (!!props.agency && !!props.agencies[1]) {
     var acronym = props.agencies.find( a => a.name === props.agency).acronym ? props.agencies.find( a => a.name === props.agency).acronym : ''
     props.unresolved_engagements.filter( pue => pue.title.toLowerCase().includes(acronym.toLowerCase())).forEach( pue => unresolved_engagements.push({ key: pue.id, value: pue.title, text: pue.title }))
   }

@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { List, Button, Card, Loader, Container, Header, Grid, Divider} from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid, Divider, Segment, Progress} from 'semantic-ui-react'
 import ConnectionsSimpleTable from '../Connections/ConnectionsSimpleTable.js'
 import EngagementsSimpleTable from '../Engagements/EngagementsSimpleTable.js'
 
@@ -62,6 +62,54 @@ export default class AgencyDetail extends Component {
     })
   }
 
+  services(){
+    var core = this.state.agency.services.filter(s => s.core).map( cs => <Segment attached key={cs.id}>{cs.title}</Segment>)
+    var servicesByCategory = this.state.agency.service_categories.sort( (a,b) => a.name > b.name ? 1 : -1).map( sc => this.otherServices(sc))
+    var servicesByCategoryFirst = servicesByCategory.slice(0, (servicesByCategory.length/2) - 1)
+    var servicesByCategorySecond = servicesByCategory.slice((servicesByCategory.length/2) -1, servicesByCategory.length)
+    return(
+      <Grid.Row columns={2}>
+        <Grid.Column stretched>
+          <Segment.Group>
+            <Header as='h4' block attached='top'>CORE SERVICES</Header>
+            <Progress color='blue' value={core.length} total={7} progress='ratio' label='Service Utilization'/>
+            <Segment.Group>
+              {core}
+            </Segment.Group>
+          </Segment.Group>
+          {servicesByCategoryFirst}
+        </Grid.Column>
+        <Grid.Column>
+            {servicesByCategorySecond}
+        </Grid.Column>
+
+      </Grid.Row>
+    )
+  }
+
+  otherServices(sc){
+    var services = this.state.agency.services.filter(s => s.service_category === sc.name)
+    return(
+      <Segment.Group key={sc.name}>
+        <Header as='h4' block attached='top'>{sc.name}</Header>
+        <Progress color='blue' value={services.length} total={sc.count} progress='ratio' label='Service Utilization'/>
+        <Segment.Group>
+          {services.map( s => <Segment attached key={s.id}>{s.title}</Segment>)}
+        </Segment.Group>
+      </Segment.Group>
+    )
+  }
+
+  totalServices(){
+    var totalServices = 0
+    this.state.agency.service_categories.forEach( sc => totalServices += sc.count)
+    return totalServices
+  }
+
+  utilizedServices(){
+    return this.state.agency.services.length
+  }
+
   render(){
     return(
       !this.state.agency.id ? <Loader active inline='centered' content='Loading'/> :
@@ -100,6 +148,14 @@ export default class AgencyDetail extends Component {
               <EngagementsSimpleTable history={this.props.history} table={'agencies'} attribute={'acronym'} value={this.state.agency.acronym}/>
             </Grid.Column>
           </Grid.Row>
+          <Divider/>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <Header as="h2">Services</Header>
+              <Progress value={this.utilizedServices()} total={this.totalServices()} color='blue' progress='ratio' label='Overall DoITT Service Utilization'/>
+            </Grid.Column>
+          </Grid.Row>
+          {this.services()}
           <Divider/>
           <Grid.Row columns={1}>
             <Grid.Column >

@@ -25,7 +25,10 @@ export default class ConnectionsNew extends Component{
 
   componentDidMount(){
     if (this.props.history.location.state) {
-      this.setState({engagements: [this.props.history.location.state.engagements]})
+      this.setState({
+        agency: this.props.history.location.state.agency,
+        engagements: [this.props.history.location.state.engagements]
+      })
     }
     fetchFormInfo('connections')
     .then(

@@ -59,7 +59,10 @@ export default class EngagementsDetail extends Component {
   }
 
   handleNewConnection(){
-    this.props.history.push('/connections/new', {engagements: this.state.engagement.title})
+    this.props.history.push('/connections/new', {
+      engagements: this.state.engagement.title,
+      agency: this.state.engagement.connections[0].agency.name
+    })
   }
 
 
@@ -90,7 +93,7 @@ export default class EngagementsDetail extends Component {
         <Grid.Column key={i}>
         <Card fluid id={c.id} onClick={this.handleSelectConnection.bind(this)} className="black">
           <Card.Content header={`Connection: ${i + 1}`}/>
-          <Card.Content as='p'>
+          <Card.Content>
             <List>
               <List.Item icon='calendar' content={`Date: ${new Date(c.date).toDateString()}`}/>
               <List.Item icon='time' content={`Time: ${new Date(c.date).toLocaleTimeString()}`}/>
@@ -135,7 +138,6 @@ export default class EngagementsDetail extends Component {
   }
 
   render(){
-    console.log(this.state);
     return(
       !this.state.engagement.id ? <Loader active inline='centered' content='Loading'/> :
       <Container>

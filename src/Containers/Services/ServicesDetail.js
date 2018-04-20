@@ -1,7 +1,8 @@
 import React,{ Component } from 'react'
 import { getDetails, deleteResource } from '../../api'
-import { List, Button, Card, Loader, Container, Header, Grid, Divider } from 'semantic-ui-react'
+import { List, Button, Card, Loader, Container, Header, Grid, Divider, Progress } from 'semantic-ui-react'
 import EngagementsSimpleTable from '../Engagements/EngagementsSimpleTable.js'
+import '../../Black.css'
 
 
 export default class ServiceDetail extends Component {
@@ -46,6 +47,34 @@ export default class ServiceDetail extends Component {
     })
   }
 
+  agencyUtilization(){
+    var agencies = this.state.service.agencies.sort( (a,b) => a.name > b.name ? 1 : -1).map( a => <List.Item  id={a.id} onClick={this.handleSelectAgency.bind(this)} key={a.id}>{a.name}</List.Item>)
+    var agenciesFirst = agencies.slice(0, (agencies.length/2))
+    var agenciesSecond = agencies.slice((agencies.length/2), agencies.length)
+
+    return(
+      <Grid.Row columns={2}>
+        <Grid.Column>
+            <List animated>
+              {agenciesFirst}
+            </List>
+        </Grid.Column>
+        <Grid.Column>
+            <List animated>
+              {agenciesSecond}
+            </List>
+        </Grid.Column>
+      </Grid.Row>
+    )
+  }
+
+  totalUtilization(){
+    return this.state.service.total_agencies
+  }
+  handleSelectAgency(event){
+    return this.props.history.push("/agencies/" + event.currentTarget.id)
+  }
+
 
   render(){
     return(
@@ -78,6 +107,13 @@ export default class ServiceDetail extends Component {
               <EngagementsSimpleTable history={this.props.history} table={'services'} attribute={'title'} value={this.state.service.title}/>
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row columns={1}>
+            <Grid.Column>
+              <Header as='h2'>Utilization by Agencies</Header>
+              <Progress color='blue' value={this.state.service.agencies.length} total={this.totalUtilization()} progress='ratio'/>
+            </Grid.Column>
+          </Grid.Row>
+          {this.agencyUtilization()}
           <Divider/>
           <Grid.Row columns={1}>
             <Grid.Column >

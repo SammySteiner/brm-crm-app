@@ -25,7 +25,7 @@ export default(props) => {
             </Table.HeaderCell>
             <Table.HeaderCell >Report</Table.HeaderCell>
             <Table.HeaderCell sorted={props.column === 'type' ? props.direction : null} onClick={props.handleSort('type')} >
-              Engagement Type
+              Type
               <Dropdown icon='filter'>
                 <Dropdown.Menu>
                   {props.types.map( t => <Dropdown.Item key={t} id='type' content={t} onClick={props.handleFilter} />)}
