@@ -15,10 +15,10 @@ export default (props) => {
   props.agencies.sort((a,b) => a.name > b.name ? 1 : -1).forEach( (a, i) => agencies.push({ key: i, value: a.name, text: a.name }))
   var staff = [{key: '', value: '', text: ''}]
   props.staff.sort( (a,b) => a.fullname > b.fullname ? 1 : -1 ).forEach( s => staff.push({ key: s.id, value: s.fullname, text: s.fullname }))
-  var unresolved_engagements = [{key: '', value: '', text: ''}]
+  var agency_engagements = [{key: '', value: '', text: ''}]
   if (!!props.agency && !!props.agencies[1]) {
     var acronym = props.agencies.find( a => a.name === props.agency).acronym ? props.agencies.find( a => a.name === props.agency).acronym : ''
-    props.unresolved_engagements.filter( pue => pue.title.toLowerCase().includes(acronym.toLowerCase())).forEach( pue => unresolved_engagements.push({ key: pue.id, value: pue.title, text: pue.title }))
+    props.agency_engagements.filter( pue => pue.title.toLowerCase().includes(acronym.toLowerCase())).forEach( pue => agency_engagements.push({ key: pue.id, value: pue.title, text: pue.title }))
   }
 
   return(
@@ -43,7 +43,7 @@ export default (props) => {
           </Form.Field>
           <Form.Field disabled={!props.agency}>
             <label>Engagements:</label>
-            <Dropdown fluid search selection multiple placeholder='Search...' id='engagements' value={props.engagements} onChange={props.handleInputChange} options={unresolved_engagements} />
+            <Dropdown fluid search selection multiple placeholder='Search...' id='engagements' value={props.engagements} onChange={props.handleInputChange} options={agency_engagements} />
           </Form.Field>
           <Form.TextArea label="Connection Notes: " type='textArea' value={props.notes} onChange={props.handleInputChange} id='notes'/>
           <Form.TextArea label="Connection Report: " type='textArea' value={props.report} onChange={props.handleInputChange} id='report'/>

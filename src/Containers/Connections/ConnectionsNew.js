@@ -14,7 +14,7 @@ export default class ConnectionsNew extends Component{
       arm: '',
       agency: '',
       engagements: [],
-      unresolved_engagements: [],
+      agency_engagements: [],
       attendees: [],
       arms: [],
       agencies: [],
@@ -38,7 +38,7 @@ export default class ConnectionsNew extends Component{
           alert('You must be logged in to access this page.')
           return this.props.history.push('/login')
         } else {
-          return this.setState({ arms: data.arms, agencies: data.agencies, types: data.types, staff: data.staff, unresolved_engagements: data.unresolved_engagements})
+          return this.setState({ arms: data.arms, agencies: data.agencies, types: data.types, staff: data.staff, agency_engagements: data.agency_engagements})
         }
       }
     )
@@ -56,7 +56,7 @@ export default class ConnectionsNew extends Component{
   handleSubmit(event){
     event.preventDefault()
     let s = this.state
-    let engagements = s.engagements.map( title => s.unresolved_engagements.find( e => e.title === title).id)
+    let engagements = s.engagements.map( title => s.agency_engagements.find( e => e.title === title).id)
     let attendees = s.attendees.map( fullname => s.staff.find( staff => staff.fullname === fullname).id)
     let info = {
       date: s.datetime,
@@ -85,7 +85,7 @@ export default class ConnectionsNew extends Component{
           arm={this.state.arm}
           agency={this.state.agency}
           engagements={this.state.engagements}
-          unresolved_engagements={this.state.unresolved_engagements}
+          agency_engagements={this.state.agency_engagements}
           attendees={this.state.attendees}
           arms={this.state.arms}
           agencies={this.state.agencies}

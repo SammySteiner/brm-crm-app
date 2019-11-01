@@ -72,7 +72,7 @@ export default class AgencyDetail extends Component {
         <Grid.Column stretched>
           <Segment.Group>
             <Header as='h4' block attached='top'>CORE SERVICES</Header>
-            <Progress color='blue' value={core.length} total={7} progress='ratio' label='Service Utilization'/>
+            <Progress color='blue' value={core.length} total={8} progress='ratio' label='Service Utilization'/>
             <Segment.Group>
               {core}
             </Segment.Group>
